@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import { Share2 } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
@@ -39,19 +40,19 @@ export default function Install() {
         {isInstallable ? (
           <div className="p-6 rounded-lg shadow-md">
             <h2 className="text-xl font-semibold mb-4">Install App</h2>
-            <button
+            <Button
               onClick={handleInstall}
-              className="w-full flex items-center justify-center gap-2 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition-colors"
+              className="w-full flex items-center justify-center gap-2 bg-primary text-primary-foreground py-2 px-4 rounded hover:bg-primary/90 transition-colors"
             >
               <Share2 className="w-5 h-5" />
               Install App
-            </button>
+            </Button>
           </div>
         ) : (
           <>
             <div className="p-6 rounded-lg shadow-md">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center">
+                <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
                   <Image
                     src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/Safari_2020_logo.svg/1024px-Safari_2020_logo.svg.png?20240509054828"
                     alt="Safari"
@@ -73,7 +74,7 @@ export default function Install() {
 
             <div className="p-6 rounded-lg shadow-md">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center">
+                <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
                   <Image
                     src="https://upload.wikimedia.org/wikipedia/commons/e/e1/Google_Chrome_icon_%28February_2022%29.svg"
                     alt="Chrome"

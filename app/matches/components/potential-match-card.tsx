@@ -104,7 +104,7 @@ export default function PotentialMatchCard({
             <Button
               variant="default"
               size="icon"
-              className="rounded-full w-12 h-12 bg-green-500 hover:bg-green-600"
+              className="rounded-full w-12 h-12 bg-primary hover:bg-primary/90"
               onClick={() => onAction(potentialMatch.user_id, "interested")}
             >
               <ThumbsUp className="h-5 w-5" />
