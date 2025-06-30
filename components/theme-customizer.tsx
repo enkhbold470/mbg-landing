@@ -6,6 +6,8 @@ import { Label } from "@/components/ui/label";
 import { hexColors, hexToHsl, applyTheme, toggleTheme, getCurrentTheme } from "@/lib/colors";
 import { useState, useEffect } from "react";
 
+const STORAGE_KEY = 'custom-theme-colors';
+
 export function ThemeCustomizer() {
   const [colors, setColors] = useState({
     primary: hexColors.primary,
@@ -17,11 +19,41 @@ export function ThemeCustomizer() {
   
   const [isDark, setIsDark] = useState(false);
 
+  // Load saved colors and apply them on mount
   useEffect(() => {
-    // Get current theme on mount
+    // Get current theme
     const currentTheme = getCurrentTheme();
     setIsDark(currentTheme.isDark);
+
+    // Load saved colors from localStorage
+    const savedColors = localStorage.getItem(STORAGE_KEY);
+    if (savedColors) {
+      try {
+        const parsedColors = JSON.parse(savedColors);
+        setColors(parsedColors);
+        
+        // Apply saved colors immediately
+        applySavedColors(parsedColors);
+      } catch (error) {
+        console.error('Failed to load saved colors:', error);
+      }
+    }
   }, []);
+
+  const applySavedColors = (colorValues: typeof colors) => {
+    const colorMap = {
+      primary: hexToHsl(colorValues.primary),
+      secondary: hexToHsl(colorValues.secondary),
+      destructive: hexToHsl(colorValues.error),
+      ring: hexToHsl(colorValues.primary),
+      accent: hexToHsl(colorValues.secondary),
+    };
+
+    const root = document.documentElement;
+    Object.entries(colorMap).forEach(([key, value]) => {
+      root.style.setProperty(`--${key}`, value);
+    });
+  };
 
   const handleColorChange = (colorKey: keyof typeof colors, value: string) => {
     setColors((prev) => ({
@@ -32,43 +64,85 @@ export function ThemeCustomizer() {
 
   const applyColors = () => {
     // Apply colors to CSS variables
-    const colorMap = {
-      primary: hexToHsl(colors.primary),
-      secondary: hexToHsl(colors.secondary),
-      destructive: hexToHsl(colors.error),
-      ring: hexToHsl(colors.primary),
-      accent: hexToHsl(colors.secondary),
-    };
+    applySavedColors(colors);
 
-    // Apply to CSS variables
-    const root = document.documentElement;
-    Object.entries(colorMap).forEach(([key, value]) => {
-      root.style.setProperty(`--${key}`, value);
-    });
+    // Save to localStorage for persistence
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(colors));
 
     // Show success message
-    alert("Colors applied successfully! Your theme has been updated.");
+    alert("Colors applied and saved! Your theme will persist across page refreshes.");
   };
 
   const resetToDefaults = () => {
-    setColors({
+    const defaultColors = {
       primary: hexColors.primary,
       secondary: hexColors.secondary,
       success: hexColors.success,
       warning: hexColors.warning,
       error: hexColors.error,
-    });
+    };
+    
+    setColors(defaultColors);
     
     // Reset CSS variables by removing custom properties
     const root = document.documentElement;
     ['primary', 'secondary', 'destructive', 'ring', 'accent'].forEach(prop => {
       root.style.removeProperty(`--${prop}`);
     });
+
+    // Clear saved colors
+    localStorage.removeItem(STORAGE_KEY);
+    
+    alert("Theme reset to defaults and cleared from storage.");
   };
 
   const handleThemeToggle = () => {
     const newIsDark = toggleTheme();
     setIsDark(newIsDark);
+  };
+
+  const exportTheme = () => {
+    const themeConfig = {
+      colors,
+      timestamp: new Date().toISOString(),
+      version: '1.0.0'
+    };
+    
+    const dataStr = JSON.stringify(themeConfig, null, 2);
+    const dataBlob = new Blob([dataStr], { type: 'application/json' });
+    const url = URL.createObjectURL(dataBlob);
+    
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'custom-theme.json';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
+  const importTheme = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const themeConfig = JSON.parse(e.target?.result as string);
+        if (themeConfig.colors) {
+          setColors(themeConfig.colors);
+          applySavedColors(themeConfig.colors);
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(themeConfig.colors));
+          alert('Theme imported successfully!');
+        }
+      } catch (error) {
+        alert('Failed to import theme. Please check the file format.');
+      }
+    };
+    reader.readAsText(file);
+    
+    // Reset input
+    event.target.value = '';
   };
 
   const copyTailwindConfig = () => {
@@ -99,7 +173,7 @@ colors: {
       <div>
         <h2 className="text-xl font-bold mb-2">Theme Customizer</h2>
         <p className="text-sm text-muted-foreground">
-          Customize your color palette using CSS variables. Changes apply in real-time.
+          Customize your color palette. Changes are saved automatically and persist across sessions.
         </p>
       </div>
 
@@ -219,16 +293,34 @@ colors: {
         </div>
 
         {/* Action Buttons */}
-        <div className="grid grid-cols-3 gap-2 pt-2">
+        <div className="grid grid-cols-2 gap-2 pt-2">
           <Button onClick={applyColors} className="w-full">
-            Apply Colors
+            💾 Apply & Save
           </Button>
           <Button onClick={resetToDefaults} variant="outline" className="w-full">
-            Reset
+            🔄 Reset
           </Button>
+        </div>
+
+        {/* Additional Tools */}
+        <div className="grid grid-cols-3 gap-2">
           <Button onClick={copyTailwindConfig} variant="secondary" className="w-full">
-            Copy Config
+            📋 Copy Config
           </Button>
+          <Button onClick={exportTheme} variant="secondary" className="w-full">
+            📤 Export
+          </Button>
+          <label className="w-full">
+            <Button variant="secondary" className="w-full cursor-pointer">
+              📥 Import
+            </Button>
+            <input
+              type="file"
+              accept=".json"
+              onChange={importTheme}
+              className="hidden"
+            />
+          </label>
         </div>
       </div>
 

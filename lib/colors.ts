@@ -3,6 +3,8 @@
  * This file provides utilities and defaults for working with CSS custom properties
  */
 
+const STORAGE_KEY = 'custom-theme-colors';
+
 /**
  * Default HSL values that match our CSS variables
  * These are the fallback values if CSS variables aren't loaded
@@ -128,9 +130,80 @@ export const applyTheme = (colors: Record<string, string>, isDark = false) => {
 };
 
 /**
+ * Load and apply saved custom colors from localStorage
+ * Call this on app startup to restore user's custom theme
+ */
+export const loadSavedTheme = () => {
+  if (typeof window === 'undefined') return null; // SSR safety
+  
+  try {
+    const savedColors = localStorage.getItem(STORAGE_KEY);
+    if (savedColors) {
+      const colors = JSON.parse(savedColors);
+      
+      // Apply the saved colors
+      const colorMap = {
+        primary: hexToHsl(colors.primary || hexColors.primary),
+        secondary: hexToHsl(colors.secondary || hexColors.secondary),
+        destructive: hexToHsl(colors.error || hexColors.error),
+        ring: hexToHsl(colors.primary || hexColors.primary),
+        accent: hexToHsl(colors.secondary || hexColors.secondary),
+      };
+
+      const root = document.documentElement;
+      Object.entries(colorMap).forEach(([key, value]) => {
+        root.style.setProperty(`--${key}`, value);
+      });
+      
+      return colors;
+    }
+  } catch (error) {
+    console.error('Failed to load saved theme:', error);
+  }
+  
+  return null;
+};
+
+/**
+ * Save current theme colors to localStorage
+ */
+export const saveTheme = (colors: Record<string, string>) => {
+  if (typeof window === 'undefined') return; // SSR safety
+  
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(colors));
+  } catch (error) {
+    console.error('Failed to save theme:', error);
+  }
+};
+
+/**
+ * Clear saved theme colors
+ */
+export const clearSavedTheme = () => {
+  if (typeof window === 'undefined') return; // SSR safety
+  
+  try {
+    localStorage.removeItem(STORAGE_KEY);
+    
+    // Reset CSS variables
+    const root = document.documentElement;
+    ['primary', 'secondary', 'destructive', 'ring', 'accent'].forEach(prop => {
+      root.style.removeProperty(`--${prop}`);
+    });
+  } catch (error) {
+    console.error('Failed to clear saved theme:', error);
+  }
+};
+
+/**
  * Get current theme colors from CSS variables
  */
 export const getCurrentTheme = () => {
+  if (typeof window === 'undefined') {
+    return { isDark: false, colors: defaultColors.light };
+  }
+  
   const root = document.documentElement;
   const isDark = root.classList.contains('dark');
   
@@ -144,6 +217,8 @@ export const getCurrentTheme = () => {
  * Toggle between light and dark themes
  */
 export const toggleTheme = () => {
+  if (typeof window === 'undefined') return false;
+  
   const root = document.documentElement;
   root.classList.toggle('dark');
   
