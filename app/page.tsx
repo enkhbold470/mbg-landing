@@ -4,7 +4,7 @@ import { User } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { getProfile } from "./actions/saveProfile";
-
+import { siteConfig } from "@/config/site";
 export default function Home() {
   const [profile, setProfile] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -44,7 +44,7 @@ export default function Home() {
   if (!profile) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen gap-4">
-        <h1 className="text-2xl font-bold">Welcome to MatchAnza!</h1>
+        <h1 className="text-2xl font-bold">Welcome to {siteConfig.name}!</h1>
         <p>You need to create a profile to get started</p>
         <Button onClick={handleCreateProfile}>Create Profile</Button>
       </div>

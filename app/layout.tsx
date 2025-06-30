@@ -12,7 +12,7 @@ import type { ReactNode } from "react";
 
 import { Viewport } from "next";
 import { Inter } from "next/font/google";
-
+import { siteConfig } from "@/config/site";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -26,23 +26,22 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "MatchAnza",
-  description: "Find your hackathon team!",
+  title: siteConfig.title,
+  description: siteConfig.description,
   manifest: "/icons/site.webmanifest",
   generator: "Next.js",
-  keywords: ["hackathon", "team", "match"],
+  keywords: ["MBG Cargo", "MBG", "Cargo", "Logistics", "Supply Chain", "Freight Forwarding"],
   icons: [
     { rel: "apple-touch-icon", url: "/icons/android-chrome-192x192.png" },
     { rel: "icon", url: "/icons/android-chrome-192x192.png" },
   ],
 
-  applicationName: "MatchAnza",
+    applicationName: siteConfig.name,
   authors: [
     {
       name: "Inky Ganbold",
       url: "https://chat.enk.icu",
     },
-    { name: "Michael Garcia", url: "https://github.com/michaelrgarcia" },
   ],
 };
 
