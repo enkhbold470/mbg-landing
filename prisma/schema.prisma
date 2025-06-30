@@ -1,0 +1,56 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                        Int      @id @default(autoincrement())
+  user_id                   String   @map("user_id") @unique
+  email                     String?  @map("email")
+  full_name                 String?  @map("full_name")
+  discord                   String?  @map("discord")
+  linkedin                  String?  @map("linkedin")
+  instagram                 String?  @map("instagram")
+  github                    String?  @map("github")
+  skill_level                String?  @map("skill_level")
+  hackathon_experience       String?  @map("hackathon_experience")
+  project_experience         String?  @map("project_experience")
+  what_to_build              String?  @map("what_to_build")
+  fun_fact                   String?  @map("fun_fact")
+  self_description           String?  @map("self_description")
+  created_at                 DateTime @default(now()) @map("created_at")
+  updated_at                 DateTime @updatedAt @map("updated_at")
+  
+  // Relations
+  matches_as_user1            Match[]  @relation("User1")
+  matches_as_user2            Match[]  @relation("User2")
+
+  @@map("applications")
+}
+
+model Match {
+  id        Int      @id @default(autoincrement())
+  user_id_1   String   @map("user_id_1")
+  user_id_2   String   @map("user_id_2") 
+  status    String   // "interested", "passed", "matched"
+  created_at DateTime @default(now()) @map("created_at")
+  updated_at DateTime @updatedAt @map("updated_at")
+  
+  // Relations
+  user1     User @relation("User1", fields: [user_id_1], references: [user_id])
+  user2     User @relation("User2", fields: [user_id_2], references: [user_id])
+
+  // Ensure that we can't have duplicate matches between the same users
+  @@unique([user_id_1, user_id_2])
+  @@map("matches")
+}
