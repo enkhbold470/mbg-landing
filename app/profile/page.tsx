@@ -1,6 +1,6 @@
 "use client";
 
-import { getProfile, saveProfile } from "@/app/actions/saveProfile";
+import { getProfile, saveUserProfile } from "@/app/actions/saveProfile";
 import {
   Card,
   CardDescription,
@@ -14,8 +14,12 @@ import { useEffect, useState } from "react";
 import LoadingProfile from "./components/loading-profile";
 import ProfileDisplay from "./components/profile-display";
 import ProfileForm from "./components/profile-form";
-
 import Logout from "./components/logout";
+import { UserProfile } from "@/lib/types";
+
+if (typeof window !== "undefined" && process.env.NODE_ENV === "development") {
+  console.log("👤 Loading profile page");
+}
 
 export default function ProfilePage() {
   const [profile, setProfile] = useState<User | null>(null);
@@ -35,6 +39,10 @@ export default function ProfilePage() {
           setIsEditing(false);
         } else {
           setIsEditing(true);
+        }
+
+        if (process.env.NODE_ENV === "development") {
+          console.log("👤 Profile loaded:", existingProfile ? "found" : "not found");
         }
       } catch (error) {
         console.error("Failed to fetch profile:", error);
@@ -59,7 +67,19 @@ export default function ProfilePage() {
 
     if (profile) {
       try {
-        await saveProfile(profile as User);
+        if (process.env.NODE_ENV === "development") {
+          console.log("💾 Saving profile:", profile);
+        }
+
+        // Convert User to UserProfile type
+        const profileData: UserProfile = {
+          full_name: profile.full_name || undefined,
+          phone: profile.phone || undefined,
+          home_address: profile.home_address || undefined,
+          email: profile.email || undefined,
+        };
+
+        await saveUserProfile(profileData);
 
         toast({
           title: "Success!",
@@ -71,6 +91,10 @@ export default function ProfilePage() {
         if (updatedProfile) setProfile(updatedProfile);
 
         setIsEditing(false);
+
+        if (process.env.NODE_ENV === "development") {
+          console.log("✅ Profile saved successfully");
+        }
       } catch (error) {
         console.error("Failed to save profile:", error);
 
@@ -101,15 +125,15 @@ export default function ProfilePage() {
 
   return (
     <div className="container mx-auto py-10 min-h-screen pb-20">
-      <Card className=" flex-col gap-4 max-w-2xl mx-auto">
+      <Card className="flex-col gap-4 max-w-2xl mx-auto">
         <CardHeader>
           <CardTitle className="flex justify-between items-center">
             {isEditing ? "Edit Profile" : "Your Profile"} <Logout />
           </CardTitle>
           <CardDescription>
             {isEditing
-              ? "Update your profile information below."
-              : "View your profile information."}
+              ? "Update your delivery information below."
+              : "Manage your delivery profile and preferences."}
           </CardDescription>
         </CardHeader>
         {isEditing ? (

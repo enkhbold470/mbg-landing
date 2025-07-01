@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { hexColors, hexToHsl, applyTheme, toggleTheme, getCurrentTheme } from "@/lib/colors";
+import { hexColors, hexToHsl, toggleTheme, getCurrentTheme } from "@/lib/colors";
 import { useState, useEffect } from "react";
 
 const STORAGE_KEY = 'custom-theme-colors';

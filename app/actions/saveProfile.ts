@@ -1,65 +1,80 @@
 "use server"
 
-import { User } from "@prisma/client";
-import { getCurrentUser } from "@/app/actions/getCurrentUser";
-
+import { auth } from "@clerk/nextjs/server";
 import { prisma } from "@/lib/prisma";
+import { revalidatePath } from "next/cache";
+import { UserProfile } from "@/lib/types";
 
-export async function saveProfile(profile: User) {
-  console.log("Profile data received in saveProfile action:", profile);
-  const user = await getCurrentUser();
- 
+if (process.env.NODE_ENV === "development") {
+  console.log("👤 Loading user profile actions");
+}
+
+export async function saveUserProfile(profileData: UserProfile) {
   try {
-    await prisma.user.upsert({
-      where: {
-        user_id: user?.id || "",
-      },
+    const { userId } = await auth();
+    
+    if (!userId) {
+      throw new Error("User not authenticated");
+    }
+
+    if (process.env.NODE_ENV === "development") {
+      console.log("💾 Saving user profile:", { userId, profileData });
+    }
+
+    const user = await prisma.user.upsert({
+      where: { user_id: userId },
       update: {
-        // Fields to update if the user already exists
-        full_name: profile.full_name,
-        discord: profile.discord,
-        linkedin: profile.linkedin,
-        instagram: profile.instagram,
-        github: profile.github,
-        skill_level: profile.skill_level,
-        hackathon_experience: profile.hackathon_experience,
-        project_experience: profile.project_experience,
-        what_to_build: profile.what_to_build,
-        fun_fact: profile.fun_fact,
-        self_description: profile.self_description,
-        // Note: email is typically managed by the auth provider (Clerk)
-        // and user_id is the unique key, so they are not in the update section.
+        full_name: profileData.full_name,
+        phone: profileData.phone,
+        home_address: profileData.home_address,
+        email: profileData.email,
+        updated_at: new Date(),
       },
       create: {
-        // Fields to set when creating a new user profile
-        user_id: user?.id || "",
-        email: user?.emailAddresses[0]?.emailAddress || "", // Ensure email exists
-        full_name: profile.full_name,
-        discord: profile.discord,
-        linkedin: profile.linkedin,
-        instagram: profile.instagram,
-        github: profile.github,
-        skill_level: profile.skill_level,
-        hackathon_experience: profile.hackathon_experience,
-        project_experience: profile.project_experience,
-        what_to_build: profile.what_to_build,
-        fun_fact: profile.fun_fact,
-        self_description: profile.self_description,
+        user_id: userId,
+        full_name: profileData.full_name,
+        phone: profileData.phone,
+        home_address: profileData.home_address,
+        email: profileData.email,
       },
     });
+
+    revalidatePath("/profile");
+    
+    if (process.env.NODE_ENV === "development") {
+      console.log("✅ Profile saved successfully:", user);
+    }
+    
+    return user;
   } catch (error) {
-    console.error("Error saving profile:", error);
-    // Optionally, rethrow the error or handle it in a way that the client can understand
-    // throw error;
+    console.error("❌ Error saving profile:", error);
+    throw error;
   }
 }
 
 export async function getProfile() {
-  const user = await getCurrentUser();
-  const profile = await prisma.user.findUnique({
-    where: {
-      user_id: user?.id,
-    },
-  });
-  return profile;
+  try {
+    const { userId } = await auth();
+    
+    if (!userId) {
+      return null;
+    }
+
+    if (process.env.NODE_ENV === "development") {
+      console.log("🔍 Fetching profile for user:", userId);
+    }
+
+    const user = await prisma.user.findUnique({
+      where: { user_id: userId },
+    });
+
+    if (process.env.NODE_ENV === "development") {
+      console.log("👤 Profile fetched:", user ? "found" : "not found");
+    }
+
+    return user;
+  } catch (error) {
+    console.error("❌ Error fetching profile:", error);
+    throw error;
+  }
 }

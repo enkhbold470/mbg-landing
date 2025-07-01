@@ -1,129 +1,129 @@
-/* delete? */
 
-// "use client";
 
-// import { Badge } from "@/components/ui/badge";
-// import { Button } from "@/components/ui/button";
-// import { Card, CardContent, CardFooter } from "@/components/ui/card";
-// import { cn } from "@/lib/utils";
-// import { Check, X } from "lucide-react";
-// import { useState } from "react";
+"use client";
 
-// type UserCardProps = {
-//   profile: {
-//     id: string;
-//     skillLevel: "Beginner" | "Intermediate" | "Advanced";
-//     hackathonExperience: "None" | "1-2" | "3-5" | "5+";
-//     buildInterest: string;
-//     funFact: string;
-//     selfDescription: "Creative" | "Technical" | "Leader" | "Balanced";
-//     fullName?: string;
-//   };
-//   onConnect: (id: string) => void;
-//   onPass: (id: string) => void;
-// };
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
+import { Check, X } from "lucide-react";
+import { useState } from "react";
 
-// export function UserCard({ profile, onConnect, onPass }: UserCardProps) {
-//   const [isExiting, setIsExiting] = useState(false);
-//   const [exitDirection, setExitDirection] = useState<"left" | "right" | null>(
-//     null
-//   );
+type UserCardProps = {
+  profile: {
+    id: string;
+    skillLevel: "Beginner" | "Intermediate" | "Advanced";
+    hackathonExperience: "None" | "1-2" | "3-5" | "5+";
+    buildInterest: string;
+    funFact: string;
+    selfDescription: "Creative" | "Technical" | "Leader" | "Balanced";
+    fullName?: string;
+  };
+  onConnect: (id: string) => void;
+  onPass: (id: string) => void;
+};
 
-//   const handleConnect = () => {
-//     setIsExiting(true);
-//     setExitDirection("right");
-//     setTimeout(() => {
-//       onConnect(profile.id);
-//     }, 300);
-//   };
+export function UserCard({ profile, onConnect, onPass }: UserCardProps) {
+  const [isExiting, setIsExiting] = useState(false);
+  const [exitDirection, setExitDirection] = useState<"left" | "right" | null>(
+    null
+  );
 
-//   const handlePass = () => {
-//     setIsExiting(true);
-//     setExitDirection("left");
-//     setTimeout(() => {
-//       onPass(profile.id);
-//     }, 300);
-//   };
+  const handleConnect = () => {
+    setIsExiting(true);
+    setExitDirection("right");
+    setTimeout(() => {
+      onConnect(profile.id);
+    }, 300);
+  };
 
-//   const getCardClasses = () => {
-//     const baseClasses =
-//       "w-full max-w-md mx-auto overflow-hidden card-transition";
+  const handlePass = () => {
+    setIsExiting(true);
+    setExitDirection("left");
+    setTimeout(() => {
+      onPass(profile.id);
+    }, 300);
+  };
 
-//     if (!isExiting) return baseClasses;
+  const getCardClasses = () => {
+    const baseClasses =
+      "w-full max-w-md mx-auto overflow-hidden card-transition";
 
-//     if (exitDirection === "left") {
-//       return `${baseClasses} card-exit-left`;
-//     } else if (exitDirection === "right") {
-//       return `${baseClasses} card-exit-right`;
-//     } else {
-//       return `${baseClasses} card-exit`;
-//     }
-//   };
+    if (!isExiting) return baseClasses;
 
-//   return (
-//     <Card className={cn(getCardClasses())}>
-//       <CardContent className="p-6">
-//         <div className="space-y-4">
-//           <div className="flex justify-between items-center">
-//             <Badge
-//               variant="outline"
-//               className="bg-secondary text-secondary-foreground"
-//             >
-//               {profile.skillLevel || "Unknown"}
-//             </Badge>
-//             <Badge
-//               variant="outline"
-//               className="bg-secondary text-secondary-foreground"
-//             >
-//               {profile.selfDescription || "Unknown"}
-//             </Badge>
-//           </div>
+    if (exitDirection === "left") {
+      return `${baseClasses} card-exit-left`;
+    } else if (exitDirection === "right") {
+      return `${baseClasses} card-exit-right`;
+    } else {
+      return `${baseClasses} card-exit`;
+    }
+  };
 
-//           {profile.fullName && (
-//             <div className="space-y-2">
-//               <h3 className="font-medium text-lg">Name</h3>
-//               <p className="text-muted-foreground">{profile.fullName}</p>
-//             </div>
-//           )}
+  return (
+    <Card className={cn(getCardClasses())}>
+      <CardContent className="p-6">
+        <div className="space-y-4">
+          <div className="flex justify-between items-center">
+            <Badge
+              variant="outline"
+              className="bg-secondary text-secondary-foreground"
+            >
+              {profile.skillLevel || "Unknown"}
+            </Badge>
+            <Badge
+              variant="outline"
+              className="bg-secondary text-secondary-foreground"
+            >
+              {profile.selfDescription || "Unknown"}
+            </Badge>
+          </div>
 
-//           <div className="space-y-2">
-//             <h3 className="font-medium text-lg">Experience</h3>
-//             <p className="text-muted-foreground">
-//               {profile.hackathonExperience || "None"} hackathons
-//             </p>
-//           </div>
+          {profile.fullName && (
+            <div className="space-y-2">
+              <h3 className="font-medium text-lg">Name</h3>
+              <p className="text-muted-foreground">{profile.fullName}</p>
+            </div>
+          )}
 
-//           {profile.buildInterest && (
-//             <div className="space-y-2">
-//               <h3 className="font-medium text-lg">Wants to build</h3>
-//               <p className="text-muted-foreground">{profile.buildInterest}</p>
-//             </div>
-//           )}
+          <div className="space-y-2">
+            <h3 className="font-medium text-lg">Experience</h3>
+            <p className="text-muted-foreground">
+              {profile.hackathonExperience || "None"} hackathons
+            </p>
+          </div>
 
-//           {profile.funFact && (
-//             <div className="space-y-2">
-//               <h3 className="font-medium text-lg">Fun fact</h3>
-//               <p className="text-muted-foreground">{profile.funFact}</p>
-//             </div>
-//           )}
-//         </div>
-//       </CardContent>
+          {profile.buildInterest && (
+            <div className="space-y-2">
+              <h3 className="font-medium text-lg">Wants to build</h3>
+              <p className="text-muted-foreground">{profile.buildInterest}</p>
+            </div>
+          )}
 
-//       <CardFooter className="flex justify-between p-6 pt-0 gap-4">
-//         <Button
-//           variant="outline"
-//           size="lg"
-//           className="w-full"
-//           onClick={handlePass}
-//         >
-//           <X className="mr-2 h-4 w-4" />
-//           Not Now
-//         </Button>
-//         <Button size="lg" className="w-full" onClick={handleConnect}>
-//           <Check className="mr-2 h-4 w-4" />
-//           Connect
-//         </Button>
-//       </CardFooter>
-//     </Card>
-//   );
-// }
+          {profile.funFact && (
+            <div className="space-y-2">
+              <h3 className="font-medium text-lg">Fun fact</h3>
+              <p className="text-muted-foreground">{profile.funFact}</p>
+            </div>
+          )}
+        </div>
+      </CardContent>
+
+      <CardFooter className="flex justify-between p-6 pt-0 gap-4">
+        <Button
+          variant="outline"
+          size="lg"
+          className="w-full"
+          onClick={handlePass}
+        >
+          <X className="mr-2 h-4 w-4" />
+          Not Now
+        </Button>
+        <Button size="lg" className="w-full" onClick={handleConnect}>
+          <Check className="mr-2 h-4 w-4" />
+          Connect
+        </Button>
+      </CardFooter>
+    </Card>
+  );
+}

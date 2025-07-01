@@ -1,42 +1,42 @@
-export interface MatchedUser {
-  user_id: string;
-  full_name: string;
-  discord: string;
-  skill_level: string;
-  hackathon_experience: string;
-  project_experience: string;
-  fun_fact: string;
-  self_description: string;
-  future_plans: string;
-  links: string;
-}
+import { User, DeliveryOrder } from "@prisma/client";
 
-export interface Match {
-  id: string;
-  user_id_1: string;
-  user_id_2: string;
-  status: string;
-  created_at: Date;
-  is_mutual_match: boolean;
-  is_user_interested: boolean;
-  is_other_interested: boolean;
-  other_user: MatchedUser;
-}
+export type CargoUser = User;
 
-export interface User {
-  user_id: string;
-  email: string;
-  full_name: string;
-  discord: string;
-  linkedin: string;
-  instagram: string;
-  github: string;
-  skill_level: string;
-  hackathon_experience: string;
-  project_experience: string;
-  what_to_build: string;
-  fun_fact: string;
-  self_description: string;
-  created_at: Date;
-  updated_at: Date;
-}
+export type CargoDeliveryOrder = DeliveryOrder;
+
+export type DeliveryOrderWithUser = DeliveryOrder & {
+  user: User;
+};
+
+export type DeliveryStatus = "requested" | "confirmed" | "in_delivery" | "delivered" | "cancelled";
+
+export type DeliveryOrderFormData = {
+  tracking_id: string;
+  package_title: string;
+  package_description?: string;
+  delivery_address: string;
+  item_value: number;
+  wants_insurance: boolean;
+};
+
+export type DeliveryQuote = {
+  base_cargo_cost: number;
+  insurance_cost: number;
+  estimated_days: number;
+};
+
+export type TrackingInfo = {
+  tracking_id: string;
+  status: DeliveryStatus;
+  package_title: string;
+  delivery_address: string;
+  estimated_delivery?: Date;
+  last_updated: Date;
+};
+
+export type UserProfile = {
+  full_name?: string;
+  phone?: string;
+  home_address?: string;
+  email?: string;
+};

@@ -1,18 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { CardContent, CardFooter } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { User } from "@prisma/client";
 import { motion } from "framer-motion";
-import {
-  AtSign,
-  Github,
-  Instagram,
-  Link as LinkIcon,
-  MessageCircleHeart,
-  User as UserIcon,
-} from "lucide-react";
+import type React from "react";
+import { MapPin, Phone, Mail, User as UserIcon, Edit } from "lucide-react";
 
 interface ProfileDisplayProps {
-  profile: User | null;
+  profile: User;
   setIsEditing: (isEditing: boolean) => void;
 }
 
@@ -20,128 +15,102 @@ export default function ProfileDisplay({
   profile,
   setIsEditing,
 }: ProfileDisplayProps) {
-  if (!profile) {
-    return (
-      <CardContent>
-        <p>Profile not found.</p>
-      </CardContent>
-    );
-  }
   return (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
     >
-      <CardContent className="pt-6 space-y-6">
-        <div className="border rounded-lg p-4 border-orange-500">
-          <p className="text-center opacity-50 uppercase">
-            this info will appear once matched
-          </p>
-
-          {/* Full Name Section */}
-          <div className="space-y-1">
-            <div className="flex items-center gap-2">
-              <UserIcon className="h-5 w-5 text-muted-foreground" />
-              <h3 className="text-base font-semibold">Full Name</h3>
-            </div>
-            <p className="ml-7 text-sm text-muted-foreground">
-              {profile.full_name || "Not specified"}
-            </p>
+      <CardContent className="space-y-6">
+        {/* Full Name */}
+        <div className="space-y-2">
+          <div className="flex items-center gap-2 text-sm font-medium text-gray-600">
+            <UserIcon className="h-4 w-4" />
+            Full Name
           </div>
+          <p className="text-lg font-medium">
+            {profile.full_name || "Not provided"}
+          </p>
+        </div>
 
-          {/* Social Links Section */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4">
-            <div className="space-y-1">
-              <div className="flex items-center gap-2">
-                <AtSign className="h-5 w-5 text-muted-foreground" />
-                <h3 className="text-base font-semibold">Discord</h3>
-              </div>
-              <p className="ml-7 text-sm text-muted-foreground">
-                {profile.discord || "Not specified"}
-              </p>
-            </div>
+        {/* Email */}
+        <div className="space-y-2">
+          <div className="flex items-center gap-2 text-sm font-medium text-gray-600">
+            <Mail className="h-4 w-4" />
+            Email Address
+          </div>
+          <p className="text-gray-800">
+            {profile.email || "Not provided"}
+          </p>
+        </div>
 
-            <div className="space-y-1">
-              <div className="flex items-center gap-2">
-                <LinkIcon className="h-5 w-5 text-muted-foreground" />
-                <h3 className="text-base font-semibold">LinkedIn</h3>
-              </div>
-              <p className="ml-7 text-sm text-muted-foreground overflow-hidden text-ellipsis whitespace-nowrap">
-                {profile.linkedin || "Not specified"}
-              </p>
-            </div>
+        {/* Phone */}
+        <div className="space-y-2">
+          <div className="flex items-center gap-2 text-sm font-medium text-gray-600">
+            <Phone className="h-4 w-4" />
+            Phone Number
+          </div>
+          <p className="text-gray-800">
+            {profile.phone || "Not provided"}
+          </p>
+        </div>
 
-            <div className="space-y-1">
-              <div className="flex items-center gap-2">
-                <Instagram className="h-5 w-5 text-muted-foreground" />
-                <h3 className="text-base font-semibold">Instagram</h3>
-              </div>
-              <p className="ml-7 text-sm text-muted-foreground">
-                {profile.instagram || "Not specified"}
+        {/* Home Address */}
+        <div className="space-y-2">
+          <div className="flex items-center gap-2 text-sm font-medium text-gray-600">
+            <MapPin className="h-4 w-4" />
+            Home Address
+          </div>
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+            <p className="text-gray-800 whitespace-pre-line">
+              {profile.home_address || "No address provided"}
+            </p>
+            {!profile.home_address && (
+              <p className="text-sm text-blue-600 mt-2">
+                💡 Add your home address to auto-fill delivery forms
               </p>
-            </div>
-
-            <div className="space-y-1">
-              <div className="flex items-center gap-2">
-                <Github className="h-5 w-5 text-muted-foreground" />
-                <h3 className="text-base font-semibold">GitHub</h3>
-              </div>
-              <p className="ml-7 text-sm text-muted-foreground">
-                {profile.github || "Not specified"}
-              </p>
-            </div>
+            )}
           </div>
         </div>
 
-        <hr className="border-border" />
-        <div className="border rounded-lg p-4 border-green-500">
-          <p className="text-center opacity-50 uppercase my-2">
-            this info will used to match you with others
-          </p>
+        {/* Profile Status */}
+        <div className="space-y-2">
+          <div className="text-sm font-medium text-gray-600">Profile Status</div>
+          <div className="flex gap-2">
+            {profile.full_name && (
+              <Badge variant="outline" className="bg-green-50 border-green-200 text-green-800">
+                ✓ Name Added
+              </Badge>
+            )}
+            {profile.email && (
+              <Badge variant="outline" className="bg-green-50 border-green-200 text-green-800">
+                ✓ Email Added
+              </Badge>
+            )}
+            {profile.phone && (
+              <Badge variant="outline" className="bg-green-50 border-green-200 text-green-800">
+                ✓ Phone Added
+              </Badge>
+            )}
+            {profile.home_address && (
+              <Badge variant="outline" className="bg-green-50 border-green-200 text-green-800">
+                ✓ Address Added
+              </Badge>
+            )}
+          </div>
+        </div>
 
-          {/* Other Profile Details Section */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-6">
-            <div className="space-y-2">
-              <div className="flex items-center gap-2">
-                <MessageCircleHeart className="h-5 w-5 text-muted-foreground" />
-                <h3 className="text-base font-semibold">Project Experience</h3>
-              </div>
-              <p className="text-sm text-muted-foreground break-words">
-                {profile.project_experience || "Not specified"}
-              </p>
+        {/* Account Info */}
+        <div className="space-y-2 pt-4 border-t">
+          <div className="text-sm font-medium text-gray-600">Account Information</div>
+          <div className="grid grid-cols-2 gap-4 text-sm">
+            <div>
+              <span className="text-gray-500">Member Since:</span>
+              <div>{new Date(profile.created_at).toLocaleDateString()}</div>
             </div>
-
-            <div className="space-y-2">
-              <div className="flex items-center gap-2">
-                <MessageCircleHeart className="h-5 w-5 text-muted-foreground" />
-                <h3 className="text-base font-semibold">
-                  What I want to build
-                </h3>
-              </div>
-              <p className="text-sm text-muted-foreground break-words">
-                {profile.what_to_build || "Not specified"}
-              </p>
-            </div>
-
-            <div className="space-y-2">
-              <div className="flex items-center gap-2">
-                <MessageCircleHeart className="h-5 w-5 text-muted-foreground" />
-                <h3 className="text-base font-semibold">Self-Description</h3>
-              </div>
-              <p className="text-sm text-muted-foreground break-words">
-                {profile.self_description || "Not specified"}
-              </p>
-            </div>
-
-            <div className="space-y-2">
-              <div className="flex items-center gap-2">
-                <MessageCircleHeart className="h-5 w-5 text-muted-foreground" />
-                <h3 className="text-base font-semibold">Fun Fact</h3>
-              </div>
-              <p className="text-sm text-muted-foreground break-words">
-                {profile.fun_fact || "Not specified"}
-              </p>
+            <div>
+              <span className="text-gray-500">Last Updated:</span>
+              <div>{new Date(profile.updated_at).toLocaleDateString()}</div>
             </div>
           </div>
         </div>
@@ -149,6 +118,7 @@ export default function ProfileDisplay({
 
       <CardFooter>
         <Button onClick={() => setIsEditing(true)} className="w-full">
+          <Edit className="h-4 w-4 mr-2" />
           Edit Profile
         </Button>
       </CardFooter>
