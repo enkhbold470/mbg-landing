@@ -7,7 +7,7 @@ export function cn(...inputs: ClassValue[]) {
 
 
 
-export const portalLink = "https://cargo.mbg.com"
+export const portalLink = "https://apply.mbg.mn"
 
 
 export async function copyToClipboard(text: string) {

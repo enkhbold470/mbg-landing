@@ -1,6 +1,5 @@
 import { Footer } from "@/components/footer";
 import { Header } from "@/components/header";
-import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/toaster";
 
 import { ClerkProvider } from "@clerk/nextjs";
@@ -26,7 +25,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: siteConfig.title,
+  title: siteConfig.name,
   description: siteConfig.description,
   manifest: "/icons/site.webmanifest",
   generator: "Next.js",
@@ -54,17 +53,12 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en" suppressHydrationWarning>
         <body className={inter.className}>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="light"
-            enableSystem={true}
-            disableTransitionOnChange
-          >
+
             <Header />
             {children}
             <Footer />
             <Toaster />
-          </ThemeProvider>
+
           <Analytics />
         </body>
       </html>
