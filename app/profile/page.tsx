@@ -208,7 +208,7 @@ export default function ProfilePage() {
           {!isEditing ? (
             <Button onClick={() => setIsEditing(true)} className="flex items-center gap-2">
               <Edit className="h-4 w-4" />
-              Edit Profile
+              Профайл өөрчлөх
             </Button>
           ) : (
             <div className="flex gap-2">
@@ -218,8 +218,9 @@ export default function ProfilePage() {
                 className="flex items-center gap-2"
               >
                 <X className="h-4 w-4" />
-                Cancel
+                Цуцлах
               </Button>
+       
               <Button 
                 onClick={handleSave}
                 disabled={isSaving}

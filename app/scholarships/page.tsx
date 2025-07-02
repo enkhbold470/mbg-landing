@@ -24,7 +24,7 @@ import {
 } from "lucide-react";
 import { getScholarships, searchScholarships, createScholarshipApplication } from "../actions/getCollegesAndScholarships";
 import { PROGRAM_TYPES } from "@/lib/types";
-import { toast } from "sonner";
+import { useToast } from "@/hooks/use-toast";
 
 export default function ScholarshipsPage() {
   const [scholarships, setScholarships] = useState<any[]>([]);
@@ -45,7 +45,7 @@ export default function ScholarshipsPage() {
 
   const router = useRouter();
   const searchParams = useSearchParams();
-
+  const { toast } = useToast();
   useEffect(() => {
     // Get search term from URL params
     const urlSearch = searchParams.get('search');
@@ -86,7 +86,11 @@ export default function ScholarshipsPage() {
       }
     } catch (error) {
       console.error("Error fetching scholarships:", error);
-      toast.error("Failed to load scholarships");
+      toast({
+        title: "Error",
+        description: "Failed to load scholarships",
+        variant: "destructive",
+      });
     } finally {
       setIsLoading(false);
     }
@@ -120,7 +124,11 @@ export default function ScholarshipsPage() {
       }
     } catch (error) {
       console.error("Error searching scholarships:", error);
-      toast.error("Search failed");
+      toast({
+        title: "Error",
+        description: "Search failed",
+        variant: "destructive",
+      });
     } finally {
       setIsSearching(false);
     }
@@ -137,14 +145,25 @@ export default function ScholarshipsPage() {
       });
 
       if (result.success && result.data) {
-        toast.success("Application created! Complete your application now.");
+        toast({
+          title: "Success",
+          description: "Application created! Complete your application now.",
+        });
         router.push(`/applications/${result.data.applicationId}`);
       } else {
-        toast.error(result.error || "Failed to create application");
+        toast({
+          title: "Error",
+          description: result.error || "Failed to create application",
+          variant: "destructive",
+        });
       }
     } catch (error) {
       console.error("Error creating application:", error);
-      toast.error("Failed to create application");
+        toast({
+        title: "Error",
+        description: "Failed to create application",
+        variant: "destructive",
+      });
     }
   };
 
