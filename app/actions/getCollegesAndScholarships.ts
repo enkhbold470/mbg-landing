@@ -3,10 +3,10 @@
 import { auth } from "@clerk/nextjs/server";
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
-import { ApplicationStatus, ScholarshipSearchFilters, ApplicationFormData } from "@/lib/types";
+import { ApplicationStatus, ScholarshipSearchFilters, ApplicationFormData, AdmissionStatus } from "@/lib/types";
 
 if (process.env.NODE_ENV === "development") {
-  console.log("🎓 Loading scholarship application actions");
+  console.log("🎓 Loading scholarship and college actions");
 }
 
 // Get all available scholarships with optional filters
@@ -21,22 +21,27 @@ export async function getScholarships(filters?: ScholarshipSearchFilters) {
     };
 
     if (filters) {
-      if (filters.programType) where.program_type = filters.programType;
+      if (filters.programType) where.programType = filters.programType;
       if (filters.major) where.major = { contains: filters.major, mode: 'insensitive' };
       if (filters.city) where.city = { contains: filters.city, mode: 'insensitive' };
       if (filters.university) where.university = { contains: filters.university, mode: 'insensitive' };
-      if (filters.languageProgram !== undefined) where.language_program = filters.languageProgram;
-      if (filters.hskRequired) where.hsk_required = { lte: filters.hskRequired };
-      if (filters.ieltsRequired) where.ielts_required = { lte: filters.ieltsRequired };
-      if (filters.minAge) where.min_age = { lte: filters.minAge };
-      if (filters.maxAge) where.max_age = { gte: filters.maxAge };
-      if (filters.minAmount) where.scholarship_amount = { gte: filters.minAmount };
-      if (filters.maxAmount) where.scholarship_amount = { lte: filters.maxAmount };
+      if (filters.languageProgram !== undefined) where.languageProgram = filters.languageProgram;
+      if (filters.hskRequired) where.hskRequired = { lte: filters.hskRequired };
+      if (filters.ieltsRequired) where.ieltsRequired = { lte: filters.ieltsRequired };
+      if (filters.minAge) where.minAge = { lte: filters.minAge };
+      if (filters.maxAge) where.maxAge = { gte: filters.maxAge };
+      if (filters.minAmount) where.scholarshipAmount = { gte: filters.minAmount };
+      if (filters.maxAmount) where.scholarshipAmount = { lte: filters.maxAmount };
     }
 
     const scholarships = await prisma.scholarship.findMany({
       where,
       orderBy: { createdAt: "desc" },
+      include: {
+        _count: {
+          select: { applications: true }
+        }
+      }
     });
 
     if (process.env.NODE_ENV === "development") {
@@ -74,22 +79,27 @@ export async function searchScholarships(searchTerm: string, filters?: Scholarsh
 
     // Apply filters
     if (filters) {
-      if (filters.programType) where.program_type = filters.programType;
+      if (filters.programType) where.programType = filters.programType;
       if (filters.major && !searchTerm) where.major = { contains: filters.major, mode: 'insensitive' };
       if (filters.city && !searchTerm) where.city = { contains: filters.city, mode: 'insensitive' };
       if (filters.university && !searchTerm) where.university = { contains: filters.university, mode: 'insensitive' };
-      if (filters.languageProgram !== undefined) where.language_program = filters.languageProgram;
-      if (filters.hskRequired) where.hsk_required = { lte: filters.hskRequired };
-      if (filters.ieltsRequired) where.ielts_required = { lte: filters.ieltsRequired };
-      if (filters.minAge) where.min_age = { lte: filters.minAge };
-      if (filters.maxAge) where.max_age = { gte: filters.maxAge };
-      if (filters.minAmount) where.scholarship_amount = { gte: filters.minAmount };
-      if (filters.maxAmount) where.scholarship_amount = { lte: filters.maxAmount };
+      if (filters.languageProgram !== undefined) where.languageProgram = filters.languageProgram;
+      if (filters.hskRequired) where.hskRequired = { lte: filters.hskRequired };
+      if (filters.ieltsRequired) where.ieltsRequired = { lte: filters.ieltsRequired };
+      if (filters.minAge) where.minAge = { lte: filters.minAge };
+      if (filters.maxAge) where.maxAge = { gte: filters.maxAge };
+      if (filters.minAmount) where.scholarshipAmount = { gte: filters.minAmount };
+      if (filters.maxAmount) where.scholarshipAmount = { lte: filters.maxAmount };
     }
 
     const scholarships = await prisma.scholarship.findMany({
       where,
       orderBy: { createdAt: "desc" },
+      include: {
+        _count: {
+          select: { applications: true }
+        }
+      }
     });
 
     return scholarships;
@@ -104,6 +114,11 @@ export async function getScholarshipById(id: number) {
   try {
     const scholarship = await prisma.scholarship.findUnique({
       where: { id },
+      include: {
+        _count: {
+          select: { applications: true }
+        }
+      }
     });
 
     if (!scholarship) {
@@ -114,6 +129,73 @@ export async function getScholarshipById(id: number) {
   } catch (error) {
     console.error("❌ Error fetching scholarship:", error);
     throw error;
+  }
+}
+
+// Get universities with scholarship counts
+export async function getUniversities() {
+  try {
+    const universities = await prisma.scholarship.groupBy({
+      by: ['university', 'city'],
+      where: { isActive: true },
+      _count: {
+        id: true
+      },
+      orderBy: {
+        _count: {
+          id: 'desc'
+        }
+      }
+    });
+
+    if (process.env.NODE_ENV === "development") {
+      console.log(`🏫 Found ${universities.length} universities`);
+    }
+
+    return universities.map(uni => ({
+      name: uni.university,
+      city: uni.city,
+      scholarshipCount: uni._count.id
+    }));
+  } catch (error) {
+    console.error("❌ Error fetching universities:", error);
+    return [];
+  }
+}
+
+// Get university details with scholarships
+export async function getUniversityDetails(universityName: string) {
+  try {
+    const scholarships = await prisma.scholarship.findMany({
+      where: {
+        university: universityName,
+        isActive: true
+      },
+      orderBy: { createdAt: "desc" },
+      include: {
+        _count: {
+          select: { applications: true }
+        }
+      }
+    });
+
+    if (scholarships.length === 0) {
+      return null;
+    }
+
+    const university = {
+      name: universityName,
+      city: scholarships[0].city,
+      scholarships: scholarships,
+      totalScholarships: scholarships.length,
+      programs: [...new Set(scholarships.map(s => s.programType))],
+      majors: [...new Set(scholarships.map(s => s.major))],
+    };
+
+    return university;
+  } catch (error) {
+    console.error("❌ Error fetching university details:", error);
+    return null;
   }
 }
 
@@ -162,8 +244,9 @@ export async function createScholarshipApplication(data: ApplicationFormData) {
       data: {
         userId,
         scholarshipId: data.scholarshipId,
-        applicationId: applicationId,
+        applicationId,
         status: ApplicationStatus.DRAFT,
+        collegeAdmissionStatus: AdmissionStatus.PENDING,
         hskLevel: data.hskLevel,
         ieltsScore: data.ieltsScore,
         previousEducation: data.previousEducation,
@@ -260,7 +343,7 @@ export async function submitApplication(applicationId: string) {
       where: { id: application.id },
       data: { 
         status: ApplicationStatus.SUBMITTED,
-          updatedAt: new Date(),
+        updatedAt: new Date(),
       },
       include: {
         scholarship: true,
@@ -298,6 +381,11 @@ export async function getRecommendedScholarships(limit: number = 5) {
       where: { isActive: true },
       orderBy: { createdAt: "desc" },
       take: limit,
+      include: {
+        _count: {
+          select: { applications: true }
+        }
+      }
     });
 
     return scholarships;
@@ -319,7 +407,7 @@ export async function getScholarshipStats() {
       popularUniversities
     ] = await Promise.all([
       prisma.scholarship.count(),
-        prisma.scholarship.count({ where: { isActive: true } }),
+      prisma.scholarship.count({ where: { isActive: true } }),
       prisma.scholarshipApplication.count(),
       prisma.scholarship.groupBy({
         by: ['city'],
@@ -376,5 +464,33 @@ export async function getScholarshipStats() {
       popularMajors: [],
       popularUniversities: [],
     };
+  }
+}
+
+// Get application by ID
+export async function getApplicationById(applicationId: string) {
+  try {
+    const { userId } = await auth();
+    
+    if (!userId) {
+      return null;
+    }
+
+    const application = await prisma.scholarshipApplication.findFirst({
+      where: { 
+        applicationId,
+        userId 
+      },
+      include: {
+        scholarship: true,
+        user: true,
+        documents: true,
+      },
+    });
+
+    return application;
+  } catch (error) {
+    console.error("❌ Error fetching application:", error);
+    return null;
   }
 }
