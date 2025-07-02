@@ -1,6 +1,3 @@
-import withPWA from 'next-pwa';
-import runtimeCaching from "next-pwa/cache.js";
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   eslint: {
@@ -23,11 +20,4 @@ const nextConfig = {
   swcMinify: true,
 }
 
-export default withPWA({
-  dest: 'public',
-  register: true,
-  skipWaiting: true,
-  runtimeCaching,
-  disable: process.env.NODE_ENV === 'development', // Disable PWA in development
-  publicExcludes: ['!noprecache/**/*']
-})(nextConfig);
+export default nextConfig;

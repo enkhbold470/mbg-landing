@@ -136,9 +136,9 @@ export default function ScholarshipsPage() {
         motivationLetter: ""
       });
 
-      if (result.success) {
-        toast.success("Application draft created! Complete it in My Applications.");
-        router.push("/applications");
+      if (result.success && result.data) {
+        toast.success("Application created! Complete your application now.");
+        router.push(`/applications/${result.data.applicationId}`);
       } else {
         toast.error(result.error || "Failed to create application");
       }

@@ -52,13 +52,13 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en" suppressHydrationWarning>
-        <body className={inter.className}>
-
-            <Header />
+        <body className={`${inter.className} flex flex-col min-h-screen`}>
+          <Header />
+          <main className="flex-grow">
             {children}
-            <Footer />
-            <Toaster />
-
+          </main>
+          <Footer />
+          <Toaster />
           <Analytics />
         </body>
       </html>
