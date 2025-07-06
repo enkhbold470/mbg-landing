@@ -17,7 +17,7 @@ const nextConfig = {
     optimizeCss: true,
   },
   poweredByHeader: false,
-  swcMinify: true,
+
 }
 
 export default nextConfig;
