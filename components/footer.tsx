@@ -55,12 +55,12 @@ export function Footer() {
               Хичээлийн талаар тусламж хэрэгтэй юу?
             </p>
             <Link
-              href={siteConfig.links.discord}
+              href={siteConfig.links.facebook}
               className="inline-flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg transition-all duration-300 transform hover:scale-105"
               target="_blank"
             >
               <MessageCircle className="w-4 h-4" />
-              Discord-т нэгдэх
+              Facebook-т нэгдэх
             </Link>
           </div>
         </div>

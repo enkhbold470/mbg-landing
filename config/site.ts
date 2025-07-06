@@ -193,8 +193,8 @@ export const siteConfig = {
   // Нийгмийн холбоосууд
   links: {
     twitter: "https://twitter.com/mbgeducation",
-    github: "https://github.com/enkhbold470/mbg-cargo",
-    discord: "https://discord.gg/bJWTS7qem6",
+    github: "mailto:enkhbold470@gmail.com",
+    facebook: "https://www.facebook.com/learningchina",
   },
 
   // Сургалтын хөтөлбөрүүд
