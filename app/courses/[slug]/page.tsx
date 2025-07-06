@@ -39,10 +39,10 @@ export default async function CourseDetailPage({ params }: { params: { slug: str
                                 Онцлох хөтөлбөр
                             </Badge>
                         )}
-                        <h1 className="text-5xl font-bold text-gray-900 mb-4">
+                        <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
                             {course.fullTitle}
                         </h1>
-                        <p className="text-xl text-gray-600 mb-8">
+                        <p className="text-base md:text-lg text-gray-600 mb-8">
                             {course.description}
                         </p>
                     </div>
@@ -194,7 +194,7 @@ export default async function CourseDetailPage({ params }: { params: { slug: str
             </section>
 
             {/* Google Form Embed */}
-            <section className="pb-20 px-6">
+            {/* <section className="pb-20 px-6">
                 <div className="max-w-4xl mx-auto">
                     <Card className="rounded-3xl border-0 shadow-lg bg-white">
                         <CardContent className="p-8">
@@ -220,7 +220,7 @@ export default async function CourseDetailPage({ params }: { params: { slug: str
                         </CardContent>
                     </Card>
                 </div>
-            </section>
+            </section> */}
         </div>
     )
 }
