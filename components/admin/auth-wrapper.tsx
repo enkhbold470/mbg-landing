@@ -8,7 +8,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Lock, Shield, Server } from 'lucide-react';
-
+import { useToast } from '@/hooks/use-toast';
+import Link from 'next/link';
+import Image from 'next/image';
 interface AuthWrapperProps {
   children: React.ReactNode;
   isAuthenticated: boolean;
@@ -18,7 +20,7 @@ export default function AuthWrapper({ children, isAuthenticated }: AuthWrapperPr
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string>('');
   const [isLocalhost, setIsLocalhost] = useState(false);
-
+  const { toast } = useToast();
   useEffect(() => {
     // Check if we're on localhost
     const checkHost = () => {
@@ -27,7 +29,7 @@ export default function AuthWrapper({ children, isAuthenticated }: AuthWrapperPr
       setIsLocalhost(localhost);
       
       if (!localhost) {
-        setError('Admin panel is only accessible from localhost');
+        setError('Админ панель зөвхөн localhost-ээс хандаж болно');
       }
     };
 
@@ -39,30 +41,46 @@ export default function AuthWrapper({ children, isAuthenticated }: AuthWrapperPr
     startTransition(async () => {
       try {
         await authenticateAdmin(formData);
+        toast({
+          title: "Admin Page",
+              description: "Нэвтрэх амжилттай",
+        })  
       } catch (err) {
         setError('Invalid credentials');
-      }
+        toast({
+          title: "Admin Page",
+          description: "Нэвтрэх үед алдаа гарлаа",
+        })  
+        }
     });
   };
 
   const handleLogout = async () => {
     startTransition(async () => {
       await logout();
-    });
+      toast({
+        title: "Admin Page",
+        description: "Гарах амжилттай",
+      })  
+      });
   };
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50">
         <Card className="w-full max-w-md">
           <CardHeader>
-            <CardTitle>Admin Login</CardTitle>
-            <CardDescription>Enter your credentials to access the admin panel</CardDescription>
+            <div className="flex items-center gap-2">
+              <Image src="https://placekeanu.com/100/100" alt="MBG Logo" width={100} height={100} className="rounded-full" />
+              <CardTitle>MBG Админ нэвтрэх</CardTitle>
+            </div>
+            
+            
           </CardHeader>
           <CardContent>
             <form action={handleLogin} className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="username">Username</Label>
+                <Label htmlFor="username">Админ нэр</Label>
                 <Input
                   id="username"
                   name="username"
@@ -72,7 +90,7 @@ export default function AuthWrapper({ children, isAuthenticated }: AuthWrapperPr
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="password">Password</Label>
+                <Label htmlFor="password">Нууц үг</Label>
                 <Input
                   id="password"
                   name="password"
@@ -89,11 +107,13 @@ export default function AuthWrapper({ children, isAuthenticated }: AuthWrapperPr
                 className="w-full" 
                 disabled={isPending}
               >
-                {isPending ? 'Signing in...' : 'Sign In'}
+                {isPending ? 'Нэвтрэх...' : 'Нэвтрэх'}
               </Button>
             </form>
           </CardContent>
         </Card>
+
+        <div className="text-center text-sm text-gray-500 mt-4">Шинэ админ нэвтрэх эрхийг үүсгэх бол: <Link href="mailto:enkhbold470@gmail.com" className="text-blue-500 hover:underline">enkhbold470@gmail.com</Link></div>
       </div>
     );
   }
@@ -102,13 +122,13 @@ export default function AuthWrapper({ children, isAuthenticated }: AuthWrapperPr
     <div className="min-h-screen bg-gray-50">
       <div className="border-b bg-white">
         <div className="flex h-16 items-center justify-between px-4">
-          <h1 className="text-xl font-semibold">MBG Admin Panel</h1>
+          <h1 className="text-xl font-semibold">MBG Админ Панель</h1>
           <Button 
             variant="outline" 
             onClick={handleLogout}
             disabled={isPending}
           >
-            {isPending ? 'Signing out...' : 'Logout'}
+            {isPending ? 'Гарах...' : 'Гарах'}
           </Button>
         </div>
       </div>

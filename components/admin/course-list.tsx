@@ -6,7 +6,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { Pencil, Trash2, Star } from 'lucide-react'
 import { CourseForm } from './course-form'
 import { deleteCourse } from '@/app/actions/config'
-
+import { useToast } from '@/hooks/use-toast'
 interface CourseListProps {
   courses: any[]
   onEditCourse: (course: any) => void
@@ -23,21 +23,24 @@ export function CourseList({
   onRefresh 
 }: CourseListProps) {
   console.log("📋 [CourseList] Rendering list with", courses.length, "courses");
-
+  const { toast } = useToast();
   const handleDeleteCourse = async (courseId: string, courseTitle: string) => {
     console.log("🗑️ [CourseList] Attempting to delete course:", { courseId, courseTitle });
     
-    if (confirm(`Are you sure you want to delete "${courseTitle}"?`)) {
+    if (confirm(`Уучлаарай уу, "${courseTitle}"-ийг устгах уу?`)) {
       try {
         await deleteCourse(courseId);
         console.log("✅ [CourseList] Course deleted successfully:", courseId);
         onRefresh();
       } catch (error) {
         console.error("❌ [CourseList] Error deleting course:", error);
-        alert('Error deleting course');
+        toast({
+          title: "Admin Page",
+          description: `"${courseTitle}"-ийг устгах үед алдаа гарлаа`,
+        })  
       }
     }
-  };
+  };  
 
   return (
     <div className="space-y-4">
@@ -125,7 +128,7 @@ export function CourseList({
       
       {courses.length === 0 && (
         <div className="text-center py-8 text-gray-500">
-          <p>No courses found. Create your first course above!</p>
+          <p>Сургалт олдсонгүй. Эхний сургалтыг үүсгэх!</p>
         </div>
       )}
     </div>

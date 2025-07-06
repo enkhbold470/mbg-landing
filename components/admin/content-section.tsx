@@ -9,6 +9,7 @@ import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Pencil, Trash2, Star } from 'lucide-react'
+import { useToast } from '@/hooks/use-toast'
 
 interface Field {
   name: string
@@ -37,7 +38,7 @@ export function ContentSection({
 }: ContentSectionProps) {
   const [editingItem, setEditingItem] = useState<any>(null)
   const [formKey, setFormKey] = useState(0) // For force re-rendering form
-  
+  const { toast } = useToast();
   console.log(`📝 [ContentSection-${title}] Rendering with ${items.length} items`);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>, isEdit = false) => {
@@ -69,19 +70,30 @@ export function ContentSection({
       }
     } catch (error) {
       console.error(`❌ [ContentSection-${title}] Error:`, error);
+      toast({
+        title: "Admin Page",
+        description: `"${title.slice(0, -1)}"-ийг хадгалах үед алдаа гарлаа`,
+      })  
     }
   }
 
   const handleDelete = async (id: string, itemName: string) => {
     console.log(`🗑️ [ContentSection-${title}] Deleting item:`, { id, itemName });
     
-    if (confirm(`Are you sure you want to delete "${itemName}"?`)) {
+    if (confirm(`Уучлаарай уу, "${itemName}"-ийг устгах уу?`)) {
       try {
         await onDelete(id)
         console.log(`✅ [ContentSection-${title}] Item deleted successfully:`, id);
       } catch (error) {
         console.error(`❌ [ContentSection-${title}] Delete error:`, error);
-        alert(`Error deleting ${title.toLowerCase()}`)
+        toast({
+          title: "Admin Page",
+          description: `"${itemName}"-ийг устгах үед алдаа гарлаа`,
+          })  
+        toast({
+          title: "Admin Page",
+          description: `"${itemName}"-ийг устгах үед алдаа гарлаа`,
+        })      
       }
     }
   }
@@ -120,7 +132,7 @@ export function ContentSection({
         </div>
       ))}
       <Button type="submit">
-        {isEdit ? `Update ${title.slice(0, -1)}` : `Add ${title.slice(0, -1)}`}
+        {isEdit ? `Хадгалах ${title.slice(0, -1)}` : `Үүсгэх `}
       </Button>
     </form>
   )
@@ -129,7 +141,7 @@ export function ContentSection({
     <div className="space-y-6">
       <Card>
         <CardHeader>
-          <CardTitle>Add New {title.slice(0, -1)}</CardTitle>
+          <CardTitle>Шинэ {title.slice(0, -1)} үүсгэх</CardTitle>
         </CardHeader>
         <CardContent>
           {renderForm()}
@@ -138,7 +150,7 @@ export function ContentSection({
 
       <Card>
         <CardHeader>
-          <CardTitle>Existing {title} ({items.length})</CardTitle>
+          <CardTitle>Одоо байгаа {title} ({items.length})</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
@@ -183,7 +195,7 @@ export function ContentSection({
             
             {items.length === 0 && (
               <div className="text-center py-8 text-gray-500">
-                <p>No {title.toLowerCase()} found. Create your first {title.toLowerCase().slice(0, -1)} above!</p>
+                <p>Олдсонгүй. Эхний {title.toLowerCase().slice(0, -1)}-ийг үүсгэх!</p>
               </div>
             )}
           </div>

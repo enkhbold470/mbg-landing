@@ -13,7 +13,8 @@ import { SiteConfigForm } from '@/components/admin/site-config-form'
 import { CourseForm } from '@/components/admin/course-form'
 import { CourseList } from '@/components/admin/course-list'
 import { ContentSection } from '@/components/admin/content-section'
-
+import Link from 'next/link'
+ 
 // Import actions
 import { 
   getSiteConfig,
@@ -38,6 +39,7 @@ import {
   updateFeature,
   deleteFeature
 } from '@/app/actions/config'
+import { useToast } from '@/hooks/use-toast'
 
 export default function AdminPage() {
   console.log("🚀 [AdminPage] Component mounted");
@@ -51,9 +53,13 @@ export default function AdminPage() {
   const [features, setFeatures] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [editingCourse, setEditingCourse] = useState<any>(null)
-
+  const { toast } = useToast()
   useEffect(() => {
     console.log("📊 [AdminPage] Loading initial data...");
+    toast({
+      title: "Admin Page",
+      description: "Анхны мэдээлэл олдож байна...",
+    })  
     loadData()
   }, [])
 
@@ -70,7 +76,10 @@ export default function AdminPage() {
       ])
 
       console.log("✅ [AdminPage] All data loaded successfully");
-
+      toast({
+        title: "Admin Page",
+        description: "Бүх мэдээлэл амжилттай олдлоо",
+      })  
       setSiteConfig(siteData)
       setCourses(coursesData as any)
       setTestimonials(testimonialsData)
@@ -103,10 +112,16 @@ export default function AdminPage() {
       await updateSiteConfig(data)
       setSiteConfig(data)
       console.log("✅ [AdminPage] Site configuration updated successfully");
-      alert('Site configuration updated successfully!')
+      toast({
+        title: "Admin Page",
+        description: "Сайтын тохируулга амжилттай хадгалагдлаа",
+      })  
     } catch (error) {
       console.error("❌ [AdminPage] Error updating site configuration:", error);
-      alert('Error updating site configuration')
+      toast({
+        title: "Admin Page",
+        description: "Сайтын тохируулга хадгалах үед алдаа гарлаа",
+      })  
     }
   }
 
@@ -143,17 +158,26 @@ export default function AdminPage() {
         await updateCourse(editingCourse.id, data)
         setEditingCourse(null)
         console.log("✅ [AdminPage] Course updated successfully");
-        alert('Course updated successfully!')
+        toast({
+          title: "Admin Page",
+          description: "Сургалт амжилттай хадгалагдлаа",
+        })  
       } else {
         await createCourse(data)
         e.currentTarget.reset()
         console.log("✅ [AdminPage] Course created successfully");
-        alert('Course created successfully!')
+        toast({
+          title: "Admin Page",
+          description: "Сургалт амжилттай үүслээ",
+        })  
       }
       loadData()
     } catch (error) {
       console.error("❌ [AdminPage] Error saving course:", error);
-      alert('Error saving course')
+      toast({
+        title: "Admin Page",
+        description: "Сургалт хадгалах үед алдаа гарлаа",
+      })  
     }
   }
 
@@ -171,10 +195,16 @@ export default function AdminPage() {
           console.log("✅ [AdminPage] Content created successfully");
         }
         await loadData()
-        alert(`${isEdit ? 'Updated' : 'Created'} successfully!`)
+        toast({
+          title: "Admin Page",
+          description: `${isEdit ? 'Шинэчлэгдлээ' : 'Үүслээ'} амжилттай`,
+        })  
       } catch (error) {
         console.error("❌ [AdminPage] Error saving content:", error);
-        alert('Error saving content')
+        toast({
+          title: "Admin Page",
+          description: "Мэдээлэл хадгалах үед алдаа гарлаа",
+        })  
       }
     }
   }
@@ -228,10 +258,12 @@ export default function AdminPage() {
       <Image 
         src={partner.logo} 
         alt={partner.name} 
-        className="w-16 h-16 object-contain mb-2"
+        className="w-24 h-24 object-contain mb-2"
         onError={(e) => {
           (e.target as HTMLImageElement).src = 'https://placekeanu.com/64/64'
         }}
+        width={100}
+        height={100}
       />
       <h3 className="font-semibold mb-2">{partner.name}</h3>
       <a 
@@ -266,7 +298,7 @@ export default function AdminPage() {
 
   if (loading) {
     console.log("⏳ [AdminPage] Loading state active");
-    return <div className="p-8">Loading admin dashboard...</div>
+    return <div className="p-8">Админ панель ачааллаж байна...</div>
   }
 
   console.log("🎨 [AdminPage] Rendering admin dashboard, active tab:", activeTab);
@@ -274,8 +306,9 @@ export default function AdminPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold">Admin Dashboard</h1>
-        <p className="text-gray-600">Manage your site content and configuration</p>
+        <h1 className="text-3xl font-bold">Админ панель</h1>
+        <p className="text-gray-600">Сайтын бүх мэдээлэл</p>
+        <p className="text-gray-600">Тусламж? <Link href="mailto:enkhbold470@gmail.com" className="text-blue-500 hover:underline">enkhbold470@gmail.com</Link></p>
       </div>
 
       <Tabs value={activeTab} onValueChange={(value) => {
@@ -283,12 +316,12 @@ export default function AdminPage() {
         setActiveTab(value);
       }}>
         <TabsList className="grid w-full grid-cols-6">
-          <TabsTrigger value="site">Site Config</TabsTrigger>
-          <TabsTrigger value="courses">Courses</TabsTrigger>
-          <TabsTrigger value="testimonials">Testimonials</TabsTrigger>
-          <TabsTrigger value="partners">Partners</TabsTrigger>
-          <TabsTrigger value="faq">FAQ</TabsTrigger>
-          <TabsTrigger value="features">Features</TabsTrigger>
+          <TabsTrigger value="site">Нүүр хуудас</TabsTrigger>
+          <TabsTrigger value="courses">Сургалтууд</TabsTrigger>
+          <TabsTrigger value="testimonials">Сэтгэгдэлүүд</TabsTrigger>
+          <TabsTrigger value="partners">Бидний хамтрагчид</TabsTrigger>
+          <TabsTrigger value="faq">Түгээмэл асуултууд</TabsTrigger>
+          <TabsTrigger value="features">Онцлог боломжууд</TabsTrigger>
         </TabsList>
 
         <TabsContent value="site">
@@ -299,7 +332,7 @@ export default function AdminPage() {
           <div className="space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle>Add New Course</CardTitle>
+                <CardTitle>Сургалт үүсгэх</CardTitle>
               </CardHeader>
               <CardContent>
                 <CourseForm onSubmit={handleCourseSubmit} />
@@ -308,7 +341,7 @@ export default function AdminPage() {
 
             <Card>
               <CardHeader>
-                <CardTitle>Existing Courses ({courses.length})</CardTitle>
+                <CardTitle>Одоо байгаа сургалтууд ({courses.length})</CardTitle>
               </CardHeader>
               <CardContent>
                 <CourseList 
@@ -325,7 +358,7 @@ export default function AdminPage() {
 
         <TabsContent value="testimonials">
           <ContentSection
-            title="Testimonials"
+            title="Сэтгэгдэлүүд"
             items={testimonials}
             fields={testimonialFields}
             onSubmit={createContentHandler(createTestimonial, updateTestimonial)}
@@ -336,7 +369,7 @@ export default function AdminPage() {
 
         <TabsContent value="partners">
           <ContentSection
-            title="Partners"
+            title="Бидний хамтрагчид"
             items={partners}
             fields={partnerFields}
             onSubmit={createContentHandler(createPartner, updatePartner)}
@@ -347,7 +380,7 @@ export default function AdminPage() {
 
         <TabsContent value="faq">
           <ContentSection
-            title="FAQs"
+            title="Түгээмэл асуултууд"
             items={faqs}
             fields={faqFields}
             onSubmit={createContentHandler(createFAQ, updateFAQ)}
@@ -358,7 +391,7 @@ export default function AdminPage() {
 
         <TabsContent value="features">
           <ContentSection
-            title="Features"
+            title="Онцлог боломжууд"
             items={features}
             fields={featureFields}
             onSubmit={createContentHandler(createFeature, updateFeature)}
