@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "types": ["node", "react", "react-dom", "@prisma/client"],
+    "types": [ "react"],
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "target": "ESNext",
@@ -28,8 +28,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "hooks/useScreenSize.js",
-    "prisma"
+
   ],
   "exclude": ["node_modules"]
 }

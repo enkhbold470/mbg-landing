@@ -2,8 +2,6 @@ import { Footer } from "@/components/footer";
 import { Header } from "@/components/header";
 import { Toaster } from "@/components/ui/toaster";
 
-import { ClerkProvider } from "@clerk/nextjs";
-
 import { Analytics } from "@vercel/analytics/next";
 
 import type { Metadata } from "next";
@@ -50,7 +48,6 @@ export default function RootLayout({
   children: ReactNode;
 }>) {
   return (
-    <ClerkProvider>
       <html lang="en" suppressHydrationWarning>
         <body className={`${openSans.className} flex flex-col min-h-screen overflow-x-hidden`}>
           <Header />
@@ -62,6 +59,5 @@ export default function RootLayout({
           <Analytics />
         </body>
       </html>
-    </ClerkProvider>
   );
 }
