@@ -309,7 +309,7 @@ export const metaConfig = {
   title: 'MBG Боловсрол',
   description: 'Хятадын хэлийг эзэмших мэргэжлийн сургалт',
   url: 'https://mbg-education.com',
-  ogImage: 'https://mbg-education.com/og.jpg',
+  ogImage: 'https://mbg-landing.vercel.app/og.jpg',
   keywords: [
     'MBG Боловсрол', 'Хятад хэл', 'HSK', 'Хятадын боловсрол',
     'Хэл сургалт', 'Монгол', 'Хятад хэлний сургалт', 'Улаанбаатар'
