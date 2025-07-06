@@ -1,0 +1,95 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model SiteConfig {
+  id          String @id @default(cuid())
+  name        String
+  description String
+  tagline     String
+  slogan      String
+  url         String
+  ogImage     String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  @@map("site_config")
+}
+
+model Course {
+  id          String @id @default(cuid())
+  title       String
+  subtitle    String
+  description String
+  price       String
+  duration    String
+  highlighted Boolean @default(false)
+  slug        String @unique
+  image       String
+  video       String
+  signupForm  String
+  fullTitle   String
+  startDate   String
+  schedule    String
+  frequency   String
+  classSize   String
+  teacher     String
+  features    String[] // Array of features
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  @@map("courses")
+}
+
+model Testimonial {
+  id        String @id @default(cuid())
+  name      String
+  role      String
+  content   String
+  rating    Int
+  image     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@map("testimonials")
+}
+
+model Partner {
+  id        String @id @default(cuid())
+  name      String
+  logo      String
+  url       String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@map("partners")
+}
+
+model FAQ {
+  id        String @id @default(cuid())
+  question  String
+  answer    String
+  order     Int @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@map("faq")
+}
+
+model Feature {
+  id          String @id @default(cuid())
+  title       String
+  description String
+  icon        String
+  order       Int @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  @@map("features")
+}
+

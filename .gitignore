@@ -44,3 +44,5 @@ dev.db
 applications.json
 **/public/workbox-*.js
 **/public/sw.js
+
+/lib/generated/prisma
