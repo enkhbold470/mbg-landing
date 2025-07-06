@@ -164,7 +164,10 @@ export default function AdminPage() {
         })  
       } else {
         await createCourse(data)
-        e.currentTarget.reset()
+        // Safely reset the form if currentTarget is available
+        if (e.currentTarget) {
+          e.currentTarget.reset()
+        }
         console.log("✅ [AdminPage] Course created successfully");
         toast({
           title: "Admin Page",

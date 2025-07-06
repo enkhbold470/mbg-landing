@@ -3,23 +3,36 @@ import OpenAI from "openai";
 
 // Make OpenAI client initialization conditional
 let openai: OpenAI | null = null;
+let initError: string | null = null;
 
 try {
   if (process.env.OPENAI_API_KEY) {
     openai = new OpenAI({
       apiKey: process.env.OPENAI_API_KEY,
     });
+    console.log("✅ OpenAI client initialized successfully");
+  } else {
+    initError = "OPENAI_API_KEY environment variable is not set";
+    console.warn("❌ OpenAI client initialization failed:", initError);
   }
 } catch (error) {
-  console.warn("OpenAI client could not be initialized:", error);
+  initError = error instanceof Error ? error.message : String(error);
+  console.warn("❌ OpenAI client could not be initialized:", error);
 }
 
 export async function POST(req: Request) {
+  console.log("🔄 Auto-fill API called");
   try {
     // Check if OpenAI is available
     if (!openai) {
+      const errorMessage = initError || "OpenAI client is not available";
+      console.error("❌ Auto-fill request failed:", errorMessage);
       return NextResponse.json(
-        { error: "OpenAI API key is not configured" },
+        { 
+          error: "OpenAI service is not available", 
+          details: errorMessage,
+          timestamp: new Date().toISOString()
+        },
         { status: 500 }
       );
     }
@@ -93,20 +106,35 @@ Example format:
     // when response_format: { type: "json_object" } is used.
     try {
       const parsedContent = JSON.parse(content);
+      console.log("✅ Auto-fill completed successfully for course:", courseTitle);
       return NextResponse.json(parsedContent);
     } catch (parseError) {
-      console.error("Error parsing OpenAI response:", parseError);
+      console.error("❌ Error parsing OpenAI response:", parseError);
       console.error("Raw OpenAI response content:", content);
       return NextResponse.json(
-        { error: "Failed to parse AI-generated content. Raw content: " + content },
+        { 
+          error: "Failed to parse AI-generated content", 
+          details: "Invalid JSON response from AI service",
+          rawContent: content,
+          timestamp: new Date().toISOString()
+        },
         { status: 500 }
       );
     }
 
   } catch (error: any) {
-    console.error("Error in API route:", error);
+    console.error("❌ Error in auto-fill API route:", {
+      message: error.message,
+      stack: error.stack,
+      name: error.name,
+      timestamp: new Date().toISOString()
+    });
     return NextResponse.json(
-      { error: error.message || "An unknown error occurred" },
+      { 
+        error: "Auto-fill service error",
+        details: error.message || "An unknown error occurred",
+        timestamp: new Date().toISOString()
+      },
       { status: 500 }
     );
   }

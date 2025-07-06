@@ -33,9 +33,10 @@ export function CourseForm({ course, onSubmit, isEdit = false }: CourseFormProps
     }
 
     setIsGenerating(true);
+    let response;
     
     try {
-      const response = await fetch('/api/auto-fill', {
+      response = await fetch('/api/auto-fill', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -84,9 +85,23 @@ export function CourseForm({ course, onSubmit, isEdit = false }: CourseFormProps
 
     } catch (error) {
       console.error('AI generation error:', error);
+      
+      // Try to get more specific error info from the response
+      let errorMessage = "AI үүсгэх явцад алдаа гарлаа";
+      if (response && !response.ok) {
+        try {
+          const errorResponse = await response.json();
+          if (errorResponse.details) {
+            errorMessage = `AI алдаа: ${errorResponse.details}`;
+          }
+        } catch (parseError) {
+          // Fallback to generic message if we can't parse the error
+        }
+      }
+      
       toast({
         title: "Алдаа",
-        description: "AI үүсгэх явцад алдаа гарлаа",
+        description: errorMessage,
         variant: "destructive"
       });
     } finally {
