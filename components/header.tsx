@@ -21,21 +21,21 @@ export function Header() {
           </Link>
 
           <div className="hidden md:flex items-center space-x-8">
-            <a href="/#features" className="text-gray-600 hover:text-purple-600 transition-colors">
+            <Link href="/#features" className="text-gray-600 hover:text-purple-600 transition-colors">
               Онцлогууд
-            </a>
-            <a href="/#testimonials" className="text-gray-600 hover:text-purple-600 transition-colors">
+            </Link>
+            <Link href="/#testimonials" className="text-gray-600 hover:text-purple-600 transition-colors">
               Сэтгэгдэлүүд
-            </a>
-            <a href="/#about" className="text-gray-600 hover:text-purple-600 transition-colors">
+            </Link>
+            <Link href="/#about" className="text-gray-600 hover:text-purple-600 transition-colors">
               Бидний тухай
-            </a>
-            <a href="/#faq" className="text-gray-600 hover:text-purple-600 transition-colors">
+            </Link>
+            <Link href="/#faq" className="text-gray-600 hover:text-purple-600 transition-colors">
               Асуулт
-            </a>
-            <a href="/#contact" className="text-gray-600 hover:text-purple-600 transition-colors">
+            </Link>
+            <Link href="/#contact" className="text-gray-600 hover:text-purple-600 transition-colors">
               Холбоо барих
-            </a>
+            </Link>
           </div>
 
           <div className="flex items-center gap-4">

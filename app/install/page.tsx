@@ -10,11 +10,17 @@ export default function Install() {
   const [isInstallable, setIsInstallable] = useState(false);
 
   useEffect(() => {
-    window.addEventListener("beforeinstallprompt", (e) => {
+    const handleBeforeInstallPrompt = (e: Event) => {
       e.preventDefault();
-      setDeferredPrompt(e);
+      setDeferredPrompt(e as any);
       setIsInstallable(true);
-    });
+    };
+
+    window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+
+    return () => {
+      window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+    };
   }, []);
 
   const handleInstall = async () => {
@@ -67,8 +73,8 @@ export default function Install() {
                 <li>
                   Tap the Share button <span className="inline-block">⎋</span>
                 </li>
-                <li>Scroll down and tap "Add to Home Screen"</li>
-                <li>Tap "Add" to install</li>
+                <li>Scroll down and tap &quot;Add to Home Screen&quot;</li>
+                <li>Tap &quot;Add&quot; to install</li>
               </ol>
             </div>
 
@@ -87,11 +93,10 @@ export default function Install() {
               <ol className="list-decimal list-inside space-y-2">
                 <li>Open this website in Chrome</li>
                 <li>
-                  Tap the three dots menu{" "}
-                  <span className="inline-block">⋮</span>
+                  Tap the three dots menu <span className="inline-block">⋮</span>
                 </li>
-                <li>Select "Add to Home screen"</li>
-                <li>Tap "Add" to install</li>
+                <li>Select &quot;Add to Home screen&quot;</li>
+                <li>Tap &quot;Add&quot; to install</li>
               </ol>
             </div>
           </>

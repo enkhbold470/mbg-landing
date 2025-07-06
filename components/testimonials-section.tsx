@@ -44,7 +44,7 @@ export function TestimonialsSection() {
                 </div>
 
                 <blockquote className="text-gray-700 italic leading-relaxed">
-                  "{testimonial.content}"
+                  &quot;{testimonial.content}&quot;
                 </blockquote>
               </CardContent>
             </Card>

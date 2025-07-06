@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Sparkles, Globe,MessageCircle, HelpCircle, Download } from "lucide-react";
+import { Sparkles, Globe, MessageCircle, HelpCircle, Download } from "lucide-react";
 import { siteConfig } from "@/config/site";
 
 export function Footer() {
@@ -16,7 +16,7 @@ export function Footer() {
               </div>
               <h3 className="text-2xl font-bold">{siteConfig.name}</h3>
             </div>
-            <p className="text-purple-200 text-sm italic">"{siteConfig.slogan}"</p>
+            <p className="text-purple-200 text-sm italic">&quot;{siteConfig.slogan}&quot;</p>
           </div>
 
           {/* Quick Links */}
