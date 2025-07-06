@@ -148,7 +148,7 @@ export const ctaSection = {
   subtitle: "Хятад хэлийг эзэмшиж, ирээдүйн боломжуудыг нээж аваарай",
   primaryCta: {
     text: "Үнэгүй зөвлөгөө авах",
-    href: "/contact"
+    href: "/#contact"
   },
   secondaryCta: { 
     text: "🇲🇳 Сургалтын хөтөлбөрүүд",
@@ -160,7 +160,7 @@ export const siteConfig = {
   name: "MBG Education",
   description: "Хятадын хэлийг эзэмших мэргэжлийн сургалт",
   tagline: "Тэгээс тэтгэлэгт тэнцэх нь",
-  slogan: "Тэгээс тэтгэлэгт тэнцэх нь",
+  slogan: "MBG гээс бүгдийг нь",
   url: "https://mbg-landing.vercel.app",
   ogImage: "https://raw.githubusercontent.com/enkhbold470/mbg-landing/refs/heads/main/public/og.jpg?token=GHSAT0AAAAAADDNY624LZU73VR2BBFWVMA22DKJ7HA",
   

@@ -71,14 +71,7 @@ export default function AdminPage() {
 
       console.log("✅ [AdminPage] All data loaded successfully");
 
-      setSiteConfig(siteData || {
-        name: 'MBG Education',
-        description: 'Хятадын хэлийг эзэмших мэргэжлийн сургалт',
-        tagline: 'Тэгээс тэтгэлэгт тэнцэх нь',
-        slogan: 'Тэгээс тэтгэлэгт тэнцэх нь',
-        url: 'https://mbg-landing.vercel.app',
-        ogImage: 'https://raw.githubusercontent.com/enkhbold470/mbg-landing/refs/heads/main/public/og.jpg'
-      })
+      setSiteConfig(siteData)
       setCourses(coursesData as any)
       setTestimonials(testimonialsData)
       setPartners(partnersData)
