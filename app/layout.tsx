@@ -5,7 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Analytics } from "@vercel/analytics/next";
 
 import type { Metadata } from "next";
-import type { ReactNode } from "react";
+
 
 import { Viewport } from "next";
 import { Open_Sans } from "next/font/google";
@@ -42,11 +42,7 @@ export const metadata: Metadata = {
   ],
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: ReactNode;
-}>) {
+export default function RootLayout({children}: {children: React.ReactNode}) {
   return (
       <html lang="en" suppressHydrationWarning>
         <body className={`${openSans.className} flex flex-col min-h-screen overflow-x-hidden`}>
