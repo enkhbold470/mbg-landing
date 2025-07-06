@@ -19,3 +19,10 @@ export async function copyToClipboard(text: string) {
     return false;
   }
 }
+
+// make youtube regular video long link to iframe
+export const youtubeVideo = (link: string) => {
+  const videoId = link.split("v=")[1];  
+  
+  return `https://www.youtube.com/embed/${videoId}`;
+}

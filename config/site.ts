@@ -1,150 +1,252 @@
+export const aboutUs = {
+  title: "Танилцуулга",
+  description: "MBG Education Center нь 2016 оноос хойш тасралтгүй үйл ажиллагаагаа зохион байгуулж, ажиллаж байна. MBG ХХК нь...Боловсрол, Сургалт аялал, Мэдээлэл зөвлөгөө чиглэлээр 9 дахь жилдээ...Тэг-с ТЭТГЭЛЭГТ ТЭНЦЭХ хүртэл нь... MBG гэдэг нь Mongolian Business Guide гэсэн үг. Зөвхөн сургалтын үйл ажиллагаагаа зохион байгуулаад зогсохгүй, бид бусад үйл ажиллагаагаа нэмэлтээр үйл ажиллаж байна.",
+  image: "https://placekeanu.com/500/500",
+  video: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+  facebook: [
+    {
+      name: "Learning China",
+      url: "https://www.facebook.com/learningchina"
+    },
+  ]
+}
+
+export const valueProposition = {
+  title: "Хятадын хэлийг эзэмшиж, ирээдүйгээ бүтээнэ үү",
+  subtitle: "Дэлхийн хамгийн том эдийн засгийн гүрний хэлийг эзэмшиж, ирээдүйн боломжуудыг нээж аваарай",
+  benefits: [
+    {
+      title: "Мэргэжлийн багш нар",
+      description: "Хятадаас боловсрол эзэмшсэн мэргэжлийн багш нар",
+      icon: "👨‍🏫"
+    },
+    {
+      title: "Олон улсын сертификат",
+      description: "HSK болон олон улсын хүлээн зөвшөөрөгдсөн сертификат",
+      icon: "🏆"
+    },
+    {
+      title: "Уян хатан цаг",
+      description: "Таны цаг хуваарьт тохирсон уян хатан сургалтын цаг",
+      icon: "⏰"
+    },
+    {
+      title: "Бодит дадлага",
+      description: "Бодит нөхцөл байдалд хэрэглэх боломжтой дадлага",
+      icon: "🗣️"
+    }
+  ]
+}
+
+export const features = [
+  {
+    title: "HSK бэлтгэл",
+    description: "HSK-ийн бүх түвшинд мэргэжлийн бэлтгэл",
+    icon: "📚"
+  },
+  {
+    title: "Бизнес хятад хэл",
+    description: "Ажлын орчинд шаардлагатай хятад хэлний мэдлэг",
+    icon: "💼"
+  },
+  {
+    title: "Хэлээр харилцах",
+    description: "Өдөр тутмын амьдралд хэрэглэх харилцааны хэл",
+    icon: "🗣️"
+  },
+  {
+    title: "Онлайн сургалт",
+    description: "Гэрээсээ суралцах онлайн хичээлүүд",
+    icon: "💻"
+  }
+]
+
+export const testimonials = [
+  {
+    name: "Батбаяр",
+    role: "Оюутан",
+    content: "MBG-ийн тусламжтайгаар HSK 6 түвшинд хүрч, Бээжингийн их сургуульд тэтгэлэгтэй суралцаж байна.",
+    rating: 5,
+    image: "https://placekeanu.com/100/100"
+  },
+  {
+    name: "Сарангэрэл",
+    role: "Ажилтан",
+    content: "Хятад хэлийг эзэмшсэний дараа олон улсын компанид ажлын боломж олдлоо.",
+    rating: 5,
+    image: "https://placekeanu.com/100/100"
+  },
+  {
+    name: "Мөнхбат",
+    role: "Бизнесмен",
+    content: "Хятадтай худалдаа хийхэд хэлний мэдлэг маш их тустай болж байна.",
+    rating: 5,
+    image: "https://placekeanu.com/100/100"
+  }
+]
+
+export const partners = [
+  {
+    name: "Пекинг",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f4/Peking_University_seal.svg/1024px-Peking_University_seal.svg.png",
+    url: "https://www.pku.edu.cn/"
+  },
+  {
+    name: "Цинхуа",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Tsinghua_University_Logo.svg/2560px-Tsinghua_University_Logo.svg.png",
+    url: "https://www.tsinghua.edu.cn/"
+  },
+
+  {
+    name: "Фудан",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Fudan_University_Logo.svg/2565px-Fudan_University_Logo.svg.png",
+    url: "https://www.fudan.edu.cn/"
+  },
+  {
+    name: "Шанхайын ЖИАО Тонг",
+    logo: "https://upload.wikimedia.org/wikipedia/en/d/da/Sjtu-logo-standard-red.png",
+    url: "https://www.sjtu.edu.cn/"
+  },
+  {
+    name: "Харвард",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Harvard_University_coat_of_arms.svg/2560px-Harvard_University_coat_of_arms.svg.png",
+    url: "https://www.harvard.edu/"
+  },
+  {
+    name: "Стэнфорд",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Seal_of_Leland_Stanford_Junior_University.svg/2560px-Seal_of_Leland_Stanford_Junior_University.svg.png",
+    url: "https://www.stanford.edu/"
+  },
+  {
+    name: "MIT",
+    logo: "https://upload.wikimedia.org/wikipedia/en/thumb/4/44/MIT_Seal.svg/2568px-MIT_Seal.svg.png",
+    url: "https://www.mit.edu/"
+  }
+]
+
+export const faq = [
+  {
+    question: "Сургалтын хугацаа хэр үргэлжлэх вэ?",
+    answer: "Сургалтын хугацаа таны сонгосон хөтөлбөрөөс хамаарч 40 цагаас 1 жил хүртэл байна."
+  },
+  {
+    question: "Онлайн сургалт байдаг уу?",
+    answer: "Тийм, бид онлайн болон танхимын сургалт хоёуланг нь санал болгодог."
+  },
+  {
+    question: "HSK шалгалтанд бэлтгэх үү?",
+    answer: "Тийм, HSK-ийн бүх түвшинд мэргэжлийн бэлтгэл хийдэг."
+  },
+  {
+    question: "Тэтгэлэгт хөтөлбөрт оролцох боломжтой юу?",
+    answer: "Тийм, бид Хятадын их сургуулиудын тэтгэлэгт хөтөлбөрүүдэд оролцоход тусалдаг."
+  }
+]
+
+export const ctaSection = {
+  title: "Өнөөдөр л эхлээрэй",
+  subtitle: "Хятад хэлийг эзэмшиж, ирээдүйн боломжуудыг нээж аваарай",
+  primaryCta: {
+    text: "Үнэгүй зөвлөгөө авах",
+    href: "#contact"
+  },
+  secondaryCta: {
+    text: "Сургалтын хөтөлбөрүүд",
+    href: "/courses"
+  }
+}
+
 export const siteConfig = {
-  name: "MBG Scholarship",
-  description: "Expert guidance for Mongolian students pursuing Chinese scholarships",
-  tagline: "Your pathway to Chinese education excellence",
-  url: "https://mbg-scholarship.com",
-  ogImage: "https://mbg-scholarship.com/og.jpg",
+  name: "MBG Боловсрол",
+  description: "Хятадын хэлийг эзэмших мэргэжлийн сургалт",
+  tagline: "Хятадын боловсролын шилдэг зам",
+  slogan: "Тэгээс тэтгэлэгт тэнцэх нь",
+  url: "https://mbg-education.com",
+  ogImage: "https://mbg-education.com/og.jpg",
   
-  // Service details
-  service: {
-    target: "Mongolian students seeking Chinese college scholarships",
-    coverage: "All scholarship types: Government, Local, University, Stipends",
-    sources: "Comprehensive data from campuschina.org and official sources",
-    languages: ["English", "Mongolian", "Chinese"],
-    fee_structure: {
-      consultation: "Free initial consultation",
-      basic_plan: "Application guidance and document review",
-      premium_plan: "Full-service application management",
-      success_fee: "Only pay when you get accepted"
+  // Холбоо барих мэдээлэл
+  contact: {
+    email: "mbgedumn@gmail.com",
+    phones: [
+      "(+976) 77117678",
+      "(+976) 99797678", 
+      "(+976) 80098089"
+    ],
+    address: {
+      mongolian: "Танан төв -202, Сүхбаатар дүүрэг, 8-р хороо, Улаанбаатар, Монгол улс",
+      english: "Tanan center-202, 8th khoroo, Ulaanbaatar Mongolia"
+    },
+    social: {
+      facebook: [
+        {
+          name: "Learning China",
+          url: "https://www.facebook.com/learningchina"
+        },
+        {
+          name: "MBG Education", 
+          url: "https://www.facebook.com/MBGeduMBGtourMBGConsulting"
+        }
+      ]
     }
   },
 
-  // Features
-  features: {
-    scholarship_discovery: "AI-powered matching with 1000+ scholarships",
-    college_selection: "Expert guidance on university choices", 
-    document_management: "Complete document preparation and review",
-    application_tracking: "Real-time status updates",
-    interview_prep: "Mock interviews and coaching",
-    visa_support: "Student visa application assistance"
-  },
-
-  // Contact information
-  contact: {
-    email: "info@china-scholarship-navigator.com",
-    phone: "+976 11 123456",
-    wechat: "ChinaScholarshipMN",
-    office: "Ulaanbaatar, Mongolia"
-  },
-
-  // Social links
+  // Нийгмийн холбоосууд
   links: {
-    twitter: "https://twitter.com/mbgscholarship",
+    twitter: "https://twitter.com/mbgeducation",
     github: "https://github.com/enkhbold470/mbg-cargo",
     discord: "https://discord.gg/bJWTS7qem6",
   },
 
-  // Navigation
-  mainNav: [
+  // Сургалтын хөтөлбөрүүд
+  courses: [
     {
-      title: "Scholarships",
-      href: "/scholarships",
+      title: "40 цаг",
+      subtitle: "HSK 4 түвшин",
+      description: "Хятад хэлний үндсийг эзэмших",
+      price: "450,000₮",
+      duration: "40 цаг",
+      highlighted: true,
+      slug: "hsk-4",
+      image: "https://placekeanu.com/500/500",
+      video: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+      signupForm: "https://www.google.com",
     },
     {
-      title: "Colleges",
-      href: "/colleges", 
+      title: "6 сар",
+      subtitle: "Үндсэн хичээл",
+      description: "Бүрэн дүүрэн хичээлийн хөтөлбөр",
+      price: "1,800,000₮",
+      duration: "6 сар",
+      highlighted: false,
+      slug: "basic-course",
+      image: "https://placekeanu.com/500/500",
+      video: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+      signupForm: "https://www.google.com",
     },
     {
-      title: "My Applications",
-      href: "/applications",
+      title: "5+5 сар",
+      subtitle: "Монгол + Хятад",
+      description: "Хосолсон олон улсын сургалт",
+      price: "5,800,000₮",
+      duration: "10 сар",
+      highlighted: false,
+      slug: "combined-course",
+      image: "https://placekeanu.com/500/500",
+      video: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+      signupForm: "https://www.google.com",
     },
     {
-      title: "Documents",
-      href: "/documents",
+      title: "1 жил",
+      subtitle: "Бүрэн хөтөлбөр",
+      description: "Мэргэжлийн түвшинд хүрэх",
+      price: "2,800,000₮",
+      duration: "12 сар",
+      highlighted: false,
+      slug: "full-course",
+      image: "https://placekeanu.com/500/500",
+      video: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+      signupForm: "https://www.google.com",
     },
-    {
-      title: "Pricing",
-      href: "/pricing",
-    }
-  ],
-
-  // Scholarship categories
-  scholarshipTypes: [
-    "CSC Government Scholarships",
-    "Provincial Government Scholarships", 
-    "University Scholarships",
-    "Belt and Road Initiative",
-    "Confucius Institute Scholarships",
-    "MOFCOM Scholarships",
-    "Private Foundation Scholarships",
-    "Language Program Scholarships"
-  ],
-
-  // Study levels
-  studyLevels: [
-    "Bachelor's Degree",
-    "Master's Degree", 
-    "PhD/Doctoral",
-    "Language Programs",
-    "Exchange Programs",
-    "Summer Schools"
-  ],
-
-  // Popular study fields
-  popularFields: [
-    "Engineering & Technology",
-    "Business & Economics", 
-    "Medicine & Health Sciences",
-    "Computer Science & IT",
-    "International Relations",
-    "Chinese Language & Literature",
-    "Environmental Science",
-    "Architecture & Design"
-  ],
-
-  supportedPrograms: [
-    "Bachelor's Degree",
-    "Master's Degree", 
-    "PhD/Doctorate",
-    "Chinese Language Program",
-    "Exchange Programs"
-  ],
-
-  servicePlans: [
-    {
-      name: "Free Consultation",
-      price: 0,
-      features: [
-        "Initial assessment",
-        "Basic scholarship recommendations",
-        "Application timeline",
-        "Requirements checklist"
-      ]
-    },
-    {
-      name: "Basic Plan",
-      price: 299,
-      features: [
-        "Everything in Free Plan",
-        "Document review",
-        "3 scholarship applications",
-        "Email support",
-        "Basic interview prep"
-      ]
-    },
-    {
-      name: "Premium Plan", 
-      price: 799,
-      features: [
-        "Everything in Basic Plan",
-        "Unlimited applications",
-        "Personal agent support",
-        "Document translation help",
-        "Visa application support",
-        "Interview coaching",
-        "Success guarantee"
-      ]
-    }
   ]
 } as const
 
@@ -152,14 +254,13 @@ export type SiteConfig = typeof siteConfig
 
 export const metaConfig = {
   generator: 'Next.js',
-  applicationName: 'MBG College Scholarship Finder',
+  applicationName: 'MBG Боловсрол',
   referrer: 'origin-when-cross-origin',
   keywords: [
-    'MBG College', 'Scholarships', 'Education', 'International Students',
-    'Bachelor Degree', 'Master Degree', 'HSK', 'IELTS', 'China Education',
-    'Study Abroad', 'Scholarship Application', 'Academic Programs'
+    'MBG Боловсрол', 'Хятад хэл', 'HSK', 'Хятадын боловсрол',
+    'Хэл сургалт', 'Монгол', 'Хятад хэлний сургалт', 'Улаанбаатар'
   ],
-  authors: [{ name: 'Enkhbold Ganbold', url: 'https://github.com/enkhbold470' }],
-  creator: 'MBG College Team',
-  publisher: 'MBG College',
+  authors: [{ name: 'Энхболд Ганболд', url: 'https://github.com/enkhbold470' }],
+  creator: 'MBG Боловсролын Баг',
+  publisher: 'MBG Боловсрол',
 };
