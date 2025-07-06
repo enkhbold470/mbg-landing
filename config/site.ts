@@ -161,8 +161,8 @@ export const siteConfig = {
   description: "Хятадын хэлийг эзэмших мэргэжлийн сургалт",
   tagline: "Тэгээс тэтгэлэгт тэнцэх нь",
   slogan: "Тэгээс тэтгэлэгт тэнцэх нь",
-  url: "https://mbg-education.com",
-  ogImage: "https://mbg-education.com/og.jpg",
+  url: "https://mbg-landing.vercel.app",
+  ogImage: "https://raw.githubusercontent.com/enkhbold470/mbg-landing/refs/heads/main/public/og.jpg?token=GHSAT0AAAAAADDNY624LZU73VR2BBFWVMA22DKJ7HA",
   
   // Холбоо барих мэдээлэл
   contact: {
@@ -309,7 +309,7 @@ export const metaConfig = {
   title: 'MBG Боловсрол',
   description: 'Хятадын хэлийг эзэмших мэргэжлийн сургалт',
   url: 'https://mbg-landing.vercel.app',
-  ogImage: 'https://mbg-landing.vercel.app/og.jpg',
+  ogImage: 'https://raw.githubusercontent.com/enkhbold470/mbg-landing/refs/heads/main/public/og.jpg?token=GHSAT0AAAAAADDNY624LZU73VR2BBFWVMA22DKJ7HA',
   keywords: [
     'MBG Боловсрол', 'Хятад хэл', 'HSK', 'Хятадын боловсрол',
     'Хэл сургалт', 'Монгол', 'Хятад хэлний сургалт', 'Улаанбаатар'
