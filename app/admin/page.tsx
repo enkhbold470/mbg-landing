@@ -3,21 +3,24 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Label } from '@/components/ui/label'
-import { Switch } from '@/components/ui/switch'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
+import { Star } from 'lucide-react'
+import Image from 'next/image'
+// Import modular components
+import { SiteConfigForm } from '@/components/admin/site-config-form'
+import { CourseForm } from '@/components/admin/course-form'
+import { CourseList } from '@/components/admin/course-list'
+import { ContentSection } from '@/components/admin/content-section'
+
+// Import actions
 import { 
-  getSiteConfig, 
+  getSiteConfig,
   updateSiteConfig,
   getCourses,
   createCourse,
   updateCourse,
-  deleteCourse,
   getTestimonials,
   createTestimonial,
   updateTestimonial,
@@ -37,6 +40,8 @@ import {
 } from '@/app/actions/config'
 
 export default function AdminPage() {
+  console.log("🚀 [AdminPage] Component mounted");
+
   const [activeTab, setActiveTab] = useState('site')
   const [siteConfig, setSiteConfig] = useState<any>(null)
   const [courses, setCourses] = useState<any[]>([])
@@ -45,13 +50,16 @@ export default function AdminPage() {
   const [faqs, setFaqs] = useState<any[]>([])
   const [features, setFeatures] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
+  const [editingCourse, setEditingCourse] = useState<any>(null)
 
   useEffect(() => {
+    console.log("📊 [AdminPage] Loading initial data...");
     loadData()
   }, [])
 
   const loadData = async () => {
     try {
+      console.log("🔄 [AdminPage] Fetching all data...");
       const [siteData, coursesData, testimonialsData, partnersData, faqsData, featuresData] = await Promise.all([
         getSiteConfig(),
         getCourses(),
@@ -60,6 +68,8 @@ export default function AdminPage() {
         getFAQs(),
         getFeatures()
       ])
+
+      console.log("✅ [AdminPage] All data loaded successfully");
 
       setSiteConfig(siteData || {
         name: 'MBG Education',
@@ -75,14 +85,17 @@ export default function AdminPage() {
       setFaqs(faqsData)
       setFeatures(featuresData)
     } catch (error) {
-      console.error('Error loading data:', error)
+      console.error('❌ [AdminPage] Error loading data:', error)
     } finally {
       setLoading(false)
     }
   }
 
+  // Site Config Handler
   const handleSiteConfigSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    console.log("💾 [AdminPage] Updating site configuration...");
+    
     const formData = new FormData(e.currentTarget)
     const data = {
       name: formData.get('name') as string,
@@ -96,14 +109,19 @@ export default function AdminPage() {
     try {
       await updateSiteConfig(data)
       setSiteConfig(data)
+      console.log("✅ [AdminPage] Site configuration updated successfully");
       alert('Site configuration updated successfully!')
     } catch (error) {
+      console.error("❌ [AdminPage] Error updating site configuration:", error);
       alert('Error updating site configuration')
     }
   }
 
-  const handleCourseSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  // Course Handlers
+  const handleCourseSubmit = async (e: React.FormEvent<HTMLFormElement>, isEdit = false) => {
     e.preventDefault()
+    console.log(`💾 [AdminPage] ${isEdit ? 'Updating' : 'Creating'} course...`);
+    
     const formData = new FormData(e.currentTarget)
     const features = (formData.get('features') as string).split('\n').filter(f => f.trim())
     
@@ -128,18 +146,137 @@ export default function AdminPage() {
     }
     
     try {
-      await createCourse(data)
+      if (isEdit && editingCourse) {
+        await updateCourse(editingCourse.id, data)
+        setEditingCourse(null)
+        console.log("✅ [AdminPage] Course updated successfully");
+        alert('Course updated successfully!')
+      } else {
+        await createCourse(data)
+        e.currentTarget.reset()
+        console.log("✅ [AdminPage] Course created successfully");
+        alert('Course created successfully!')
+      }
       loadData()
-      e.currentTarget.reset()
-      alert('Course created successfully!')
     } catch (error) {
-      alert('Error creating course')
+      console.error("❌ [AdminPage] Error saving course:", error);
+      alert('Error saving course')
     }
   }
 
-  if (loading) {
-    return <div className="p-8">Loading...</div>
+  // Generic content handlers
+  const createContentHandler = (createFn: any, updateFn: any) => {
+    return async (data: any, isEdit: boolean, editingItem?: any) => {
+      console.log(`💾 [AdminPage] ${isEdit ? 'Updating' : 'Creating'} content item...`);
+      
+      try {
+        if (isEdit && editingItem) {
+          await updateFn(editingItem.id, data)
+          console.log("✅ [AdminPage] Content updated successfully");
+        } else {
+          await createFn(data)
+          console.log("✅ [AdminPage] Content created successfully");
+        }
+        await loadData()
+        alert(`${isEdit ? 'Updated' : 'Created'} successfully!`)
+      } catch (error) {
+        console.error("❌ [AdminPage] Error saving content:", error);
+        alert('Error saving content')
+      }
+    }
   }
+
+  // Field configurations for different content types
+  const testimonialFields = [
+    { name: 'name', label: 'Name', type: 'input' as const, required: true, placeholder: 'Жишээ нь: John Doe' },
+    { name: 'role', label: 'Role', type: 'input' as const, required: true, placeholder: 'Жишээ нь: CEO' },
+      { name: 'content', label: 'Testimonial Content', type: 'textarea' as const, required: true, placeholder: 'Жишээ нь: Хятадтай худалдаа хийхэд хэлний мэдлэг маш их тустай болж байна' },
+    { name: 'rating', label: 'Rating (1-5)', type: 'number' as const, required: true, placeholder: 'Жишээ нь: 5' },
+    { name: 'image', label: 'Image URL', type: 'url' as const, placeholder: 'Жишээ нь: https://placekeanu.com/500/500' }
+  ]
+
+  const partnerFields = [
+    { name: 'name', label: 'Partner Name', type: 'input' as const, required: true, placeholder: 'Жишээ нь: John Doe' },
+    { name: 'logo', label: 'Logo URL', type: 'url' as const, required: true, placeholder: 'Жишээ нь: https://placekeanu.com/500/500' },
+    { name: 'url', label: 'Website URL', type: 'url' as const, required: true, placeholder: 'Жишээ нь: https://www.google.com' }
+  ]
+
+  const faqFields = [
+    { name: 'question', label: 'Question', type: 'input' as const, required: true, placeholder: 'Жишээ нь: Хятад хэл ямар түвшинд хичээллэх вэ?' },
+    { name: 'answer', label: 'Answer', type: 'textarea' as const, required: true, placeholder: 'Жишээ нь: HSK 6-ын түвшинд' },
+    { name: 'order', label: 'Order', type: 'number' as const, placeholder: 'Жишээ нь: 1' }
+  ]
+
+  const featureFields = [
+    { name: 'title', label: 'Title', type: 'input' as const, required: true, placeholder: 'Жишээ нь: Хятад хэл ямар түвшинд хичээллэх вэ?' },
+    { name: 'description', label: 'Description', type: 'textarea' as const, required: true, placeholder: 'Жишээ нь: Хятад хэл ямар түвшинд хичээллэх вэ?' },
+    { name: 'icon', label: 'Icon (emoji or text)', type: 'input' as const, required: true, placeholder: 'Жишээ нь: 🌐' },
+    { name: 'order', label: 'Order', type: 'number' as const, placeholder: 'Жишээ нь: 1' }
+  ]
+
+  // Render functions for different content types
+  const renderTestimonial = (testimonial: any) => (
+    <div>
+      <div className="flex items-center gap-2 mb-2">
+        <h3 className="font-semibold">{testimonial.name}</h3>
+        <Badge variant="secondary">{testimonial.role}</Badge>
+        <div className="flex">
+          {[...Array(testimonial.rating)].map((_, i) => (
+            <Star key={i} className="h-4 w-4 text-yellow-500 fill-current" />
+          ))}
+        </div>
+      </div>
+      <p className="text-gray-600">{testimonial.content}</p>
+    </div>
+  )
+
+  const renderPartner = (partner: any) => (
+    <div className="flex flex-col items-center text-center">
+      <Image 
+        src={partner.logo} 
+        alt={partner.name} 
+        className="w-16 h-16 object-contain mb-2"
+        onError={(e) => {
+          (e.target as HTMLImageElement).src = 'https://placekeanu.com/64/64'
+        }}
+      />
+      <h3 className="font-semibold mb-2">{partner.name}</h3>
+      <a 
+        href={partner.url} 
+        target="_blank" 
+        rel="noopener noreferrer"
+        className="text-blue-500 hover:underline text-sm"
+      >
+        Visit Website
+      </a>
+    </div>
+  )
+
+  const renderFAQ = (faq: any) => (
+    <div>
+      <h3 className="font-semibold mb-2">{faq.question}</h3>
+      <p className="text-gray-600">{faq.answer}</p>
+      <Badge variant="outline" className="mt-2">Order: {faq.order}</Badge>
+    </div>
+  )
+
+  const renderFeature = (feature: any) => (
+    <div>
+      <div className="flex items-center gap-2 mb-2">
+        <span className="text-2xl">{feature.icon}</span>
+        <h3 className="font-semibold">{feature.title}</h3>
+      </div>
+      <p className="text-gray-600">{feature.description}</p>
+      <Badge variant="outline" className="mt-2">Order: {feature.order}</Badge>
+    </div>
+  )
+
+  if (loading) {
+    console.log("⏳ [AdminPage] Loading state active");
+    return <div className="p-8">Loading admin dashboard...</div>
+  }
+
+  console.log("🎨 [AdminPage] Rendering admin dashboard, active tab:", activeTab);
 
   return (
     <div className="space-y-6">
@@ -148,7 +285,10 @@ export default function AdminPage() {
         <p className="text-gray-600">Manage your site content and configuration</p>
       </div>
 
-      <Tabs value={activeTab} onValueChange={setActiveTab}>
+      <Tabs value={activeTab} onValueChange={(value) => {
+        console.log("🔄 [AdminPage] Changing tab to:", value);
+        setActiveTab(value);
+      }}>
         <TabsList className="grid w-full grid-cols-6">
           <TabsTrigger value="site">Site Config</TabsTrigger>
           <TabsTrigger value="courses">Courses</TabsTrigger>
@@ -159,73 +299,7 @@ export default function AdminPage() {
         </TabsList>
 
         <TabsContent value="site">
-          <Card>
-            <CardHeader>
-              <CardTitle>Site Configuration</CardTitle>
-              <CardDescription>Update basic site information</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <form onSubmit={handleSiteConfigSubmit} className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="name">Site Name</Label>
-                    <Input
-                      id="name"
-                      name="name"
-                      defaultValue={siteConfig?.name}
-                      required
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="tagline">Tagline</Label>
-                    <Input
-                      id="tagline"
-                      name="tagline"
-                      defaultValue={siteConfig?.tagline}
-                      required
-                    />
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="description">Description</Label>
-                  <Textarea
-                    id="description"
-                    name="description"
-                    defaultValue={siteConfig?.description}
-                    required
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="slogan">Slogan</Label>
-                  <Input
-                    id="slogan"
-                    name="slogan"
-                    defaultValue={siteConfig?.slogan}
-                    required
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="url">Site URL</Label>
-                  <Input
-                    id="url"
-                    name="url"
-                    defaultValue={siteConfig?.url}
-                    required
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="ogImage">OG Image URL</Label>
-                  <Input
-                    id="ogImage"
-                    name="ogImage"
-                    defaultValue={siteConfig?.ogImage}
-                    required
-                  />
-                </div>
-                <Button type="submit">Update Site Configuration</Button>
-              </form>
-            </CardContent>
-          </Card>
+          <SiteConfigForm siteConfig={siteConfig} onSubmit={handleSiteConfigSubmit} />
         </TabsContent>
 
         <TabsContent value="courses">
@@ -235,174 +309,69 @@ export default function AdminPage() {
                 <CardTitle>Add New Course</CardTitle>
               </CardHeader>
               <CardContent>
-                <form onSubmit={handleCourseSubmit} className="space-y-4">
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="title">Title</Label>
-                      <Input id="title" name="title" required />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="subtitle">Subtitle</Label>
-                      <Input id="subtitle" name="subtitle" required />
-                    </div>
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="description">Description</Label>
-                    <Textarea id="description" name="description" required />
-                  </div>
-                  <div className="grid grid-cols-3 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="price">Price</Label>
-                      <Input id="price" name="price" required />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="duration">Duration</Label>
-                      <Input id="duration" name="duration" required />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="slug">Slug</Label>
-                      <Input id="slug" name="slug" required />
-                    </div>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Switch id="highlighted" name="highlighted" />
-                    <Label htmlFor="highlighted">Highlighted</Label>
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="features">Features (one per line)</Label>
-                    <Textarea id="features" name="features" placeholder="Feature 1&#10;Feature 2&#10;Feature 3" />
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="image">Image URL</Label>
-                      <Input id="image" name="image" />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="video">Video URL</Label>
-                      <Input id="video" name="video" />
-                    </div>
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="signupForm">Signup Form URL</Label>
-                    <Input id="signupForm" name="signupForm" />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="fullTitle">Full Title</Label>
-                    <Input id="fullTitle" name="fullTitle" />
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="startDate">Start Date</Label>
-                      <Input id="startDate" name="startDate" />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="schedule">Schedule</Label>
-                      <Input id="schedule" name="schedule" />
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="frequency">Frequency</Label>
-                      <Input id="frequency" name="frequency" />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="classSize">Class Size</Label>
-                      <Input id="classSize" name="classSize" />
-                    </div>
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="teacher">Teacher</Label>
-                    <Input id="teacher" name="teacher" />
-                  </div>
-                  <Button type="submit">Add Course</Button>
-                </form>
+                <CourseForm onSubmit={handleCourseSubmit} />
               </CardContent>
             </Card>
 
             <Card>
               <CardHeader>
-                <CardTitle>Existing Courses</CardTitle>
+                <CardTitle>Existing Courses ({courses.length})</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
-                  {courses.map((course) => (
-                    <div key={course.id} className="border p-4 rounded-lg">
-                      <div className="flex justify-between items-start">
-                        <div>
-                          <h3 className="font-semibold">{course.title}</h3>
-                          <p className="text-gray-600">{course.subtitle}</p>
-                          <div className="flex gap-2 mt-2">
-                            <Badge variant="secondary">{course.price}</Badge>
-                            <Badge variant="outline">{course.duration}</Badge>
-                            {course.highlighted && <Badge>Highlighted</Badge>}
-                          </div>
-                        </div>
-                        <Button
-                          variant="destructive"
-                          size="sm"
-                          onClick={() => {
-                            if (confirm('Are you sure you want to delete this course?')) {
-                              deleteCourse(course.id).then(() => loadData())
-                            }
-                          }}
-                        >
-                          Delete
-                        </Button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
+                <CourseList 
+                  courses={courses}
+                  onEditCourse={setEditingCourse}
+                  editingCourse={editingCourse}
+                  onCourseSubmit={handleCourseSubmit}
+                  onRefresh={loadData}
+                />
               </CardContent>
             </Card>
           </div>
         </TabsContent>
 
         <TabsContent value="testimonials">
-          <Card>
-            <CardHeader>
-              <CardTitle>Testimonials</CardTitle>
-              <CardDescription>Manage customer testimonials</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-gray-600">Testimonials management coming soon...</p>
-            </CardContent>
-          </Card>
+          <ContentSection
+            title="Testimonials"
+            items={testimonials}
+            fields={testimonialFields}
+            onSubmit={createContentHandler(createTestimonial, updateTestimonial)}
+            onDelete={async (id: string) => { await deleteTestimonial(id); await loadData(); }}
+            renderItem={renderTestimonial}
+          />
         </TabsContent>
 
         <TabsContent value="partners">
-          <Card>
-            <CardHeader>
-              <CardTitle>Partners</CardTitle>
-              <CardDescription>Manage partner organizations</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-gray-600">Partners management coming soon...</p>
-            </CardContent>
-          </Card>
+          <ContentSection
+            title="Partners"
+            items={partners}
+            fields={partnerFields}
+            onSubmit={createContentHandler(createPartner, updatePartner)}
+            onDelete={async (id: string) => { await deletePartner(id); await loadData(); }}
+            renderItem={renderPartner}
+          />
         </TabsContent>
 
         <TabsContent value="faq">
-          <Card>
-            <CardHeader>
-              <CardTitle>FAQ</CardTitle>
-              <CardDescription>Manage frequently asked questions</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-gray-600">FAQ management coming soon...</p>
-            </CardContent>
-          </Card>
+          <ContentSection
+            title="FAQs"
+            items={faqs}
+            fields={faqFields}
+            onSubmit={createContentHandler(createFAQ, updateFAQ)}
+            onDelete={async (id: string) => { await deleteFAQ(id); await loadData(); }}
+            renderItem={renderFAQ}
+          />
         </TabsContent>
 
         <TabsContent value="features">
-          <Card>
-            <CardHeader>
-              <CardTitle>Features</CardTitle>
-              <CardDescription>Manage site features</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-gray-600">Features management coming soon...</p>
-            </CardContent>
-          </Card>
+          <ContentSection
+            title="Features"
+            items={features}
+            fields={featureFields}
+            onSubmit={createContentHandler(createFeature, updateFeature)}
+            onDelete={async (id: string) => { await deleteFeature(id); await loadData(); }}
+            renderItem={renderFeature}
+          />
         </TabsContent>
       </Tabs>
     </div>

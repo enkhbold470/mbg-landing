@@ -1,7 +1,9 @@
 import { Card, CardContent } from "@/components/ui/card"
 import { features } from "@/config/site"
+import { getFeatures } from "@/app/actions/config"
 
-export function FeaturesSection() {
+export async function FeaturesSection() {
+  const featuresData = await getFeatures();
   return (
     <section id="features" className="py-20 px-6">
       <div className="max-w-6xl mx-auto">
@@ -13,7 +15,7 @@ export function FeaturesSection() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {features.map((feature, index) => (
+          {featuresData.map((feature, index) => (
             <Card
               key={index}
               className="group rounded-3xl border-0 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 bg-white hover:bg-gradient-to-br hover:from-purple-50 hover:to-blue-50"

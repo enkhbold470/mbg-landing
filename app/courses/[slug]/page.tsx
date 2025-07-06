@@ -2,15 +2,19 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { siteConfig } from "@/config/site";
 import { Clock, Users, Calendar, BookOpen, User, MapPin, CheckCircle, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { youtubeVideo } from "@/lib/utils";
 import { notFound } from "next/navigation";
+import { getCourses } from "@/app/actions/config";
 
-export default function CourseDetailPage({ params }: { params: { slug: string } }) {
-    const course = siteConfig.courses.find((course) => course.slug === params.slug);
+export default async function CourseDetailPage({ params }: { params: { slug: string } }) {
+    const { slug } = await params;
+    const [coursesData] = await Promise.all([
+        getCourses(),
+    ])
+    const course = coursesData.find((course) => course.slug === slug);
 
     if (!course) {
         notFound();

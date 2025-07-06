@@ -5,8 +5,10 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion"
 import { faq } from "@/config/site"
+import { getFAQs } from "@/app/actions/config"
 
-export function FaqSection() {
+export async function FaqSection() {
+  const faqsData = await getFAQs();
   return (
     <section id="faq" className="py-20 px-6">
       <div className="max-w-4xl mx-auto">
@@ -19,7 +21,7 @@ export function FaqSection() {
 
         <div className="bg-white rounded-3xl shadow-lg p-8">
           <Accordion type="single" collapsible className="w-full">
-            {faq.map((item, index) => (
+            {faqsData.map((item, index) => (
               <AccordionItem key={index} value={`item-${index}`}>
                 <AccordionTrigger className="text-left text-lg font-semibold text-gray-900 hover:text-purple-600 transition-colors">
                   {item.question}

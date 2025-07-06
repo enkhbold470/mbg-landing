@@ -1,26 +1,28 @@
 import { Button } from "@/components/ui/button"
 import { ArrowRight, Sparkles } from "lucide-react"
-import { siteConfig } from "@/config/site"
 import Link from "next/link"
+import { getSiteConfig } from "@/app/actions/config"
 
-export function HeroSection() {
-  return (
+export async function HeroSection() {
+  const siteConfig = await getSiteConfig();
+  console.log(siteConfig);
+  return (  
     <section className="pt-32 pb-20 px-6">
       <div className="max-w-6xl mx-auto text-center">
         <div className="inline-flex items-center px-4 py-2 bg-purple-100 rounded-full text-purple-700 text-sm font-medium mb-8">
           <Sparkles className="w-4 h-4 mr-2" />
-          {siteConfig.slogan}
+          {siteConfig?.slogan}
         </div>
 
         <h1 className="text-6xl md:text-7xl font-bold text-gray-900 mb-6 leading-tight">
-          {siteConfig.name}
+          {siteConfig?.name}
           <span className="bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent block">
-            {siteConfig.tagline}
+            {siteConfig?.tagline}
           </span>
         </h1>
 
         <p className="text-xl text-gray-600 mb-12 max-w-3xl mx-auto leading-relaxed">
-          {siteConfig.description}
+          {siteConfig?.description}
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">

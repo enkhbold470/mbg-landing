@@ -1,12 +1,34 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { siteConfig } from "@/config/site";
 import { Clock, Users, Calendar, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import { getCourses } from "@/app/actions/config";
 
-export default function CoursesPage() {
+
+
+export default async function CoursesPage() {
+  const [coursesData] = await Promise.all([
+    getCourses(),
+  ])
+
+  console.log(coursesData);
+
+  if (!coursesData) {
+    return <div>Loading...</div>;
+  }
+
+  // Sort courses to show highlighted courses first
+  const sortedCourses = coursesData.sort((a, b) => {
+    if (a.highlighted && !b.highlighted) return -1;
+    if (!a.highlighted && b.highlighted) return 1;
+    return 0;
+  });
+
+  console.log("📋 [CoursesPage] Courses sorted - highlighted first:", 
+    sortedCourses.map(c => ({ title: c.title, highlighted: c.highlighted })));
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-purple-50">
       {/* Header Section */}
@@ -25,7 +47,7 @@ export default function CoursesPage() {
       <section className="pb-20 px-6">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
-            {siteConfig.courses.map((course, index) => (
+            {sortedCourses.map((course, index) => (
               <Card
                 key={index}
                 className={`group relative overflow-hidden rounded-3xl border-0 shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 ${
@@ -105,7 +127,7 @@ export default function CoursesPage() {
                           className={`px-6 rounded-xl transition-all duration-300 ${
                             course.highlighted
                               ? "border-white/30 text-black hover:bg-white hover:text-purple-600"
-                              : "border-purple-300 text-purple-600 hover:bg-purple-50"
+                              : "border-purple-300 text-purple-600 hover:bg-purple-500"
                           }`}
                         >
                           Бүртгүүлэх

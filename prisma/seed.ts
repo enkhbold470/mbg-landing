@@ -43,7 +43,7 @@ async function main() {
         frequency: course.frequency,
         classSize: course.classSize,
         teacher: course.teacher,
-        features: course.features,
+        features: Array.isArray(course.features) ? course.features : [],
       },
     })
   }

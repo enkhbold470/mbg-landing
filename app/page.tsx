@@ -15,9 +15,6 @@ export default function LandingPage() {
       {/* 1. Hero Section (Above the Fold) */}
       <HeroSection />
       
-      {/* 2. Unique Value Proposition */}
-      <ValueProposition />
-      
       {/* 3. Social Proof & Trust Builders - Partners */}
       <PartnersSection />
       

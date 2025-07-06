@@ -1,21 +1,22 @@
 import { Card, CardContent } from "@/components/ui/card"
-import { testimonials } from "@/config/site"
 import { Star } from "lucide-react"
 import Image from "next/image"
+import { getTestimonials } from "@/app/actions/config"
 
-export function TestimonialsSection() {
+export async function TestimonialsSection() {
+  const testimonialsData = await getTestimonials();
   return (
     <section id="testimonials" className="py-20 px-6 bg-gradient-to-r from-gray-50 to-purple-50">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-5xl font-bold text-gray-900 mb-6">Оюутнуудын сэтгэгдэл</h2>
+          <h2 className="text-5xl font-bold text-gray-900 mb-6">Сэтгэгдэлүүд</h2>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Бидний оюутнуудын амжилттай түүхүүд
+            Бидний оюутнуудын болон үйлчигдэгчдэд амжилттай түүхүүд
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {testimonials.map((testimonial, index) => (
+          {testimonialsData.map((testimonial, index) => (
             <Card
               key={index}
               className="group rounded-3xl border-0 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 bg-white/70 backdrop-blur-sm"

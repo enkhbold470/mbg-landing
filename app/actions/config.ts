@@ -38,7 +38,15 @@ export async function isAuthenticated() {
 
 // Site Config Actions
 export async function getSiteConfig() {
-  return await prisma.siteConfig.findFirst()
+  try {
+    console.log("🔍 [getSiteConfig] Fetching site configuration...");
+    const config = await prisma.siteConfig.findFirst()
+    console.log("✅ [getSiteConfig] Site config fetched successfully:", config ? "Found" : "Not found");
+    return config;
+  } catch (error) {
+    console.error("❌ [getSiteConfig] Error fetching site config:", error);
+    throw error;
+  }
 }
 
 export async function updateSiteConfig(data: any) {
@@ -56,7 +64,16 @@ export async function updateSiteConfig(data: any) {
 
 // Course Actions
 export async function getCourses() {
-  return await prisma.course.findMany({ orderBy: { createdAt: 'desc' } })
+  try {
+    console.log("🔍 [getCourses] Fetching courses...");
+    const courses = await prisma.course.findMany({ orderBy: { createdAt: 'desc' } })
+    console.log(`✅ [getCourses] Courses fetched successfully: ${courses.length} courses found`);
+    console.log("📊 [getCourses] Course details:", courses.map(c => ({ id: c.id, title: c.title, highlighted: c.highlighted })));
+    return courses;
+  } catch (error) {
+    console.error("❌ [getCourses] Error fetching courses:", error);
+    throw error;
+  }
 }
 
 export async function createCourse(data: any) {
@@ -76,7 +93,16 @@ export async function deleteCourse(id: string) {
 
 // Testimonial Actions
 export async function getTestimonials() {
-  return await prisma.testimonial.findMany({ orderBy: { createdAt: 'desc' } })
+  try {
+    console.log("🔍 [getTestimonials] Fetching testimonials...");
+    const testimonials = await prisma.testimonial.findMany({ orderBy: { createdAt: 'desc' } })
+    console.log(`✅ [getTestimonials] Testimonials fetched successfully: ${testimonials.length} testimonials found`);
+    console.log("📊 [getTestimonials] Testimonial details:", testimonials.map(t => ({ id: t.id, name: t.name, rating: t.rating })));
+    return testimonials;
+  } catch (error) {
+    console.error("❌ [getTestimonials] Error fetching testimonials:", error);
+    throw error;
+  }
 }
 
 export async function createTestimonial(data: any) {
@@ -96,7 +122,16 @@ export async function deleteTestimonial(id: string) {
 
 // Partner Actions
 export async function getPartners() {
-  return await prisma.partner.findMany({ orderBy: { createdAt: 'desc' } })
+  try {
+    console.log("🔍 [getPartners] Fetching partners...");
+    const partners = await prisma.partner.findMany({ orderBy: { createdAt: 'desc' } })
+    console.log(`✅ [getPartners] Partners fetched successfully: ${partners.length} partners found`);
+    console.log("📊 [getPartners] Partner details:", partners.map(p => ({ id: p.id, name: p.name, url: p.url })));
+    return partners;
+  } catch (error) {
+    console.error("❌ [getPartners] Error fetching partners:", error);
+    throw error;
+  }
 }
 
 export async function createPartner(data: any) {
@@ -116,7 +151,16 @@ export async function deletePartner(id: string) {
 
 // FAQ Actions
 export async function getFAQs() {
-  return await prisma.fAQ.findMany({ orderBy: { order: 'asc' } })
+  try {
+    console.log("🔍 [getFAQs] Fetching FAQs...");
+    const faqs = await prisma.fAQ.findMany({ orderBy: { order: 'asc' } })
+    console.log(`✅ [getFAQs] FAQs fetched successfully: ${faqs.length} FAQs found`);
+    console.log("📊 [getFAQs] FAQ details:", faqs.map(f => ({ id: f.id, question: f.question.substring(0, 50) + "...", order: f.order })));
+    return faqs;
+  } catch (error) {
+    console.error("❌ [getFAQs] Error fetching FAQs:", error);
+    throw error;
+  }
 }
 
 export async function createFAQ(data: any) {
@@ -136,7 +180,16 @@ export async function deleteFAQ(id: string) {
 
 // Feature Actions
 export async function getFeatures() {
-  return await prisma.feature.findMany({ orderBy: { order: 'asc' } })
+  try {
+    console.log("🔍 [getFeatures] Fetching features...");
+    const features = await prisma.feature.findMany({ orderBy: { order: 'asc' } })
+    console.log(`✅ [getFeatures] Features fetched successfully: ${features.length} features found`);
+    console.log("📊 [getFeatures] Feature details:", features.map(f => ({ id: f.id, title: f.title, icon: f.icon, order: f.order })));
+    return features;
+  } catch (error) {
+    console.error("❌ [getFeatures] Error fetching features:", error);
+    throw error;
+  }
 }
 
 export async function createFeature(data: any) {

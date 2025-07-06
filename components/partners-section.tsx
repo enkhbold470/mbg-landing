@@ -1,8 +1,10 @@
-import { partners } from "@/config/site"
+
 import Image from "next/image"
 import Link from "next/link"
+import { getPartners } from "@/app/actions/config"
 
-export function PartnersSection() {
+export async function PartnersSection() {
+  const partnersData = await getPartners();
   return (
     <section className="py-20 px-6">
       <div className="max-w-6xl mx-auto">
@@ -14,7 +16,7 @@ export function PartnersSection() {
         </div>
 
         <div className="flex flex-wrap justify-center items-center gap-8 md:gap-12">
-          {partners.map((partner, index) => (
+          {partnersData.map((partner, index) => (
             <Link
               key={index}
               href={partner.url}
