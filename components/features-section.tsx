@@ -66,8 +66,8 @@ export function FeaturesSection() {
     <section id="features" className="py-20 px-6">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-5xl font-bold text-gray-900 mb-6">Онцлог боломжууд</h2>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+          <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">Онцлог боломжууд</h2>
+          <p className="text-lg lg:text-xl text-gray-600 max-w-2xl mx-auto">
             Бид дараах онцлог боломжуудыг санал болгож байна
           </p>
         </div>

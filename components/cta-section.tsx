@@ -7,8 +7,8 @@ export function CtaSection() {
   return (
     <section className="py-20 px-6 bg-gradient-to-r from-purple-600 to-blue-600">
       <div className="max-w-4xl mx-auto text-center">
-        <h2 className="text-5xl font-bold text-white mb-6">{ctaSection.title}</h2>
-        <p className="text-xl text-purple-100 mb-12 max-w-2xl mx-auto">
+        <h2 className="text-4xl lg:text-5xl font-bold text-white mb-6">{ctaSection.title}</h2>
+        <p className="text-lg lg:text-xl text-purple-100 mb-12 max-w-2xl mx-auto">
           {ctaSection.subtitle}
         </p>
 

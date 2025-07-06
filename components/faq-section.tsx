@@ -64,8 +64,8 @@ export function FaqSection() {
     <section id="faq" className="py-20 px-6">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-5xl font-bold text-gray-900 mb-6">Түгээмэл асуултууд</h2>
-          <p className="text-xl text-gray-600">
+          <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">Түгээмэл асуултууд</h2>
+          <p className="text-lg lg:text-xl text-gray-600">
             Та бүхэнд хамгийн их асуугддаг асуултууд болон хариултууд
           </p>
         </div>

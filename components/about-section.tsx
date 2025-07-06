@@ -8,8 +8,8 @@ export function AboutSection() {
     <section id="about" className="py-20 px-6 bg-gradient-to-r from-gray-50 to-purple-50">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-5xl font-bold text-gray-900 mb-6">{aboutUs.title}</h2>
-          <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
+          <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">{aboutUs.title}</h2>
+          <p className="text-lg  lg:text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
             {aboutUs.description}
           </p>
         </div>
