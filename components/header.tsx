@@ -1,7 +1,6 @@
-import { SignedIn, SignedOut, SignInButton, SignUpButton } from "@clerk/nextjs";
+
 import Link from "next/link";
-import { Button } from "./ui/button";
-import { ProfileIcon } from "./profile-icon";
+
 import { Sparkles } from "lucide-react";
 import { siteConfig } from "@/config/site";
 
@@ -33,27 +32,15 @@ export function Header() {
             <Link href="/#faq" className="text-gray-600 hover:text-purple-600 transition-colors">
               Асуулт
             </Link>
-            <Link href="/#contact" className="text-gray-600 hover:text-purple-600 transition-colors">
+            <div className="bg-purple-600 text-white px-4 py-2 rounded-lg">
+    
+            <Link href="/#contact">
               Холбоо барих
             </Link>
+            </div>
           </div>
 
-          <div className="flex items-center gap-4">
-            <SignedOut>
-              <div className="flex items-center gap-2">
-                <SignInButton>
-                  <Button variant="outline" size="sm">Нэвтрэх</Button>
-                </SignInButton>
-                <SignUpButton>
-                  <Button size="sm">Бүртгүүлэх</Button>
-                </SignUpButton>
-              </div>
-            </SignedOut>
-            
-            <SignedIn>
-              <ProfileIcon />
-            </SignedIn>
-          </div>
+         
         </div>
       </div>
     </header>

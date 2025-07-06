@@ -1,8 +1,8 @@
 export const aboutUs = {
   title: "Танилцуулга",
   description: "MBG Education Center нь 2016 оноос хойш тасралтгүй үйл ажиллагаагаа зохион байгуулж, ажиллаж байна. MBG ХХК нь...Боловсрол, Сургалт аялал, Мэдээлэл зөвлөгөө чиглэлээр 9 дахь жилдээ...Тэг-с ТЭТГЭЛЭГТ ТЭНЦЭХ хүртэл нь... MBG гэдэг нь Mongolian Business Guide гэсэн үг. Зөвхөн сургалтын үйл ажиллагаагаа зохион байгуулаад зогсохгүй, бид бусад үйл ажиллагаагаа нэмэлтээр үйл ажиллаж байна.",
-  image: "https://placekeanu.com/500/500",
-  video: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+  image: "https://scontent-sjc3-1.xx.fbcdn.net/v/t39.30808-6/509433170_1139359301555326_5701218130396420635_n.jpg?stp=cp6_dst-jpg_tt6&_nc_cat=109&ccb=1-7&_nc_sid=f727a1&_nc_ohc=K7xSzepjmsQQ7kNvwGVWUeo&_nc_oc=Adldyz_Cqg1KQZ0dKnAofUGZUIlL5agmYdEjUFHnwRQwx27ID4U-KPSWh_pIbjOGEwk&_nc_zt=23&_nc_ht=scontent-sjc3-1.xx&_nc_gid=tX9E8Tn0PrCGG49PXXYHmw&oh=00_AfSdX1pPkAH5-eS-O_DkQYWLXkk2gIdqb9FJt0hc5oB8dQ&oe=68700F87",
+  video: "https://www.youtube.com/watch?v=2dJnlynLmVM",
   facebook: [
     {
       name: "Learning China",
@@ -148,18 +148,18 @@ export const ctaSection = {
   subtitle: "Хятад хэлийг эзэмшиж, ирээдүйн боломжуудыг нээж аваарай",
   primaryCta: {
     text: "Үнэгүй зөвлөгөө авах",
-    href: "#contact"
+    href: "/contact"
   },
-  secondaryCta: {
-    text: "Сургалтын хөтөлбөрүүд",
+  secondaryCta: { 
+    text: "🇲🇳 Сургалтын хөтөлбөрүүд",
     href: "/courses"
   }
 }
 
 export const siteConfig = {
-  name: "MBG Боловсрол",
+  name: "MBG Education",
   description: "Хятадын хэлийг эзэмших мэргэжлийн сургалт",
-  tagline: "Хятадын боловсролын шилдэг зам",
+  tagline: "Тэгээс тэтгэлэгт тэнцэх нь",
   slogan: "Тэгээс тэтгэлэгт тэнцэх нь",
   url: "https://mbg-education.com",
   ogImage: "https://mbg-education.com/og.jpg",

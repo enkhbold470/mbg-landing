@@ -10,11 +10,11 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 
 import { Viewport } from "next";
-import { Inter } from "next/font/google";
+import { Open_Sans } from "next/font/google";
 import { siteConfig } from "@/config/site";
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"] });
+const openSans = Open_Sans({ subsets: ["latin"] });
 
 export const viewport: Viewport = {
   themeColor: "black",
@@ -52,7 +52,7 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en" suppressHydrationWarning>
-        <body className={`${inter.className} flex flex-col min-h-screen`}>
+        <body className={`${openSans.className} flex flex-col min-h-screen overflow-x-hidden`}>
           <Header />
           <main className="flex-grow">
             {children}

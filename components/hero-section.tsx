@@ -34,13 +34,13 @@ export function HeroSection() {
             </Button>
           </Link>
 
-          <Link href="/contact">
+          <Link href="/apply-college">
             <Button
               size="lg"
               variant="outline"
               className="border-2 border-gray-200 text-gray-700 hover:border-purple-300 hover:text-purple-600 hover:bg-purple-50 px-8 py-4 text-lg rounded-2xl min-w-[300px] transition-all duration-300 bg-white/50 backdrop-blur-sm"
             >
-              🇨🇳 Үнэгүй зөвлөгөө
+              🇨🇳 Суралцах зуучлал
             </Button>
           </Link>
         </div>
