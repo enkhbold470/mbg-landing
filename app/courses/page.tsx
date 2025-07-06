@@ -1,33 +1,84 @@
+"use client"
+
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Clock, Users, Calendar, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
-import { getCourses } from "@/app/actions/config";
 
+interface Course {
+  id: string;
+  title: string;
+  subtitle: string;
+  description: string;
+  price: string;
+  duration: string;
+  classSize: string;
+  startDate: string;
+  image: string;
+  slug: string;
+  signupForm: string;
+  highlighted: boolean;
+}
 
+export default function CoursesPage() {
+  const [coursesData, setCoursesData] = useState<Course[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-export default async function CoursesPage() {
-  const [coursesData] = await Promise.all([
-    getCourses(),
-  ])
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch('/api/courses');
+        if (!response.ok) {
+          throw new Error('Failed to fetch courses');
+        }
+        const courses = await response.json();
+        setCoursesData(courses);
+      } catch (err) {
+        console.error('Error fetching courses:', err);
+        setError('Failed to load courses');
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  console.log(coursesData);
+    fetchCourses();
+  }, []);
 
-  if (!coursesData) {
-    return <div>Loading...</div>;
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-purple-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Сургалтууд ачаалж байна...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-purple-50 flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-red-600 mb-4">{error}</p>
+          <Button onClick={() => window.location.reload()}>
+            Дахин оролдох
+          </Button>
+        </div>
+      </div>
+    );
   }
 
   // Sort courses to show highlighted courses first
-  const sortedCourses = [...coursesData].sort((a: any, b: any) => { 
+  const sortedCourses = [...coursesData].sort((a: Course, b: Course) => { 
     if (a.highlighted && !b.highlighted) return -1;
     if (!a.highlighted && b.highlighted) return 1;
     return 0;
   });
-
-  console.log("📋 [CoursesPage] Courses sorted - highlighted first:", 
-    sortedCourses.map((c: any) => ({ title: c.title, highlighted: c.highlighted })));
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-purple-50">
@@ -47,9 +98,9 @@ export default async function CoursesPage() {
       <section className="pb-20 px-6">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
-            {sortedCourses.map((course: any, index: number) => (
+            {sortedCourses.map((course: Course, index: number) => (
               <Card
-                key={index}
+                key={course.id || index}
                 className={`group relative overflow-hidden rounded-3xl border-0 shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 ${
                   course.highlighted
                     ? "bg-gradient-to-br from-purple-600 to-blue-600 text-white"

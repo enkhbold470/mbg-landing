@@ -1,4 +1,6 @@
-// follows with slug [slug]
+"use client"
+
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -6,18 +8,101 @@ import { Clock, Users, Calendar, BookOpen, User, MapPin, CheckCircle, ArrowLeft 
 import Link from "next/link";
 import Image from "next/image";
 import { youtubeVideo } from "@/lib/utils";
-import { notFound } from "next/navigation";
-import { getCourses } from "@/app/actions/config";
+import { useRouter } from "next/navigation";
 
-export default async function CourseDetailPage({ params }: { params: { slug: string } }) {
-    const { slug } = await params;
-    const [coursesData] = await Promise.all([
-        getCourses(),
-    ])
-    const course = coursesData.find((course) => course.slug === slug);
+interface Course {
+  id: string;
+  title: string;
+  subtitle: string;
+  description: string;
+  price: string;
+  duration: string;
+  classSize: string;
+  startDate: string;
+  schedule: string;
+  frequency: string;
+  teacher: string;
+  image: string;
+  slug: string;
+  signupForm: string;
+  highlighted: boolean;
+  fullTitle: string;
+  features: string[];
+  video: string;
+}
 
-    if (!course) {
-        notFound();
+export default function CourseDetailPage({ params }: { params: { slug: string } }) {
+    const router = useRouter();
+    const [slug, setSlug] = useState<string>("");
+    const [course, setCourse] = useState<Course | null>(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+        const getSlug = async () => {
+            const resolvedParams = await params;
+            setSlug(resolvedParams.slug);
+        };
+        getSlug();
+    }, [params]);
+
+    useEffect(() => {
+        if (!slug) return;
+
+        const fetchCourse = async () => {
+            try {
+                setLoading(true);
+                const response = await fetch('/api/courses');
+                if (!response.ok) {
+                    throw new Error('Failed to fetch courses');
+                }
+                const courses = await response.json();
+                const foundCourse = courses.find((course: Course) => course.slug === slug);
+                
+                if (!foundCourse) {
+                    setError('Course not found');
+                    return;
+                }
+                
+                setCourse(foundCourse);
+            } catch (err) {
+                console.error('Error fetching course:', err);
+                setError('Failed to load course');
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchCourse();
+    }, [slug]);
+
+    if (loading) {
+        return (
+            <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-purple-50 flex items-center justify-center">
+                <div className="text-center">
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
+                    <p className="text-gray-600">Хичээлийн мэдээлэл ачаалж байна...</p>
+                </div>
+            </div>
+        );
+    }
+
+    if (error || !course) {
+        return (
+            <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-purple-50 flex items-center justify-center">
+                <div className="text-center">
+                    <p className="text-red-600 mb-4">{error || 'Хичээл олдсонгүй'}</p>
+                    <div className="space-x-4">
+                        <Button onClick={() => router.back()}>
+                            Буцах
+                        </Button>
+                        <Button onClick={() => window.location.reload()}>
+                            Дахин оролдох
+                        </Button>
+                    </div>
+                </div>
+            </div>
+        );
     }
 
     return (
@@ -192,35 +277,6 @@ export default async function CourseDetailPage({ params }: { params: { slug: str
                     </div>
                 </div>
             </section>
-
-            {/* Google Form Embed */}
-            {/* <section className="pb-20 px-6">
-                <div className="max-w-4xl mx-auto">
-                    <Card className="rounded-3xl border-0 shadow-lg bg-white">
-                        <CardContent className="p-8">
-                            <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">
-                                Бүртгэлийн маягт
-                            </h3>
-                            <div className="w-full h-96 rounded-2xl overflow-hidden bg-gray-50">
-                                <iframe 
-                                    src={course.signupForm}
-                                    width="100%" 
-                                    height="100%" 
-                                    frameBorder="0" 
-                                    marginHeight={0} 
-                                    marginWidth={0}
-                                    className="rounded-2xl"
-                                >
-                                    Loading…
-                                </iframe>
-                            </div>
-                            <p className="text-center text-gray-500 text-sm mt-4">
-                                Дээрх маягтыг бөглөж, бидэнтэй холбогдоно уу
-                            </p>
-                        </CardContent>
-                    </Card>
-                </div>
-            </section> */}
         </div>
     )
 }
