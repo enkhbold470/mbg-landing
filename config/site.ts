@@ -308,7 +308,7 @@ export const metaConfig = {
   generator: 'Next.js',
   title: 'MBG Боловсрол',
   description: 'Хятадын хэлийг эзэмших мэргэжлийн сургалт',
-  url: 'https://mbg-education.com',
+  url: 'https://mbg-landing.vercel.app',
   ogImage: 'https://mbg-landing.vercel.app/og.jpg',
   keywords: [
     'MBG Боловсрол', 'Хятад хэл', 'HSK', 'Хятадын боловсрол',
