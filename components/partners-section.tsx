@@ -1,10 +1,60 @@
+'use client'
 
+import { useState, useEffect } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { getPartners } from "@/app/actions/config"
 
-export async function PartnersSection() {
-  const partnersData = await getPartners();
+interface Partner {
+  name: string
+  logo: string
+  url: string
+}
+
+export function PartnersSection() {
+  const [partners, setPartners] = useState<Partner[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    async function fetchPartners() {
+      try {
+        const response = await fetch('/api/partners')
+        if (response.ok) {
+          const data = await response.json()
+          setPartners(data)
+        }
+      } catch (error) {
+        console.error('Error fetching partners:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchPartners()
+  }, [])
+
+  if (loading) {
+    return (
+      <section className="py-20 px-6">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <div className="animate-pulse">
+              <div className="h-12 bg-gray-200 rounded w-1/2 mx-auto mb-6"></div>
+              <div className="h-6 bg-gray-200 rounded w-3/4 mx-auto"></div>
+            </div>
+          </div>
+          <div className="flex flex-wrap justify-center items-center gap-8 md:gap-12">
+            {[...Array(6)].map((_, index) => (
+              <div key={index} className="animate-pulse">
+                <div className="bg-gray-200 rounded-2xl p-6 w-32 h-32"></div>
+                <div className="h-4 bg-gray-200 rounded w-20 mx-auto mt-3"></div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    )
+  }
+
   return (
     <section className="py-20 px-6">
       <div className="max-w-6xl mx-auto">
@@ -16,7 +66,7 @@ export async function PartnersSection() {
         </div>
 
         <div className="flex flex-wrap justify-center items-center gap-8 md:gap-12">
-          {partnersData.map((partner, index) => (
+          {partners.map((partner, index) => (
             <Link
               key={index}
               href={partner.url}

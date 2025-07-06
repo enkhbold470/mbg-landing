@@ -20,24 +20,24 @@ export default async function CoursesPage() {
   }
 
   // Sort courses to show highlighted courses first
-  const sortedCourses = coursesData.sort((a, b) => {
+  const sortedCourses = [...coursesData].sort((a: any, b: any) => { 
     if (a.highlighted && !b.highlighted) return -1;
     if (!a.highlighted && b.highlighted) return 1;
     return 0;
   });
 
   console.log("📋 [CoursesPage] Courses sorted - highlighted first:", 
-    sortedCourses.map(c => ({ title: c.title, highlighted: c.highlighted })));
+    sortedCourses.map((c: any) => ({ title: c.title, highlighted: c.highlighted })));
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-purple-50">
       {/* Header Section */}
       <section className="pt-32 pb-20 px-6">
         <div className="max-w-6xl mx-auto text-center">
-          <h1 className="text-6xl font-bold text-gray-900 mb-6">
-            Сургалтын хөтөлбөрүүд
+          <h1 className="text-4xl font-bold text-gray-900 mb-6">
+            Сургалтууд
           </h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed">
             Таны хэрэгцээ, цаг хугацаанд тохирсон хятад хэлний сургалтын хөтөлбөрийг сонгоорой
           </p>
         </div>
@@ -47,7 +47,7 @@ export default async function CoursesPage() {
       <section className="pb-20 px-6">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
-            {sortedCourses.map((course, index) => (
+            {sortedCourses.map((course: any, index: number) => (
               <Card
                 key={index}
                 className={`group relative overflow-hidden rounded-3xl border-0 shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 ${
