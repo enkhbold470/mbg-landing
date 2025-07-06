@@ -1,5 +1,4 @@
 import { HeroSection } from "@/components/hero-section"
-import { ValueProposition } from "@/components/value-proposition"
 import { PartnersSection } from "@/components/partners-section"
 import { FeaturesSection } from "@/components/features-section"
 import { TestimonialsSection } from "@/components/testimonials-section"

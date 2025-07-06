@@ -45,7 +45,10 @@ export async function getSiteConfig() {
     return config;
   } catch (error) {
     console.error("❌ [getSiteConfig] Error fetching site config:", error);
-    throw error;
+    // Fallback to static site config
+    const { siteConfig } = await import('@/config/site')
+    console.log("📦 [getSiteConfig] Using fallback site config data");
+    return siteConfig;
   }
 }
 
@@ -72,7 +75,10 @@ export async function getCourses() {
     return courses;
   } catch (error) {
     console.error("❌ [getCourses] Error fetching courses:", error);
-    throw error;
+    // Fallback to static course data from site config
+    const { siteConfig } = await import('@/config/site')
+    console.log("📦 [getCourses] Using fallback course data from site config");
+    return siteConfig.courses || [];
   }
 }
 
@@ -101,7 +107,10 @@ export async function getTestimonials() {
     return testimonials;
   } catch (error) {
     console.error("❌ [getTestimonials] Error fetching testimonials:", error);
-    throw error;
+    // Fallback to static testimonial data from site config
+    const { testimonials } = await import('@/config/site')
+    console.log("📦 [getTestimonials] Using fallback testimonial data from site config");
+    return testimonials || [];
   }
 }
 
@@ -130,7 +139,10 @@ export async function getPartners() {
     return partners;
   } catch (error) {
     console.error("❌ [getPartners] Error fetching partners:", error);
-    throw error;
+    // Fallback to static partner data from site config
+    const { partners } = await import('@/config/site')
+    console.log("📦 [getPartners] Using fallback partner data from site config");
+    return partners || [];
   }
 }
 
@@ -159,7 +171,10 @@ export async function getFAQs() {
     return faqs;
   } catch (error) {
     console.error("❌ [getFAQs] Error fetching FAQs:", error);
-    throw error;
+    // Fallback to static FAQ data from site config
+    const { faq } = await import('@/config/site')
+    console.log("📦 [getFAQs] Using fallback FAQ data from site config");
+    return faq || [];
   }
 }
 
@@ -188,7 +203,10 @@ export async function getFeatures() {
     return features;
   } catch (error) {
     console.error("❌ [getFeatures] Error fetching features:", error);
-    throw error;
+    // Fallback to static feature data from site config
+    const { features } = await import('@/config/site')
+    console.log("📦 [getFeatures] Using fallback feature data from site config");
+    return features || [];
   }
 }
 

@@ -79,7 +79,7 @@ export default function AdminPage() {
         url: 'https://mbg-landing.vercel.app',
         ogImage: 'https://raw.githubusercontent.com/enkhbold470/mbg-landing/refs/heads/main/public/og.jpg'
       })
-      setCourses(coursesData)
+      setCourses(coursesData as any)
       setTestimonials(testimonialsData)
       setPartners(partnersData)
       setFaqs(faqsData)
