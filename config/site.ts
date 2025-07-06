@@ -306,12 +306,17 @@ export type SiteConfig = typeof siteConfig
 
 export const metaConfig = {
   generator: 'Next.js',
-  applicationName: 'MBG Боловсрол',
-  referrer: 'origin-when-cross-origin',
+  title: 'MBG Боловсрол',
+  description: 'Хятадын хэлийг эзэмших мэргэжлийн сургалт',
+  url: 'https://mbg-education.com',
+  ogImage: 'https://mbg-education.com/og.jpg',
   keywords: [
     'MBG Боловсрол', 'Хятад хэл', 'HSK', 'Хятадын боловсрол',
     'Хэл сургалт', 'Монгол', 'Хятад хэлний сургалт', 'Улаанбаатар'
   ],
+  applicationName: 'MBG Боловсрол',
+  referrer: 'origin-when-cross-origin',
+  
   authors: [{ name: 'Энхболд Ганболд', url: 'https://github.com/enkhbold470' }],
   creator: 'MBG Боловсролын Баг',
   publisher: 'MBG Боловсрол',

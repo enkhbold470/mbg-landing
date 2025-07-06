@@ -9,7 +9,7 @@ import type { Metadata } from "next";
 
 import { Viewport } from "next";
 import { Open_Sans } from "next/font/google";
-import { siteConfig } from "@/config/site";
+import { siteConfig, metaConfig } from "@/config/site";
 import "./globals.css";
 
 const openSans = Open_Sans({ subsets: ["latin"] });
@@ -23,17 +23,24 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: siteConfig.name,
-  description: siteConfig.description,
+  title: metaConfig.title,
+  description: metaConfig.description,
   manifest: "/icons/site.webmanifest",
   generator: "Next.js",
-  keywords: ["MBG Cargo", "MBG", "Cargo", "Logistics", "Supply Chain", "Freight Forwarding"],
+  openGraph: {
+    title: metaConfig.title,
+    description: metaConfig.description,
+    url: metaConfig.url,
+    siteName: metaConfig.applicationName,
+    images: [metaConfig.ogImage],
+  },
+  keywords: metaConfig.keywords,
   icons: [
     { rel: "apple-touch-icon", url: "/icons/android-chrome-192x192.png" },
     { rel: "icon", url: "/icons/android-chrome-192x192.png" },
   ],
 
-    applicationName: siteConfig.name,
+    applicationName: metaConfig.applicationName,
   authors: [
     {
       name: "Inky Ganbold",
