@@ -1,7 +1,16 @@
 'use client'
-
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import Image from "next/image"
+
+import Link from "next/link"
+import { gsap } from "gsap"
+import { ScrollTrigger } from "gsap/ScrollTrigger"
+
+// Register GSAP plugins
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger)
+}
+
 
 interface Partner {
   name: string
@@ -12,6 +21,10 @@ interface Partner {
 export function PartnersSection() {
   const [partners, setPartners] = useState<Partner[]>([])
   const [loading, setLoading] = useState(true)
+  const sectionRef = useRef<HTMLElement>(null)
+  const titleRef = useRef<HTMLHeadingElement>(null)
+  const subtitleRef = useRef<HTMLParagraphElement>(null)
+  const partnersRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     async function fetchPartners() {
@@ -30,6 +43,90 @@ export function PartnersSection() {
 
     fetchPartners()
   }, [])
+
+  useEffect(() => {
+    if (!loading && partners.length > 0) {
+      const ctx = gsap.context(() => {
+        // Initial setup - hide elements
+        gsap.set([titleRef.current, subtitleRef.current], { 
+          opacity: 0, 
+          y: 50 
+        })
+        gsap.set('.partner-item', { 
+          opacity: 0, 
+          scale: 0.8,
+          rotationY: -15
+        })
+
+        // Timeline for smooth sequential animation
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top 80%",
+            end: "bottom 20%",
+            toggleActions: "play none none reverse"
+          }
+        })
+
+        // Title animation with Apple-like spring effect
+        tl.to(titleRef.current, {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          ease: "back.out(1.7)"
+        }, 0)
+
+        // Subtitle animation
+        tl.to(subtitleRef.current, {
+          opacity: 1,
+          y: 0,
+          duration: 0.6,
+          ease: "power2.out"
+        }, 0.2)
+
+        // Partners stagger animation with 3D effect
+        tl.to('.partner-item', {
+          opacity: 1,
+          scale: 1,
+          rotationY: 0,
+          duration: 0.6,
+          stagger: {
+            each: 0.1,
+            ease: "power2.out"
+          },
+          ease: "back.out(1.4)"
+        }, 0.4)
+
+        // Hover animations for each partner
+        partners.forEach((_, index) => {
+          const partnerElement = document.querySelector(`.partner-item-${index}`)
+          if (partnerElement) {
+            // Hover in
+            partnerElement.addEventListener('mouseenter', () => {
+              gsap.to(partnerElement, {
+                scale: 1.05,
+                rotationY: 5,
+                duration: 0.3,
+                ease: "power2.out"
+              })
+            })
+
+            // Hover out
+            partnerElement.addEventListener('mouseleave', () => {
+              gsap.to(partnerElement, {
+                scale: 1,
+                rotationY: 0,
+                duration: 0.3,
+                ease: "power2.out"
+              })
+            })
+          }
+        })
+      }, sectionRef)
+
+      return () => ctx.revert()
+    }
+  }, [loading, partners])
 
   if (loading) {
     return (
@@ -55,28 +152,41 @@ export function PartnersSection() {
   }
 
   return (
-    <section className="py-20 px-6">
+    <section ref={sectionRef} className="py-20 px-6 overflow-hidden">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">Бидний хамтрагчид</h2>
-          <p className="text-lg lg:text-xl text-gray-600">
+          <h2 
+            ref={titleRef}
+            className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6 bg-gradient-to-r from-gray-900 via-purple-800 to-gray-900 bg-clip-text text-transparent"
+          >
+            Бидний хамтрагчид
+          </h2>
+          <p 
+            ref={subtitleRef}
+            className="text-lg lg:text-xl text-gray-600"
+          >
             Дэлхийн алдартай их сургуулиуд болон боловсролын байгууллагуудтай хамтран ажиллаж байна
           </p>
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6 md:gap-8">
+
           {partners.map((partner, index) => (
             <div
               key={index}
               className="group transition-all duration-300 hover:scale-110 hover:shadow-lg rounded-2xl p-4 flex flex-col items-center"
+
             >
-              <div className="bg-white rounded-2xl p-6 shadow-md group-hover:shadow-xl transition-all duration-300">
+              <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-6 shadow-lg group-hover:shadow-2xl transition-all duration-300 border border-white/20 transform-gpu">
                 <Image
                   src={partner.logo}
                   alt={partner.name}
                   width={150}
                   height={150}
-                  className="grayscale group-hover:grayscale-0 transition-all duration-300"
+                  className="grayscale group-hover:grayscale-0 transition-all duration-300 filter drop-shadow-sm"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = 'https://placekeanu.com/150/150'
+                  }}
                 />
               </div>
               <p className="text-center text-gray-600 mt-3 text-sm font-medium group-hover:text-purple-600 transition-colors">
@@ -88,4 +198,4 @@ export function PartnersSection() {
       </div>
     </section>
   )
-} 
+}
