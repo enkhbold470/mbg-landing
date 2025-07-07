@@ -8,7 +8,7 @@ import { Label } from '@/components/ui/label'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
-import { Pencil, Trash2, Star } from 'lucide-react'
+import { Pencil, Trash2, Star, Loader2 } from 'lucide-react'
 import { useToast } from '@/hooks/use-toast'
 
 interface Field {
@@ -26,6 +26,7 @@ interface ContentSectionProps {
   onSubmit: (data: any, isEdit: boolean, editingItem?: any) => Promise<void>
   onDelete: (id: string) => Promise<void>
   renderItem: (item: any) => React.ReactNode
+  isSubmitting?: boolean
 }
 
 export function ContentSection({ 
@@ -34,15 +35,20 @@ export function ContentSection({
   fields, 
   onSubmit, 
   onDelete, 
-  renderItem 
+  renderItem,
+  isSubmitting = false
 }: ContentSectionProps) {
   const [editingItem, setEditingItem] = useState<any>(null)
   const [formKey, setFormKey] = useState(0) // For force re-rendering form
+  const [deletingId, setDeletingId] = useState<string | null>(null)
   const { toast } = useToast();
-  console.log(`📝 [ContentSection-${title}] Rendering with ${items.length} items`);
+  console.log(`📝 [ContentSection-${title}] Rendering with ${items.length} items, isSubmitting: ${isSubmitting}`);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>, isEdit = false) => {
     e.preventDefault()
+    
+    if (isSubmitting) return // Prevent double submission
+    
     console.log(`💾 [ContentSection-${title}] ${isEdit ? 'Updating' : 'Creating'} item`);
     
     const form = e.currentTarget
@@ -71,8 +77,9 @@ export function ContentSection({
     } catch (error) {
       console.error(`❌ [ContentSection-${title}] Error:`, error);
       toast({
-        title: "Admin Page",
+        title: "Алдаа",
         description: `"${title.slice(0, -1)}"-ийг хадгалах үед алдаа гарлаа`,
+        variant: "destructive"
       })  
     }
   }
@@ -81,19 +88,19 @@ export function ContentSection({
     console.log(`🗑️ [ContentSection-${title}] Deleting item:`, { id, itemName });
     
     if (confirm(`Уучлаарай уу, "${itemName}"-ийг устгах уу?`)) {
+      setDeletingId(id)
       try {
         await onDelete(id)
         console.log(`✅ [ContentSection-${title}] Item deleted successfully:`, id);
       } catch (error) {
         console.error(`❌ [ContentSection-${title}] Delete error:`, error);
         toast({
-          title: "Admin Page",
+          title: "Алдаа",
           description: `"${itemName}"-ийг устгах үед алдаа гарлаа`,
-          })  
-        toast({
-          title: "Admin Page",
-          description: `"${itemName}"-ийг устгах үед алдаа гарлаа`,
+          variant: "destructive"
         })      
+      } finally {
+        setDeletingId(null)
       }
     }
   }
@@ -116,6 +123,7 @@ export function ContentSection({
               defaultValue={item?.[field.name]}
               required={field.required}
               placeholder={field.placeholder}
+              disabled={isSubmitting}
             />
           ) : (
             <Input
@@ -127,35 +135,46 @@ export function ContentSection({
               placeholder={field.placeholder}
               min={field.type === 'number' ? 0 : undefined}
               max={field.type === 'number' && field.name === 'rating' ? 5 : undefined}
+              disabled={isSubmitting}
             />
           )}
         </div>
       ))}
-      <Button type="submit">
-        {isEdit ? `Хадгалах ${title.slice(0, -1)}` : `Үүсгэх `}
+      <Button type="submit" className="w-full" disabled={isSubmitting}>
+        {isSubmitting ? (
+          <>
+            <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+            {isEdit ? 'Хадгалж байна...' : 'Үүсгэж байна...'}
+          </>
+        ) : (
+          isEdit ? `Хадгалах ${title.slice(0, -1)}` : `Үүсгэх `
+        )}
       </Button>
     </form>
   )
 
   return (
-    <div className="space-y-6">
-      <Card>
-        <CardHeader>
-          <CardTitle>Шинэ {title.slice(0, -1)} үүсгэх</CardTitle>
+    <div className="space-y-8">
+      <Card className="border-slate-200 shadow-sm">
+        <CardHeader className="bg-gradient-to-r from-green-50 to-blue-50">
+          <CardTitle className="text-xl text-slate-800">Шинэ {title.slice(0, -1)} үүсгэх</CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="p-6">
           {renderForm()}
         </CardContent>
       </Card>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Одоо байгаа {title} ({items.length})</CardTitle>
+      <Card className="border-slate-200 shadow-sm">
+        <CardHeader className="bg-slate-50">
+          <CardTitle className="text-xl text-slate-800 flex items-center gap-2">
+            Одоо байгаа {title} 
+            <Badge variant="secondary" className="ml-2">{items.length}</Badge>
+          </CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="p-6">
           <div className="space-y-4">
             {items.map((item) => (
-              <div key={item.id} className="border p-4 rounded-lg">
+              <div key={item.id} className="border border-slate-200 p-4 rounded-lg bg-white hover:shadow-sm transition-shadow">
                 <div className="flex justify-between items-start">
                   <div className="flex-1">
                     {renderItem(item)}
@@ -170,11 +189,13 @@ export function ContentSection({
                             console.log(`✏️ [ContentSection-${title}] Opening edit dialog:`, item.id);
                             setEditingItem(item);
                           }}
+                          disabled={isSubmitting}
+                          className="hover:bg-blue-50"
                         >
                           <Pencil className="h-4 w-4" />
                         </Button>
                       </DialogTrigger>
-                      <DialogContent>
+                      <DialogContent className="max-w-md">
                         <DialogHeader>
                           <DialogTitle>Edit {title.slice(0, -1)}</DialogTitle>
                         </DialogHeader>
@@ -185,8 +206,14 @@ export function ContentSection({
                       variant="destructive"
                       size="sm"
                       onClick={() => handleDelete(item.id, item.name || item.question || item.title)}
+                      disabled={deletingId === item.id || isSubmitting}
+                      className="hover:bg-red-600"
                     >
-                      <Trash2 className="h-4 w-4" />
+                      {deletingId === item.id ? (
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                      ) : (
+                        <Trash2 className="h-4 w-4" />
+                      )}
                     </Button>
                   </div>
                 </div>
@@ -194,8 +221,11 @@ export function ContentSection({
             ))}
             
             {items.length === 0 && (
-              <div className="text-center py-8 text-gray-500">
-                <p>Олдсонгүй. Эхний {title.toLowerCase().slice(0, -1)}-ийг үүсгэх!</p>
+              <div className="text-center py-12 text-slate-500">
+                <div className="bg-slate-50 rounded-lg p-8">
+                  <p className="text-lg font-medium mb-2">Мэдээлэл олдсонгүй</p>
+                  <p>Эхний {title.toLowerCase().slice(0, -1)}-ийг үүсгэж эхлээрэй!</p>
+                </div>
               </div>
             )}
           </div>
