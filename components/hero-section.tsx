@@ -117,7 +117,7 @@ export function HeroSection() {
             </Button>
           </Link>
 
-          <Link href="/apply-college">
+          <Link href="/#contact">
             <Button
               size="lg"
               variant="outline"
