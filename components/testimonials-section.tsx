@@ -23,6 +23,11 @@ export function TestimonialsSection() {
   const sectionRef = useRef<HTMLElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
 
+  // Duplicate testimonials for seamless infinite scroll
+  const duplicatedTestimonials = testimonials.length > 0 
+    ? [...testimonials, ...testimonials] 
+    : []
+
   useEffect(() => {
     async function fetchTestimonials() {
       try {
@@ -46,8 +51,9 @@ export function TestimonialsSection() {
 
     const ctx = gsap.context(() => {
       const container = containerRef.current
-      const cards = container!.children
-      const cardWidth = cards[0]?.clientWidth || 400
+      if (!container) return
+
+      const cardWidth = 400 // Fixed width matching the style
       const gap = 32 // gap-8 = 32px
       const totalWidth = (cardWidth + gap) * testimonials.length
 
@@ -101,14 +107,7 @@ export function TestimonialsSection() {
 
       // After initial animation, start the scrolling effect
       tl.call(() => {
-        // Clone cards for seamless loop
-        const clonedCards = Array.from(cards).map(card => card.cloneNode(true))
-        clonedCards.forEach(card => container!.appendChild(card))
-
-        // Set container width to accommodate all cards
-        container!.style.width = `${totalWidth * 2}px`
-
-        // Continuous horizontal movement
+        // Continuous horizontal movement using the duplicated testimonials
         gsap.to(container, {
           x: -totalWidth,
           duration: 30,
@@ -178,9 +177,9 @@ export function TestimonialsSection() {
           className="flex gap-8"
           style={{ width: 'fit-content' }}
         >
-          {testimonials.map((testimonial, index) => (
+          {duplicatedTestimonials.map((testimonial, index) => (
             <Card
-              key={index}
+              key={`${index}-${testimonial.name}`}
               className="group rounded-3xl border-0 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 bg-white/70 backdrop-blur-sm flex-shrink-0"
               style={{ width: '400px' }}
             >
