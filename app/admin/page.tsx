@@ -2,7 +2,7 @@
 // admin page to configure the site, /config/siteConfig.ts
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -55,16 +55,8 @@ export default function AdminPage() {
   const [loading, setLoading] = useState(true)
   const [editingCourse, setEditingCourse] = useState<any>(null)
   const { toast } = useToast()
-  useEffect(() => {
-    console.log("📊 [AdminPage] Loading initial data...");
-    toast({
-      title: "Admin Page",
-      description: "Анхны мэдээлэл олдож байна...",
-    })  
-    loadData()
-  }, [])
-
-  const loadData = async () => {
+  
+  const loadData = useCallback(async () => {
     try {
       console.log("🔄 [AdminPage] Fetching all data...");
       const [siteData, coursesData, testimonialsData, partnersData, faqsData, featuresData] = await Promise.all([
@@ -92,7 +84,16 @@ export default function AdminPage() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [toast])
+
+  useEffect(() => {
+    console.log("📊 [AdminPage] Loading initial data...");
+    toast({
+      title: "Admin Page",
+      description: "Анхны мэдээлэл олдож байна...",
+    })  
+    loadData()
+  }, [toast, loadData])
 
   // Site Config Handler
   const handleSiteConfigSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
