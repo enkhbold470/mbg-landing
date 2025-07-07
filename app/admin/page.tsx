@@ -44,7 +44,8 @@ import { useToast } from '@/hooks/use-toast'
 export default function AdminPage() {
   console.log("🚀 [AdminPage] Component mounted");
 
-  const [activeTab, setActiveTab] = useState('site')
+  // const [activeTab, setActiveTab] = useState('site')
+  const [activeTab, setActiveTab] = useState('courses')
   const [siteConfig, setSiteConfig] = useState<any>(null)
   const [courses, setCourses] = useState<any[]>([])
   const [testimonials, setTestimonials] = useState<any[]>([])
@@ -319,7 +320,7 @@ export default function AdminPage() {
         setActiveTab(value);
       }}>
         <TabsList className="grid w-full grid-cols-6">
-          <TabsTrigger value="site">Нүүр хуудас</TabsTrigger>
+          {/* <TabsTrigger value="site">Нүүр хуудас</TabsTrigger> */}
           <TabsTrigger value="courses">Сургалтууд</TabsTrigger>
           <TabsTrigger value="testimonials">Сэтгэгдэлүүд</TabsTrigger>
           <TabsTrigger value="partners">Бидний хамтрагчид</TabsTrigger>
@@ -327,9 +328,9 @@ export default function AdminPage() {
           <TabsTrigger value="features">Онцлог боломжууд</TabsTrigger>
         </TabsList>
 
-        <TabsContent value="site">
+        {/* <TabsContent value="site">
           <SiteConfigForm siteConfig={siteConfig} onSubmit={handleSiteConfigSubmit} />
-        </TabsContent>
+        </TabsContent> */}
 
         <TabsContent value="courses">
           <div className="space-y-6">
