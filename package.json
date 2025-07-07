@@ -50,6 +50,7 @@
     "critters": "^0.0.25",
     "date-fns": "4.1.0",
     "framer-motion": "^12.7.4",
+    "gsap": "^3.13.0",
     "input-otp": "^1.4.2",
     "lucide-react": "^0.454.0",
     "next": "15.2.4",
