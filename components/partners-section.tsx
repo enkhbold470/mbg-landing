@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react"
 import Image from "next/image"
-import Link from "next/link"
 
 interface Partner {
   name: string
@@ -42,9 +41,9 @@ export function PartnersSection() {
               <div className="h-6 bg-gray-200 rounded w-3/4 mx-auto"></div>
             </div>
           </div>
-          <div className="flex flex-wrap justify-center items-center gap-8 md:gap-12">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6 md:gap-8">
             {[...Array(6)].map((_, index) => (
-              <div key={index} className="animate-pulse">
+              <div key={index} className="animate-pulse flex flex-col items-center">
                 <div className="bg-gray-200 rounded-2xl p-6 w-32 h-32"></div>
                 <div className="h-4 bg-gray-200 rounded w-20 mx-auto mt-3"></div>
               </div>
@@ -65,14 +64,11 @@ export function PartnersSection() {
           </p>
         </div>
 
-        <div className="flex flex-wrap justify-center items-center gap-8 md:gap-12">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6 md:gap-8">
           {partners.map((partner, index) => (
-            <Link
+            <div
               key={index}
-              href={partner.url}
-              className="group transition-all duration-300 hover:scale-110 hover:shadow-lg rounded-2xl p-4"
-              target="_blank"
-              rel="noopener noreferrer"
+              className="group transition-all duration-300 hover:scale-110 hover:shadow-lg rounded-2xl p-4 flex flex-col items-center"
             >
               <div className="bg-white rounded-2xl p-6 shadow-md group-hover:shadow-xl transition-all duration-300">
                 <Image
@@ -86,7 +82,7 @@ export function PartnersSection() {
               <p className="text-center text-gray-600 mt-3 text-sm font-medium group-hover:text-purple-600 transition-colors">
                 {partner.name}
               </p>
-            </Link>
+            </div>
           ))}
         </div>
       </div>
