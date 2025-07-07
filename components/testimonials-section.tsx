@@ -1,9 +1,13 @@
 'use client'
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Star } from "lucide-react"
 import Image from "next/image"
+import { gsap } from "gsap"
+import { ScrollTrigger } from "gsap/ScrollTrigger"
+
+gsap.registerPlugin(ScrollTrigger)
 
 interface Testimonial {
   name: string
@@ -16,6 +20,8 @@ interface Testimonial {
 export function TestimonialsSection() {
   const [testimonials, setTestimonials] = useState<Testimonial[]>([])
   const [loading, setLoading] = useState(true)
+  const sectionRef = useRef<HTMLElement>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     async function fetchTestimonials() {
@@ -34,6 +40,87 @@ export function TestimonialsSection() {
 
     fetchTestimonials()
   }, [])
+
+  useEffect(() => {
+    if (!testimonials.length || !containerRef.current) return
+
+    const ctx = gsap.context(() => {
+      const container = containerRef.current
+      const cards = container!.children
+      const cardWidth = cards[0]?.clientWidth || 400
+      const gap = 32 // gap-8 = 32px
+      const totalWidth = (cardWidth + gap) * testimonials.length
+
+      // Initial setup - hide elements
+      gsap.set('.testimonials-title', { 
+        opacity: 0, 
+        y: 50 
+      })
+      gsap.set('.testimonials-subtitle', { 
+        opacity: 0, 
+        y: 30 
+      })
+      gsap.set(container, { 
+        opacity: 0, 
+        x: 100 
+      })
+
+      // Timeline for smooth sequential animation
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top 80%",
+          end: "bottom 20%",
+          toggleActions: "play none none reverse"
+        }
+      })
+
+      // Title animation
+      tl.to('.testimonials-title', {
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+        ease: "back.out(1.7)"
+      }, 0)
+
+      // Subtitle animation
+      tl.to('.testimonials-subtitle', {
+        opacity: 1,
+        y: 0,
+        duration: 0.6,
+        ease: "power2.out"
+      }, 0.2)
+
+      // Container animation
+      tl.to(container, {
+        opacity: 1,
+        x: 0,
+        duration: 0.8,
+        ease: "power2.out"
+      }, 0.4)
+
+      // After initial animation, start the scrolling effect
+      tl.call(() => {
+        // Clone cards for seamless loop
+        const clonedCards = Array.from(cards).map(card => card.cloneNode(true))
+        clonedCards.forEach(card => container!.appendChild(card))
+
+        // Set container width to accommodate all cards
+        container!.style.width = `${totalWidth * 2}px`
+
+        // Continuous horizontal movement
+        gsap.to(container, {
+          x: -totalWidth,
+          duration: 30,
+          ease: "none",
+          repeat: -1
+        })
+      })
+
+    }, sectionRef)
+
+    return () => ctx.revert()
+  }, [testimonials])
 
   if (loading) {
     return (
@@ -77,20 +164,25 @@ export function TestimonialsSection() {
   }
 
   return (
-    <section id="testimonials" className="py-20 px-6 bg-gradient-to-r from-gray-50 to-purple-50">
+    <section ref={sectionRef} id="testimonials" className="py-20 px-6 bg-gradient-to-r from-gray-50 to-purple-50 overflow-hidden">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">Сэтгэгдэлүүд</h2>
-          <p className="text-lg lg:text-xl text-gray-600 max-w-2xl mx-auto">
+          <h2 className="testimonials-title text-4xl lg:text-5xl font-bold text-gray-900 mb-6">Сэтгэгдэлүүд</h2>
+          <p className="testimonials-subtitle text-lg lg:text-xl text-gray-600 max-w-2xl mx-auto">
             Бидний оюутнуудын болон үйлчигдэгчдэд амжилттай түүхүүд
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div 
+          ref={containerRef}
+          className="flex gap-8"
+          style={{ width: 'fit-content' }}
+        >
           {testimonials.map((testimonial, index) => (
             <Card
               key={index}
-              className="group rounded-3xl border-0 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 bg-white/70 backdrop-blur-sm"
+              className="group rounded-3xl border-0 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 bg-white/70 backdrop-blur-sm flex-shrink-0"
+              style={{ width: '400px' }}
             >
               <CardContent className="p-8">
                 <div className="flex items-center mb-4">
@@ -125,4 +217,4 @@ export function TestimonialsSection() {
       </div>
     </section>
   )
-} 
+}

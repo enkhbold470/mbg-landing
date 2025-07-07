@@ -55,14 +55,7 @@ export default function AdminPage() {
   const [loading, setLoading] = useState(true)
   const [editingCourse, setEditingCourse] = useState<any>(null)
   const { toast } = useToast()
-  useEffect(() => {
-    console.log("📊 [AdminPage] Loading initial data...");
-    toast({
-      title: "Admin Page",
-      description: "Анхны мэдээлэл олдож байна...",
-    })  
-    loadData()
-  }, [])
+
 
   const loadData = async () => {
     try {
@@ -77,10 +70,7 @@ export default function AdminPage() {
       ])
 
       console.log("✅ [AdminPage] All data loaded successfully");
-      toast({
-        title: "Admin Page",
-        description: "Бүх мэдээлэл амжилттай олдлоо",
-      })  
+  
       setSiteConfig(siteData)
       setCourses(coursesData as any)
       setTestimonials(testimonialsData)

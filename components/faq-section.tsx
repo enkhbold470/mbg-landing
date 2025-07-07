@@ -1,12 +1,19 @@
 'use client'
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
+import { gsap } from "gsap"
+import { ScrollTrigger } from "gsap/ScrollTrigger"
+
+// Register GSAP plugins
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger)
+}
 
 interface FAQ {
   question: string
@@ -16,6 +23,10 @@ interface FAQ {
 export function FaqSection() {
   const [faqs, setFaqs] = useState<FAQ[]>([])
   const [loading, setLoading] = useState(true)
+  const sectionRef = useRef<HTMLElement>(null)
+  const titleRef = useRef<HTMLHeadingElement>(null)
+  const subtitleRef = useRef<HTMLParagraphElement>(null)
+  const accordionRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     async function fetchFAQs() {
@@ -34,6 +45,61 @@ export function FaqSection() {
 
     fetchFAQs()
   }, [])
+
+  useEffect(() => {
+    if (!loading && faqs.length > 0) {
+      const ctx = gsap.context(() => {
+        // Initial setup - hide elements
+        gsap.set([titleRef.current, subtitleRef.current], { 
+          opacity: 0, 
+          y: 50 
+        })
+        gsap.set(accordionRef.current, { 
+          opacity: 0, 
+          y: 100,
+          scale: 0.9
+        })
+
+        // Timeline for smooth sequential animation
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top 80%",
+            end: "bottom 20%",
+            toggleActions: "play none none reverse"
+          }
+        })
+
+        // Title animation
+        tl.to(titleRef.current, {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          ease: "back.out(1.7)"
+        }, 0)
+
+        // Subtitle animation
+        tl.to(subtitleRef.current, {
+          opacity: 1,
+          y: 0,
+          duration: 0.6,
+          ease: "power2.out"
+        }, 0.2)
+
+        // Accordion animation
+        tl.to(accordionRef.current, {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          duration: 0.8,
+          ease: "back.out(1.4)"
+        }, 0.4)
+
+      }, sectionRef)
+
+      return () => ctx.revert()
+    }
+  }, [loading, faqs])
 
   if (loading) {
     return (
@@ -61,16 +127,16 @@ export function FaqSection() {
   }
 
   return (
-    <section id="faq" className="py-20 px-6">
+    <section ref={sectionRef} id="faq" className="py-20 px-6">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">Түгээмэл асуултууд</h2>
-          <p className="text-lg lg:text-xl text-gray-600">
+          <h2 ref={titleRef} className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">Түгээмэл асуултууд</h2>
+          <p ref={subtitleRef} className="text-lg lg:text-xl text-gray-600">
             Та бүхэнд хамгийн их асуугддаг асуултууд болон хариултууд
           </p>
         </div>
 
-        <div className="bg-white rounded-3xl shadow-lg p-8">
+        <div ref={accordionRef} className="bg-white rounded-3xl shadow-lg p-8">
           <Accordion type="single" collapsible className="w-full">
             {faqs.map((item, index) => (
               <AccordionItem key={index} value={`item-${index}`}>
