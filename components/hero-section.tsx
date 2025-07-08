@@ -117,7 +117,7 @@ export function HeroSection() {
             </Button>
           </Link>
 
-          <Link href="/#contact">
+          <Link href="https://mbg-apply.vercel.app" target="_blank" rel="noopener noreferrer">
             <Button
               size="lg"
               variant="outline"
