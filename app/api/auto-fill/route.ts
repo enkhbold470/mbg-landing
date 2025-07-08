@@ -47,7 +47,7 @@ export async function POST(req: Request) {
     }
 
     const prompt = `
-For a Chinese language course named "${courseTitle}", please generate course details in Mongolian language:
+For a course named "${courseTitle}", please generate course details in Mongolian language:
 
 1. subtitle: A concise subtitle (e.g., "HSK 4 түвшин")
 2. description: A brief appealing description (1-2 sentences)
@@ -60,7 +60,7 @@ For a Chinese language course named "${courseTitle}", please generate course det
 9. schedule: Class schedule (e.g., "Даваа – Баасан 10:00 – 12:00")
 10. frequency: How often classes occur (e.g., "Долоо хоногт 5 удаа 2 цагаар хичээллэх болно")
 11. classSize: Number of students (e.g., "5 сурагч", "10 сурагч")
-12. teacher: Teacher description (e.g., "Хятад багш хичээл заах болно")
+12. teacher: Teacher description (e.g., "Хятад багш, Монгол багш, Солонгос багш, Америк багш")
 
 Return the output as a JSON object with these exact keys: "subtitle", "description", "price", "duration", "slug", "features", "fullTitle", "startDate", "schedule", "frequency", "classSize", "teacher".
 
@@ -86,7 +86,7 @@ Example format:
       messages: [
         {
           role: "system",
-          content: "You are a helpful assistant that generates Chinese language course details in Mongolian language. Focus on creating realistic, appealing course information for MBG Education Center.",
+          content: "You are a helpful assistant that generates course details in Mongolian language. Focus on creating realistic, appealing course information for MBG Education Center.",
         },
         { role: "user", content: prompt },
       ],

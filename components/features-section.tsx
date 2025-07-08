@@ -87,7 +87,7 @@ export function FeaturesSection() {
       // Cards stagger animation
       tl.to(cardsRef.current, {
         opacity: 1,
-        y: 0,
+          y: 0, 
         scale: 1,
         rotation: 0,
         duration: 0.8,
@@ -97,35 +97,35 @@ export function FeaturesSection() {
 
       // Continuous floating animation for cards (only after they're visible)
       tl.call(() => {
-        cardsRef.current.forEach((card, index) => {
-          if (card) {
-            gsap.to(card, {
-              y: -15,
+      cardsRef.current.forEach((card, index) => {
+        if (card) {
+          gsap.to(card, {
+            y: -15,
               duration: 1.5 + index * 0.1,
-              ease: "power2.inOut",
-              yoyo: true,
-              repeat: -1,
+            ease: "power2.inOut",
+            yoyo: true,
+            repeat: -1,
               delay: index * 0.1
-            })
-          }
+          })
+        }
         })
       })
 
       // Continuous rotation for icons (only after they're visible)
       tl.call(() => {
-        cardsRef.current.forEach((card, index) => {
-          if (card) {
-            const icon = card.querySelector('.feature-icon')
-            if (icon) {
-              gsap.to(icon, {
-                rotation: 360,
+      cardsRef.current.forEach((card, index) => {
+        if (card) {
+          const icon = card.querySelector('.feature-icon')
+          if (icon) {
+            gsap.to(icon, {
+              rotation: 360,
                 duration: 6 + index * 0.3,
-                ease: "none",
-                repeat: -1,
+              ease: "none",
+              repeat: -1,
                 delay: index * 0.2
-              })
-            }
+            })
           }
+        }
         })
       })
 

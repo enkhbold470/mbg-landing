@@ -6,10 +6,11 @@ import React, { useState, useEffect, useCallback, useMemo } from 'react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { Star, Loader2, RefreshCw } from 'lucide-react'
+import { Star, Loader2, RefreshCw, AlertCircle, CheckCircle } from 'lucide-react'
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
+import { Alert, AlertDescription } from '@/components/ui/alert'
 // Import modular components
 import { SiteConfigForm } from '@/components/admin/site-config-form'
 import { CourseForm } from '@/components/admin/course-form'
@@ -73,6 +74,20 @@ const LoadingSkeleton = () => (
   </div>
 )
 
+// Error boundary component
+const ErrorDisplay = ({ error, onRetry }: { error: string; onRetry: () => void }) => (
+  <Alert variant="destructive" className="mb-6">
+    <AlertCircle className="h-4 w-4" />
+    <AlertDescription className="flex items-center justify-between">
+      <span>{error}</span>
+      <Button onClick={onRetry} variant="outline" size="sm">
+        <RefreshCw className="h-4 w-4 mr-2" />
+        Дахин оролдох
+      </Button>
+    </AlertDescription>
+  </Alert>
+)
+
 export default function AdminPage() {
   console.log("🚀 [AdminPage] Component mounted");
 
@@ -88,15 +103,25 @@ export default function AdminPage() {
   // Loading states for different tabs
   const [loadingStates, setLoadingStates] = useState({
     site: false,
-    courses: false,
+    courses: true, // Start with courses loading since it's the default tab
     testimonials: false,
     partners: false,
     faq: false,
     features: false
   })
   
-  // Track which tabs have been loaded
-  const [loadedTabs, setLoadedTabs] = useState(new Set(['courses']))
+  // Error states for different tabs
+  const [errorStates, setErrorStates] = useState<Record<string, string | null>>({
+    site: null,
+    courses: null,
+    testimonials: null,
+    partners: null,
+    faq: null,
+    features: null
+  })
+  
+  // Track which tabs have been successfully loaded
+  const [loadedTabs, setLoadedTabs] = useState(new Set<string>())
   
   // Form submission states
   const [submittingStates, setSubmittingStates] = useState({
@@ -111,62 +136,97 @@ export default function AdminPage() {
   const [editingCourse, setEditingCourse] = useState<any>(null)
   const { toast } = useToast()
 
-  // Optimized data loading functions
-  const loadTabData = useCallback(async (tabName: string) => {
-    if (loadedTabs.has(tabName)) return
+  // Enhanced data loading with better error handling
+  const loadTabData = useCallback(async (tabName: string, force = false) => {
+    // Skip if already loaded and not forcing reload
+    if (loadedTabs.has(tabName) && !force) return
     
     setLoadingStates(prev => ({ ...prev, [tabName]: true }))
+    setErrorStates(prev => ({ ...prev, [tabName]: null }))
     
     try {
       console.log(`🔄 [AdminPage] Loading data for tab: ${tabName}`)
       
+      let data
       switch (tabName) {
         case 'site':
-          const siteData = await getSiteConfig()
-          setSiteConfig(siteData)
+          data = await getSiteConfig()
+          setSiteConfig(data)
           break
         case 'courses':
-          const coursesData = await getCourses()
-          setCourses(coursesData as any)
+          data = await getCourses()
+          setCourses(Array.isArray(data) ? data : [])
           break
         case 'testimonials':
-          const testimonialsData = await getTestimonials()
-          setTestimonials(testimonialsData)
+          data = await getTestimonials()
+          setTestimonials(Array.isArray(data) ? data : [])
           break
         case 'partners':
-          const partnersData = await getPartners()
-          setPartners(partnersData)
+          data = await getPartners()
+          setPartners(Array.isArray(data) ? data : [])
           break
         case 'faq':
-          const faqsData = await getFAQs()
-          setFaqs(faqsData)
+          data = await getFAQs()
+          setFaqs(Array.isArray(data) ? data : [])
           break
         case 'features':
-          const featuresData = await getFeatures()
-          setFeatures(featuresData)
+          data = await getFeatures()
+          setFeatures(Array.isArray(data) ? data : [])
           break
       }
       
       setLoadedTabs(prev => new Set([...prev, tabName]))
-      console.log(`✅ [AdminPage] Data loaded for tab: ${tabName}`)
+      console.log(`✅ [AdminPage] Data loaded for tab: ${tabName}`, data)
+      
+      // Show success toast only on manual refresh
+      if (force) {
+        toast({
+          title: "Амжилттай",
+          description: `${getTabDisplayName(tabName)} мэдээлэл шинэчлэгдлээ`,
+          duration: 2000
+        })
+      }
       
     } catch (error) {
       console.error(`❌ [AdminPage] Error loading ${tabName} data:`, error)
+      const errorMessage = getErrorMessage(error)
+      setErrorStates(prev => ({ ...prev, [tabName]: errorMessage }))
+      
       toast({
-        title: "Алдаа",
-        description: `${tabName} мэдээлэл ачаалахад алдаа гарлаа`,
-        variant: "destructive"
+        title: "Алдаа гарлаа",
+        description: `${getTabDisplayName(tabName)} мэдээлэл ачаалахад алдаа гарлаа: ${errorMessage}`,
+        variant: "destructive",
+        duration: 5000
       })
     } finally {
       setLoadingStates(prev => ({ ...prev, [tabName]: false }))
     }
   }, [loadedTabs, toast])
 
-  // Load initial data for the default tab
+  // Helper functions
+  const getTabDisplayName = (tabName: string) => {
+    const names: Record<string, string> = {
+      site: 'Сайтын тохируулга',
+      courses: 'Сургалтууд',
+      testimonials: 'Сэтгэгдэлүүд',
+      partners: 'Хамтрагчид',
+      faq: 'Асуултууд',
+      features: 'Онцлогууд'
+    }
+    return names[tabName] || tabName
+  }
+
+  const getErrorMessage = (error: any) => {
+    if (error?.message) return error.message
+    if (typeof error === 'string') return error
+    return 'Тодорхойгүй алдаа гарлаа'
+  }
+
+  // Load initial data for the default tab on component mount
   useEffect(() => {
     console.log("📊 [AdminPage] Loading initial data for courses tab...");
     loadTabData('courses')
-  }, [loadTabData])
+  }, []) // Remove loadTabData from dependencies to avoid infinite loop
 
   // Handle tab changes with lazy loading
   const handleTabChange = useCallback((value: string) => {
@@ -175,14 +235,21 @@ export default function AdminPage() {
     loadTabData(value);
   }, [loadTabData])
 
-  // Optimized form submission handlers with loading states
+  // Enhanced form submission handlers with better feedback
   const handleSiteConfigSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     
-    if (submittingStates.siteConfig) return // Prevent double submission
+    if (submittingStates.siteConfig) return
     
     setSubmittingStates(prev => ({ ...prev, siteConfig: true }))
     console.log("💾 [AdminPage] Updating site configuration...");
+    
+    // Show loading toast
+    const loadingToast = toast({
+      title: "Хадгалж байна...",
+      description: "Сайтын тохируулга хадгалж байна",
+      duration: 0, // Don't auto-dismiss
+    })
     
     const formData = new FormData(e.currentTarget)
     const data = {
@@ -198,16 +265,22 @@ export default function AdminPage() {
       await updateSiteConfig(data)
       setSiteConfig(data)
       console.log("✅ [AdminPage] Site configuration updated successfully");
+      
+      // Dismiss loading toast and show success
+      loadingToast.dismiss?.()
       toast({
-        title: "Амжилттай",
+        title: "Амжилттай хадгаллаа",
         description: "Сайтын тохируулга амжилттай хадгалагдлаа",
+        duration: 3000
       })  
     } catch (error) {
       console.error("❌ [AdminPage] Error updating site configuration:", error);
+      loadingToast.dismiss?.()
       toast({
-        title: "Алдаа",
-        description: "Сайтын тохируулга хадгалах үед алдаа гарлаа",
-        variant: "destructive"
+        title: "Алдаа гарлаа",
+        description: `Сайтын тохируулга хадгалах үед алдаа гарлаа: ${getErrorMessage(error)}`,
+        variant: "destructive",
+        duration: 5000
       })  
     } finally {
       setSubmittingStates(prev => ({ ...prev, siteConfig: false }))
@@ -217,10 +290,17 @@ export default function AdminPage() {
   const handleCourseSubmit = async (e: React.FormEvent<HTMLFormElement>, isEdit = false) => {
     e.preventDefault()
     
-    if (submittingStates.course) return // Prevent double submission
+    if (submittingStates.course) return
     
     setSubmittingStates(prev => ({ ...prev, course: true }))
     console.log(`💾 [AdminPage] ${isEdit ? 'Updating' : 'Creating'} course...`);
+    
+    // Show loading toast
+    const loadingToast = toast({
+      title: isEdit ? "Шинэчилж байна..." : "Үүсгэж байна...",
+      description: isEdit ? "Сургалтыг шинэчилж байна" : "Шинэ сургалт үүсгэж байна",
+      duration: 0,
+    })
     
     const formData = new FormData(e.currentTarget)
     const features = (formData.get('features') as string).split('\n').filter(f => f.trim())
@@ -247,78 +327,94 @@ export default function AdminPage() {
     
     try {
       if (isEdit && editingCourse) {
-        await updateCourse(editingCourse.id, data)
-        // Optimistic update
+        const updatedCourse = await updateCourse(editingCourse.id, data)
         setCourses(prev => prev.map(course => 
-          course.id === editingCourse.id ? { ...course, ...data } : course
+          course.id === editingCourse.id ? updatedCourse : course
         ))
         setEditingCourse(null)
         console.log("✅ [AdminPage] Course updated successfully");
+        
+        loadingToast.dismiss?.()
         toast({
-          title: "Амжилттай",
+          title: "Амжилттай шинэчлэгдлээ",
           description: "Сургалт амжилттай шинэчлэгдлээ",
+          duration: 3000
         })  
       } else {
         const newCourse = await createCourse(data)
-        // Optimistic update
         setCourses(prev => [newCourse, ...prev])
+        
         // Reset form
         if (e.currentTarget) {
           e.currentTarget.reset()
         }
         console.log("✅ [AdminPage] Course created successfully");
+        
+        loadingToast.dismiss?.()
         toast({
-          title: "Амжилттай",
-          description: "Сургалт амжилттай үүслээ",
+          title: "Амжилттай үүслээ",
+          description: "Шинэ сургалт амжилттай үүслээ",
+          duration: 3000
         })  
       }
     } catch (error) {
       console.error("❌ [AdminPage] Error saving course:", error);
+      loadingToast.dismiss?.()
       toast({
-        title: "Алдаа",
-        description: "Сургалт хадгалах үед алдаа гарлаа",
-        variant: "destructive"
+        title: "Алдаа гарлаа",
+        description: `Сургалт хадгалах үед алдаа гарлаа: ${getErrorMessage(error)}`,
+        variant: "destructive",
+        duration: 5000
       })  
     } finally {
       setSubmittingStates(prev => ({ ...prev, course: false }))
     }
   }
 
-  // Generic content handlers with loading states
+  // Enhanced generic content handlers with better error handling
   const createContentHandler = (createFn: any, updateFn: any, contentType: string, setData: any) => {
     return async (data: any, isEdit: boolean, editingItem?: any) => {
       const stateKey = contentType as keyof typeof submittingStates
       
-      if (submittingStates[stateKey]) return // Prevent double submission
+      if (submittingStates[stateKey]) return
       
       setSubmittingStates(prev => ({ ...prev, [stateKey]: true }))
       console.log(`💾 [AdminPage] ${isEdit ? 'Updating' : 'Creating'} ${contentType}...`);
       
+      // Show loading toast
+      const loadingToast = toast({
+        title: isEdit ? "Шинэчилж байна..." : "Үүсгэж байна...",
+        description: `${getTabDisplayName(contentType)} ${isEdit ? 'шинэчилж' : 'үүсгэж'} байна`,
+        duration: 0,
+      })
+      
       try {
         if (isEdit && editingItem) {
           const updated = await updateFn(editingItem.id, data)
-          // Optimistic update
           setData((prev: any[]) => prev.map(item => 
-            item.id === editingItem.id ? { ...item, ...data } : item
+            item.id === editingItem.id ? updated : item
           ))
           console.log(`✅ [AdminPage] ${contentType} updated successfully`);
         } else {
           const created = await createFn(data)
-          // Optimistic update
           setData((prev: any[]) => [created, ...prev])
           console.log(`✅ [AdminPage] ${contentType} created successfully`);
         }
         
+        loadingToast.dismiss?.()
         toast({
           title: "Амжилттай",
           description: `${isEdit ? 'Шинэчлэгдлээ' : 'Үүслээ'} амжилттай`,
+          duration: 3000
         })  
       } catch (error) {
         console.error(`❌ [AdminPage] Error saving ${contentType}:`, error);
+        loadingToast.dismiss?.()
         toast({
-          title: "Алдаа",
-          description: "Мэдээлэл хадгалах үед алдаа гарлаа",
-          variant: "destructive"
+          title: "Алдаа гарлаа",
+          description: `Мэдээлэл хадгалах үед алдаа гарлаа: ${getErrorMessage(error)}`,
+          variant: "destructive",
+          duration: 5000
         })  
       } finally {
         setSubmittingStates(prev => ({ ...prev, [stateKey]: false }))
@@ -326,15 +422,17 @@ export default function AdminPage() {
     }
   }
 
-  // Refresh function for manual data reloading
+  // Enhanced refresh function
   const refreshCurrentTab = useCallback(async () => {
-    setLoadedTabs(prev => {
-      const newSet = new Set(prev)
-      newSet.delete(activeTab)
-      return newSet
-    })
-    await loadTabData(activeTab)
+    console.log(`🔄 [AdminPage] Manually refreshing tab: ${activeTab}`);
+    await loadTabData(activeTab, true) // Force reload
   }, [activeTab, loadTabData])
+
+  // Retry function for error recovery
+  const retryTabLoad = useCallback((tabName: string) => {
+    console.log(`🔄 [AdminPage] Retrying to load tab: ${tabName}`);
+    loadTabData(tabName, true)
+  }, [loadTabData])
 
   // Field configurations (moved outside to avoid recreating on each render)
   const testimonialFields = useMemo(() => [
@@ -479,6 +577,12 @@ export default function AdminPage() {
 
             <div className="p-6">
               <TabsContent value="courses" className="mt-0">
+                {errorStates.courses && (
+                  <ErrorDisplay 
+                    error={errorStates.courses} 
+                    onRetry={() => retryTabLoad('courses')} 
+                  />
+                )}
                 {loadingStates.courses ? (
                   <LoadingSkeleton />
                 ) : (
@@ -518,6 +622,12 @@ export default function AdminPage() {
               </TabsContent>
 
               <TabsContent value="testimonials" className="mt-0">
+                {errorStates.testimonials && (
+                  <ErrorDisplay 
+                    error={errorStates.testimonials} 
+                    onRetry={() => retryTabLoad('testimonials')} 
+                  />
+                )}
                 {loadingStates.testimonials ? (
                   <LoadingSkeleton />
                 ) : (
@@ -537,6 +647,12 @@ export default function AdminPage() {
               </TabsContent>
 
               <TabsContent value="partners" className="mt-0">
+                {errorStates.partners && (
+                  <ErrorDisplay 
+                    error={errorStates.partners} 
+                    onRetry={() => retryTabLoad('partners')} 
+                  />
+                )}
                 {loadingStates.partners ? (
                   <LoadingSkeleton />
                 ) : (
@@ -556,6 +672,12 @@ export default function AdminPage() {
               </TabsContent>
 
               <TabsContent value="faq" className="mt-0">
+                {errorStates.faq && (
+                  <ErrorDisplay 
+                    error={errorStates.faq} 
+                    onRetry={() => retryTabLoad('faq')} 
+                  />
+                )}
                 {loadingStates.faq ? (
                   <LoadingSkeleton />
                 ) : (
@@ -575,6 +697,12 @@ export default function AdminPage() {
               </TabsContent>
 
               <TabsContent value="features" className="mt-0">
+                {errorStates.features && (
+                  <ErrorDisplay 
+                    error={errorStates.features} 
+                    onRetry={() => retryTabLoad('features')} 
+                  />
+                )}
                 {loadingStates.features ? (
                   <LoadingSkeleton />
                 ) : (

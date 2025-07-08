@@ -74,7 +74,7 @@ export function CourseForm({ course, onSubmit, isEdit = false, isSubmitting = fa
         }
 
         // Set default values for other fields
-        (form.querySelector('#image') as HTMLInputElement).value = 'https://placekeanu.com/500/500';
+        (form.querySelector('#image') as HTMLInputElement).value = `https://placekeanu.com/${Math.floor(Math.random() * 1000)}/${Math.floor(Math.random() * 1000)}`;
         (form.querySelector('#video') as HTMLInputElement).value = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ';
         (form.querySelector('#signupForm') as HTMLInputElement).value = 'https://www.google.com';
       }
