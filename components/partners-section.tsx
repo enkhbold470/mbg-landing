@@ -138,7 +138,7 @@ export function PartnersSection() {
               <div className="h-6 bg-gray-200 rounded w-3/4 mx-auto"></div>
             </div>
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6 md:gap-8">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-6 md:gap-8">
             {[...Array(6)].map((_, index) => (
               <div key={index} className="animate-pulse flex flex-col items-center">
                 <div className="bg-gray-200 rounded-2xl p-6 w-32 h-32"></div>
@@ -169,7 +169,7 @@ export function PartnersSection() {
           </p>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6 md:gap-8">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-6 md:gap-8">
 
           {partners.map((partner, index) => (
             <div

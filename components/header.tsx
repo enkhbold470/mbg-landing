@@ -1,28 +1,37 @@
-'use client'
+"use client"
 
 import { useState } from "react"
 import Link from "next/link"
-import { Sparkles, Menu, X } from "lucide-react"
+import {
+  Home,
+  Menu,
+} from "lucide-react"
+
 import { siteConfig } from "@/config/site"
+import { Button } from "@/components/ui/button"
+import {
+  NavigationMenu,
+  NavigationMenuLink,
+  NavigationMenuList,
+} from "@/components/ui/navigation-menu"
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet"
+
+const navigation = [
+  { href: "/#features", text: "Онцлогууд" },
+  { href: "/#testimonials", text: "Сэтгэгдэлүүд" },
+  { href: "/#about", text: "Бидний тухай" },
+  { href: "/#faq", text: "Асуулт" },
+  { href: "/courses", text: "Сургалтууд" },
+]
 
 export function Header() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
-
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen)
-  }
-
-  const closeMenu = () => {
-    setIsMenuOpen(false)
-  }
-
-  const navLinks = [
-    { href: "/#features", text: "Онцлогууд" },
-    { href: "/#testimonials", text: "Сэтгэгдэлүүд" },
-    { href: "/#about", text: "Бидний тухай" },
-    { href: "/#faq", text: "Асуулт" },
-    { href: "/courses", text: "Сургалтууд" },
-  ]
+  const [isOpen, setIsOpen] = useState(false)
 
   return (
     <header className="sticky top-0 w-full bg-white/80 backdrop-blur-xl border-b border-gray-100 z-50">
@@ -32,81 +41,93 @@ export function Header() {
           <Link
             href="/"
             className="flex items-center space-x-2"
-            onClick={closeMenu}
+            onClick={() => setIsOpen(false)}
           >
             <div className="w-8 h-8 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg flex items-center justify-center">
-              <Sparkles className="w-5 h-5 text-white" />
+              <Home className="w-5 h-5 text-white" />
             </div>
             <span className="text-xl font-semibold text-gray-900">{siteConfig.name}</span>
           </Link>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
-            {navLinks.map((link, index) => (
-              <Link 
-                key={index}
-                href={link.href} 
-                className="text-gray-600 hover:text-purple-600 transition-colors"
-              >
-                {link.text}
-              </Link>
-            ))}
-            <div className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors">
+            <NavigationMenu>
+              <NavigationMenuList className="flex space-x-8">
+                {navigation.map((link, index) => (
+                  <NavigationMenuLink key={index} asChild>
+                    <Link 
+                      href={link.href} 
+                      className="text-gray-600 hover:text-purple-600 transition-colors px-3 py-2 text-sm font-medium"
+                    >
+                      {link.text}
+                    </Link>
+                  </NavigationMenuLink>
+                ))}
+              </NavigationMenuList>
+            </NavigationMenu>
+            
+            <Button asChild className="bg-purple-600 text-white hover:bg-purple-700 transition-colors">
               <Link href="/#contact">
                 Холбоо барих
               </Link>
-            </div>
+            </Button>
           </div>
 
-          {/* Mobile Hamburger Button */}
-          <button
-            onClick={toggleMenu}
-            className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
-            aria-label="Toggle menu"
-          >
-            {isMenuOpen ? (
-              <X className="w-6 h-6 text-gray-600" />
-            ) : (
-              <Menu className="w-6 h-6 text-gray-600" />
-            )}
-          </button>
-        </div>
-
-        {/* Mobile Menu Overlay */}
-        {isMenuOpen && (
-          <div className="md:hidden absolute top-full left-0 right-0 bg-white/95 backdrop-blur-xl border-b border-gray-100 shadow-lg">
-            <div className="px-6 py-4 space-y-4">
-              {navLinks.map((link, index) => (
-                <Link
-                  key={index}
-                  href={link.href}
-                  className="block text-gray-600 hover:text-purple-600 transition-colors py-2 border-b border-gray-100 last:border-b-0"
-                  onClick={closeMenu}
-                >
-                  {link.text}
-                </Link>
-              ))}
-              <div className="pt-4">
-                <Link
-                  href="/#contact"
-                  className="block w-full text-center bg-purple-600 text-white px-4 py-3 rounded-lg hover:bg-purple-700 transition-colors"
-                  onClick={closeMenu}
-                >
-                  Холбоо барих
-                </Link>
+          {/* Mobile Menu */}
+          <Sheet open={isOpen} onOpenChange={setIsOpen}>
+            <SheetTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="md:hidden"
+                aria-label="Toggle menu"
+              >
+                <Menu className="w-6 h-6" />
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="right" className="w-[300px] sm:w-[400px]">
+              <SheetHeader>
+                <SheetTitle>
+                  <Link
+                    href="/"
+                    className="flex items-center space-x-2"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    <div className="w-8 h-8 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg flex items-center justify-center">
+                      <Home className="w-5 h-5 text-white" />
+                    </div>
+                    <span className="text-xl font-semibold text-gray-900">{siteConfig.name}</span>
+                  </Link>
+                </SheetTitle>
+              </SheetHeader>
+              
+              <div className="flex flex-col space-y-4 mt-8">
+                {navigation.map((link, index) => (
+                  <Link
+                    key={index}
+                    href={link.href}
+                    className="text-gray-600 hover:text-purple-600 transition-colors py-2 text-lg font-medium border-b border-gray-100 last:border-b-0"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    {link.text}
+                  </Link>
+                ))}
+                
+                <div className="pt-4">
+                  <Button asChild className="w-full bg-purple-600 text-white hover:bg-purple-700 transition-colors">
+                    <Link
+                      href="/#contact"
+                      onClick={() => setIsOpen(false)}
+                    >
+                      Холбоо барих
+                    </Link>
+                  </Button>
+                </div>
               </div>
-            </div>
-          </div>
-        )}
+            </SheetContent>
+          </Sheet>
+        </div>
       </div>
-
-      {/* Mobile Menu Background Overlay */}
-      {isMenuOpen && (
-        <div 
-          className="md:hidden fixed inset-0 bg-black/20 backdrop-blur-sm z-40"
-          onClick={closeMenu}
-        />
-      )}
     </header>
   )
 }

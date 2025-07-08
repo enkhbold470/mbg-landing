@@ -306,13 +306,13 @@ export type SiteConfig = typeof siteConfig
 
 export const metaConfig = {
   generator: 'Next.js',
-  title: 'MBG Боловсрол',
+  title: 'MBG Боловсролын Төв',
   description: 'Хятадын хэлийг эзэмших мэргэжлийн сургалт',
   url: 'https://mbg-landing.vercel.app',
   ogImage: 'https://raw.githubusercontent.com/enkhbold470/mbg-landing/refs/heads/main/public/og.jpg?token=GHSAT0AAAAAADDNY624LZU73VR2BBFWVMA22DKJ7HA',
   keywords: [
     'MBG Боловсрол', 'Хятад хэл', 'HSK', 'Хятадын боловсрол',
-    'Хэл сургалт', 'Монгол', 'Хятад хэлний сургалт', 'Улаанбаатар'
+    'Хэл сургалт', 'Монгол', 'Хятадын хэлний сургалт', 'Улаанбаатар'
   ],
   applicationName: 'MBG Боловсрол',
   referrer: 'origin-when-cross-origin',
