@@ -72,7 +72,14 @@ export async function getCourses() {
     const courses = await prisma.course.findMany({ orderBy: { createdAt: 'desc' } })
     console.log(`✅ [getCourses] Courses fetched successfully: ${courses.length} courses found`);
     console.log("📊 [getCourses] Course details:", courses.map(c => ({ id: c.id, title: c.title, highlighted: c.highlighted })));
-    return courses;
+    
+    // Parse features from JSON string back to array for frontend compatibility
+    const coursesWithParsedFeatures = courses.map(course => ({
+      ...course,
+      features: course.features ? (typeof course.features === 'string' ? JSON.parse(course.features) : course.features) : []
+    }));
+    
+    return coursesWithParsedFeatures;
   } catch (error) {
     console.error("❌ [getCourses] Error fetching courses:", error);
     // Fallback to static course data from site config
@@ -83,13 +90,23 @@ export async function getCourses() {
 }
 
 export async function createCourse(data: any) {
-  return await prisma.course.create({ data })
+  // Convert features array to JSON string for SQLite storage
+  const courseData = {
+    ...data,
+    features: Array.isArray(data.features) ? JSON.stringify(data.features) : data.features
+  }
+  return await prisma.course.create({ data: courseData })
 }
 
 export async function updateCourse(id: string, data: any) {
+  // Convert features array to JSON string for SQLite storage
+  const courseData = {
+    ...data,
+    features: Array.isArray(data.features) ? JSON.stringify(data.features) : data.features
+  }
   return await prisma.course.update({
     where: { id },
-    data
+    data: courseData
   })
 }
 
