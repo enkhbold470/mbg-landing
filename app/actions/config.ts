@@ -73,9 +73,18 @@ export async function authenticateAdmin(formData: FormData) {
 
 export async function logout() {
   return withErrorHandling(async () => {
-    const cookieStore = await cookies()
-    cookieStore.delete('admin-auth')
-    redirect('/admin')
+    const response = await fetch('/api/auth/logout', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+    
+    if (!response.ok) {
+      throw new AdminActionError('Failed to logout', 'LOGOUT_ERROR')
+    }
+    
+    return await response.json()
   }, 'logout')
 }
 
