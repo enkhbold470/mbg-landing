@@ -1,48 +1,21 @@
 'use client'
-import { useState, useEffect, useRef } from "react"
+import { useRef, useEffect } from "react"
 import Image from "next/image"
-
-import Link from "next/link"
 import { gsap } from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
+import { useLandingData } from "@/hooks/use-landing-data"
 
 // Register GSAP plugins
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger)
 }
 
-
-interface Partner {
-  name: string
-  logo: string
-  url: string
-}
-
 export function PartnersSection() {
-  const [partners, setPartners] = useState<Partner[]>([])
-  const [loading, setLoading] = useState(true)
+  const { partners, loading, error, isUsingFallback } = useLandingData()
   const sectionRef = useRef<HTMLElement>(null)
   const titleRef = useRef<HTMLHeadingElement>(null)
   const subtitleRef = useRef<HTMLParagraphElement>(null)
   const partnersRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    async function fetchPartners() {
-      try {
-        const response = await fetch('/api/partners')
-        if (response.ok) {
-          const data = await response.json()
-          setPartners(data)
-        }
-      } catch (error) {
-        console.error('Error fetching partners:', error)
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    fetchPartners()
-  }, [])
 
   useEffect(() => {
     if (!loading && partners.length > 0) {

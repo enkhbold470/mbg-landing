@@ -1,9 +1,10 @@
 'use client'
 
-import { useState, useEffect, useRef } from "react"
+import { useEffect, useRef } from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import { gsap } from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
+import { useLandingData } from "@/hooks/use-landing-data"
 
 // Register GSAP plugins
 if (typeof window !== 'undefined') {
@@ -17,30 +18,11 @@ interface Feature {
 }
 
 export function FeaturesSection() {
-  const [features, setFeatures] = useState<Feature[]>([])
-  const [loading, setLoading] = useState(true)
+  const { features, loading, error, isUsingFallback } = useLandingData()
   const sectionRef = useRef<HTMLElement>(null)
   const cardsRef = useRef<(HTMLDivElement | null)[]>([])
   const titleRef = useRef<HTMLHeadingElement>(null)
   const subtitleRef = useRef<HTMLParagraphElement>(null)
-
-  useEffect(() => {
-    async function fetchFeatures() {
-      try {
-        const response = await fetch('/api/features')
-        if (response.ok) {
-          const data = await response.json()
-          setFeatures(data)
-        }
-      } catch (error) {
-        console.error('Error fetching features:', error)
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    fetchFeatures()
-  }, [])
 
   useEffect(() => {
     if (loading || !sectionRef.current || features.length === 0) return
