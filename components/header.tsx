@@ -24,7 +24,7 @@ import {
 
 const navigation = [
   { href: "/#features", text: "Онцлогууд" },
-  { href: "/#testimonials", text: "Сэтгэгдэлүүд" },
+  { href: "/#testimonials", text: "Сэтгэгдэл" },
   { href: "/#about", text: "Бидний тухай" },
   { href: "/#faq", text: "Асуулт" },
   { href: "/courses", text: "Сургалтууд" },
