@@ -209,7 +209,7 @@ export const metaConfig = {
   generator: 'Next.js',
   title: 'MBG center',
   description: 'Хятадын хэлийг эзэмших мэргэжлийн сурgalт',
-  url: 'https://mbg-landing.vercel.app',
+  url: 'https://mbg.mn',
   ogImage: 'https://raw.githubusercontent.com/enkhbold470/mbg-landing/refs/heads/main/public/og.jpg',
   keywords: [
     'MBG Боловсрол', 'Хятад хэл', 'HSK', 'Хятадын боловсрол',
