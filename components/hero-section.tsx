@@ -6,6 +6,7 @@ import Link from "next/link"
 import { siteConfig } from "@/config/site"
 import { useEffect, useRef } from "react"
 import gsap from "gsap"
+import { showEmoji } from "@/lib/utils"
 
 export function HeroSection() {
   const sectionRef = useRef<HTMLElement>(null)
@@ -105,14 +106,14 @@ export function HeroSection() {
 
         <div 
           ref={buttonsRef}
-          className="flex flex-col sm:flex-row gap-4 justify-center items-center"
+          className="flex flex-col sm:flex-row gap-6 lg:gap-4 justify-center items-center"
         >
           <Link href="/courses">
             <Button
               size="lg"
               className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-8 py-4 text-lg rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 min-w-[300px] group"
             >
-              🇲🇳 Танхим сургалт
+              {showEmoji('🇲🇳')} Танхим сургалт
               <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </Button>
           </Link>
@@ -120,24 +121,26 @@ export function HeroSection() {
           <Link href="https://apply.mbg.mn" target="_blank" rel="noopener noreferrer">
             <Button
               size="lg"
-              variant="outline"
-              className="border-2 border-gray-200 text-gray-700 hover:border-purple-300 hover:text-purple-600 hover:bg-purple-50 px-8 py-4 text-lg rounded-2xl min-w-[300px] transition-all duration-300 bg-white/50 backdrop-blur-sm"
+              className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-8 py-4 text-lg rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 min-w-[300px] group"
             >
-              🇨🇳 Суралцах зуучлал
+              {showEmoji('🇨🇳')} Суралцах зуучлал
+                            <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+
             </Button>
           </Link>
 
           <Link href="mailto:info@mbg.mn" target="_blank" rel="noopener noreferrer">
-            <Button
+             <Button
               size="lg"
-              variant="outline"
-              className="border-2 border-gray-200 text-gray-700 hover:border-purple-300 hover:text-purple-600 hover:bg-purple-50 px-8 py-4 text-lg rounded-2xl min-w-[300px] transition-all duration-300 bg-white/50 backdrop-blur-sm"
+              className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-8 py-4 text-lg rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 min-w-[300px] group"
             >
-             🌐 Бизнес, аялал хөтөч
+             {showEmoji('🌐')} Бизнес, аялал хөтөч
+                           <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+
             </Button>
           </Link>
         </div>
       </div>
     </section>
   )
-} 
+}

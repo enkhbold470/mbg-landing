@@ -26,3 +26,14 @@ export const youtubeVideo = (link: string) => {
   
   return `https://www.youtube.com/embed/${videoId}`;
 }
+
+// Detect if the device is Windows
+export const isWindows = () => {
+  if (typeof window === 'undefined') return false;
+  return /Windows/.test(navigator.userAgent);
+}
+
+// Conditionally show emoji based on platform
+export const showEmoji = (emoji: string, fallback: string = '') => {
+  return isWindows() ? fallback : emoji;
+}
