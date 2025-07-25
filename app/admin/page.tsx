@@ -532,7 +532,7 @@ export default function AdminPage() {
             <div>
               <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                 Админ панель
-              </h1>
+              </h1> 
               <p className="text-slate-600 mt-2">Сайтын бүх мэдээлэл</p>
               <p className="text-slate-500 text-sm mt-1">
                 Тусламж? <Link href="mailto:enkhbold470@gmail.com" className="text-blue-500 hover:underline font-medium">

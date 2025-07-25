@@ -153,11 +153,16 @@ export const ctaSection = {
   secondaryCta: { 
     text: "🇲🇳 Сургалтын хөтөлбөрүүд",
     href: "/courses"
+  },
+  thirdCta: {
+    text: "Бусад үйлчилгээ",
+    href: "mailto:info@mbg.mn"
   }
+
 }
 
 export const siteConfig = {
-  name: "MBG Center",
+  name: "MBG center",
   description: "Хятад хэл, тэтгэлэгт хөтөлбөр, бизнес аялалын цогц шийдэл.",
   tagline: "ТЭГ-ээс тэтгэлэгт ТЭНЦЭХ хүртэл нь",
   slogan: "MBG 10 дахь жилдээ",
@@ -166,15 +171,15 @@ export const siteConfig = {
   
   // Холбоо барих мэдээлэл
   contact: {
-    email: "mbgedumn@gmail.com",
+    email: "info@mbg.mn",
     phones: [
       "(+976) 77117678",
       "(+976) 99797678", 
-      "(+976) 80098089"
+
     ],
     address: {
-      mongolian: "Танан төв -202, Сүхбаатар дүүрэг, 8-р хороо, Улаанбаатар, Монгол улс",
-      english: "Tanan center-202, 8th khoroo, Ulaanbaatar Mongolia"
+      mongolian: "Монгол улс, Улаанбаатар, Сүхбаатар дүүрэг, 8-р хороо, Оюутаны гудамж, Танан Төв 202 тоот",
+      english: "Room 202, Tanan Center, Student Street, 8th Khoroo, Sukhbaatar District, Ulaanbaatar, Mongolia"
     },
     social: {
       facebook: [
@@ -186,13 +191,13 @@ export const siteConfig = {
           name: "MBG Education", 
           url: "https://www.facebook.com/MBGeduMBGtourMBGConsulting"
         }
-      ]
+      ] 
     }
   },
 
   // Нийгмийн холбоосууд
   links: {
-    twitter: "https://twitter.com/mbgeducation",
+    // twitter: "https://twitter.com/mbgeducation",
     github: "mailto:enkhbold470@gmail.com",
     facebook: "https://www.facebook.com/learningchina",
   },

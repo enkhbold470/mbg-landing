@@ -22,7 +22,7 @@ export function ContactSection() {
                 <div>
                   <h3 className="text-xl font-semibold text-gray-900 mb-3">Хаяг</h3>
                   <p className="text-gray-700 leading-relaxed mb-2">{siteConfig.contact.address.mongolian}</p>
-                  <p className="text-sm text-gray-500">{siteConfig.contact.address.english}</p>
+                  {/* <p className="text-sm text-gray-500">{siteConfig.contact.address.english}</p> */}
                 </div>
               </div>
             </CardContent>

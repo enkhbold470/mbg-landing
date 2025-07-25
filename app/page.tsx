@@ -14,8 +14,10 @@ export default function LandingPage() {
       {/* 1. Hero Section (Above the Fold) */}
       <HeroSection />
       
+      {/* 2. Team & Company Information */}
+      <AboutSection />
       {/* 3. Social Proof & Trust Builders - Partners */}
-      <PartnersSection />
+      {/* <PartnersSection /> */}
       
       {/* 4. Product or Service Details - Features */}
       <FeaturesSection />
@@ -23,8 +25,6 @@ export default function LandingPage() {
       {/* 5. Social Proof & Trust Builders - Testimonials */}
       <TestimonialsSection />
       
-      {/* 6. Team & Company Information */}
-      <AboutSection />
       
       {/* 7. FAQs */}
       <FaqSection />

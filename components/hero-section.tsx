@@ -117,13 +117,23 @@ export function HeroSection() {
             </Button>
           </Link>
 
-          <Link href="https://mbg-apply.vercel.app" target="_blank" rel="noopener noreferrer">
+          <Link href="https://apply.mbg.mn" target="_blank" rel="noopener noreferrer">
             <Button
               size="lg"
               variant="outline"
               className="border-2 border-gray-200 text-gray-700 hover:border-purple-300 hover:text-purple-600 hover:bg-purple-50 px-8 py-4 text-lg rounded-2xl min-w-[300px] transition-all duration-300 bg-white/50 backdrop-blur-sm"
             >
               🇨🇳 Суралцах зуучлал
+            </Button>
+          </Link>
+
+          <Link href="mailto:info@mbg.mn" target="_blank" rel="noopener noreferrer">
+            <Button
+              size="lg"
+              variant="outline"
+              className="border-2 border-gray-200 text-gray-700 hover:border-purple-300 hover:text-purple-600 hover:bg-purple-50 px-8 py-4 text-lg rounded-2xl min-w-[300px] transition-all duration-300 bg-white/50 backdrop-blur-sm"
+            >
+             🌐 Бизнес, аялал хөтөч
             </Button>
           </Link>
         </div>

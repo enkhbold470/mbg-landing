@@ -71,15 +71,15 @@ export function Footer() {
         {/* Bottom Section */}
         <div className="text-center">
           <p className="text-gray-300 text-sm mb-2">
-            © {new Date().getFullYear()} {siteConfig.name} by{" "}
-            <Link
+            © {new Date().getFullYear()} {siteConfig.name}
+            {/* <Link
               href="https://github.com/enkhbold470"
               target="_blank"
               className="inline-flex items-center gap-1 text-purple-300 hover:text-purple-200 transition-colors group"
             >
               <Globe className="w-3 h-3 group-hover:scale-110 transition-transform" />
               enk.icu
-            </Link>
+            </Link> */}
           </p>
           <p className="text-gray-400 text-xs">
             {siteConfig.description}

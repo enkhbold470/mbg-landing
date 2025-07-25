@@ -101,6 +101,16 @@ export function CtaSection() {
               <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </Button>
           </Link>
+          <Link href={ctaSection.thirdCta.href}>
+            <Button
+              size="lg"
+              variant="outline"
+              className="border-2  hover:bg-white hover:text-purple-600 px-8 py-4 text-lg rounded-2xl min-w-[250px] transition-all duration-300 group"
+            >
+              {ctaSection.thirdCta.text}
+              <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            </Button>
+          </Link>
         </div>
       </div>
     </section>
