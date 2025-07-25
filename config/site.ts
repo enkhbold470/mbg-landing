@@ -159,7 +159,7 @@ export const ctaSection = {
 export const siteConfig = {
   name: "MBG Education",
   description: "Хятадын хэлийг эзэмших мэргэжлийн сургалт",
-  tagline: "Тэгээс тэтгэлэгт тэнцэх нь",
+  tagline: "ТЭГ-ээс тэтгэлэгт ТЭНЦЭХ хүртэл нь",
   slogan: "MBG гээс бүгдийг нь",
   url: "https://mbg-landing.vercel.app",
   ogImage: "https://raw.githubusercontent.com/enkhbold470/mbg-landing/refs/heads/main/public/og.jpg?token=GHSAT0AAAAAADDNY624LZU73VR2BBFWVMA22DKJ7HA",
