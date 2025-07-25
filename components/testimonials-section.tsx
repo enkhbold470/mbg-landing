@@ -1,11 +1,12 @@
 'use client'
 
-import { useState, useEffect, useRef } from "react"
+import { useEffect, useRef } from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Star } from "lucide-react"
 import Image from "next/image"
 import { gsap } from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
+import { useLandingData } from "@/hooks/use-landing-data"
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -18,8 +19,7 @@ interface Testimonial {
 }
 
 export function TestimonialsSection() {
-  const [testimonials, setTestimonials] = useState<Testimonial[]>([])
-  const [loading, setLoading] = useState(true)
+  const { testimonials, loading, error, isUsingFallback } = useLandingData()
   const sectionRef = useRef<HTMLElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
 
@@ -27,24 +27,6 @@ export function TestimonialsSection() {
   const duplicatedTestimonials = testimonials.length > 0 
     ? [...testimonials, ...testimonials] 
     : []
-
-  useEffect(() => {
-    async function fetchTestimonials() {
-      try {
-        const response = await fetch('/api/testimonials')
-        if (response.ok) {
-          const data = await response.json()
-          setTestimonials(data)
-        }
-      } catch (error) {
-        console.error('Error fetching testimonials:', error)
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    fetchTestimonials()
-  }, [])
 
   useEffect(() => {
     if (!testimonials.length || !containerRef.current) return

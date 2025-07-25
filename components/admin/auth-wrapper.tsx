@@ -57,12 +57,22 @@ export default function AuthWrapper({ children, isAuthenticated }: AuthWrapperPr
 
   const handleLogout = async () => {
     startTransition(async () => {
-      await logout();
-      toast({
-        title: "Admin Page",
-        description: "Гарах амжилттай",
-      })  
-      });
+      try {
+        await logout();
+        toast({
+          title: "Admin Page",
+          description: "Гарах амжилттай",
+        });
+        // Redirect to admin login page
+        window.location.href = '/admin';
+      } catch (error) {
+        toast({
+          title: "Admin Page",
+          description: "Гарах үед алдаа гарлаа",
+          variant: "destructive",
+        });
+      }
+    });
   };
 
   if (!isAuthenticated) {
