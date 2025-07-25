@@ -4,7 +4,15 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Clock, Users, Calendar, BookOpen, User, MapPin, CheckCircle, ArrowLeft } from "lucide-react";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
+import { Clock, Users, Calendar, BookOpen, User, MapPin, CheckCircle, ArrowLeft, Home } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { youtubeVideo } from "@/lib/utils";
@@ -107,8 +115,36 @@ export default function CourseDetailPage({ params }: { params: { slug: string } 
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-purple-50">
-            {/* Header */}
+            {/* Breadcrumb */}
             <section className="pt-32 pb-8 px-6">
+                <div className="max-w-4xl mx-auto">
+                    <Breadcrumb>
+                        <BreadcrumbList>
+                            <BreadcrumbItem>
+                                <BreadcrumbLink asChild>
+                                    <Link href="/" className="flex items-center gap-1">
+                                        <Home className="w-4 h-4" />
+                                        Нүүр
+                                    </Link>
+                                </BreadcrumbLink>
+                            </BreadcrumbItem>
+                            <BreadcrumbSeparator />
+                            <BreadcrumbItem>
+                                <BreadcrumbLink asChild>
+                                    <Link href="/courses">Сургалтууд</Link>
+                                </BreadcrumbLink>
+                            </BreadcrumbItem>
+                            <BreadcrumbSeparator />
+                            <BreadcrumbItem>
+                                <BreadcrumbPage>{course.title}</BreadcrumbPage>
+                            </BreadcrumbItem>
+                        </BreadcrumbList>
+                    </Breadcrumb>
+                </div>
+            </section>
+
+            {/* Header */}
+            <section className="pb-8 px-6">
                 <div className="max-w-4xl mx-auto">
                     <Link 
                         href="/courses" 

@@ -4,7 +4,15 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Clock, Users, Calendar, ArrowRight } from "lucide-react";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
+import { Clock, Users, Calendar, ArrowRight, Home } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -82,8 +90,30 @@ export default function CoursesPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-purple-50">
+      {/* Breadcrumb */}
+      <section className="pt-32 pb-8 px-6">
+        <div className="max-w-6xl mx-auto">
+          <Breadcrumb>
+            <BreadcrumbList>
+              <BreadcrumbItem>
+                <BreadcrumbLink asChild>
+                  <Link href="/" className="flex items-center gap-1">
+                    <Home className="w-4 h-4" />
+                    Нүүр
+                  </Link>
+                </BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                <BreadcrumbPage>Сургалтууд</BreadcrumbPage>
+              </BreadcrumbItem>
+            </BreadcrumbList>
+          </Breadcrumb>
+        </div>
+      </section>
+
       {/* Header Section */}
-      <section className="pt-32 pb-20 px-6">
+      <section className="pb-20 px-6">
         <div className="max-w-6xl mx-auto text-center">
           <h1 className="text-4xl font-bold text-gray-900 mb-6">
             Сургалтууд
