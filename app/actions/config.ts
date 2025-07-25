@@ -19,6 +19,12 @@ async function withErrorHandling<T>(operation: () => Promise<T>, operationName: 
   try {
     return await operation()
   } catch (error) {
+    // Handle Next.js redirect - this is expected behavior, not an error
+    if (error && typeof error === 'object' && 'message' in error && 
+        (error as any).message?.includes('NEXT_REDIRECT')) {
+      throw error // Re-throw redirect errors as they are expected
+    }
+    
     console.error(`❌ [${operationName}] Error:`, error)
     
     // Handle different types of errors
@@ -73,18 +79,9 @@ export async function authenticateAdmin(formData: FormData) {
 
 export async function logout() {
   return withErrorHandling(async () => {
-    const response = await fetch('/api/auth/logout', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-    
-    if (!response.ok) {
-      throw new AdminActionError('Failed to logout', 'LOGOUT_ERROR')
-    }
-    
-    return await response.json()
+    const cookieStore = await cookies()
+    cookieStore.delete('admin-auth')
+    redirect('/admin')
   }, 'logout')
 }
 

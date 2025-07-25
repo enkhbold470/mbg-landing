@@ -1,6 +1,6 @@
 export const aboutUs = {
   title: "Танилцуулга",
-  description: "MBG Education Center нь 2016 оноос хойш тасралтгүй үйл ажиллагаагаа зохион байгуулж, ажиллаж байна. MBG ХХК нь...Боловсрол, Сургалт аялал, Мэдээлэл зөвлөгөө чиглэлээр 9 дахь жилдээ...Тэг-с ТЭТГЭЛЭГТ ТЭНЦЭХ хүртэл нь... MBG гэдэг нь Mongolian Business Guide гэсэн үг. Зөвхөн сургалтын үйл ажиллагаагаа зохион байгуулаад зогсохгүй, бид бусад үйл ажиллагаагаа нэмэлтээр үйл ажиллаж байна.",
+  description: "MBG center нь 2016 оноос хойш тасралтгүй үйл ажиллагаагаа зохион байгуулж, ажиллаж байна. MBG ХХК нь...Боловсрол, Сургалт аялал, Мэдээлэл зөвлөгөө чиглэлээр 9 дахь жилдээ...Тэг-с ТЭТГЭЛЭГТ ТЭНЦЭХ хүртэл нь... MBG гэдэг нь Mongolian Business Guide гэсэн үг. Зөвхөн сургалтын үйл ажиллагаагаа зохион байгуулаад зогсохгүй, бид бусад үйл ажиллагаагаа нэмэлтээр үйл ажиллаж байна.",
   image: "https://raw.githubusercontent.com/enkhbold470/mbg-landing/refs/heads/main/public/og.jpg",
   video: "https://www.youtube.com/watch?v=2dJnlynLmVM",
   facebook: [
@@ -188,7 +188,7 @@ export const siteConfig = {
           url: "https://www.facebook.com/learningchina"
         },
         {
-          name: "MBG Education", 
+          name: "MBG center", 
           url: "https://www.facebook.com/MBGeduMBGtourMBGConsulting"
         }
       ] 
@@ -311,8 +311,8 @@ export type SiteConfig = typeof siteConfig
 
 export const metaConfig = {
   generator: 'Next.js',
-  title: 'MBG Боловсролын Төв',
-  description: 'Хятадын хэлийг эзэмших мэргэжлийн сургалт',
+  title: 'MBG center',
+  description: 'Хятадын хэлийг эзэмших мэргэжлийн сурgalт',
   url: 'https://mbg-landing.vercel.app',
   ogImage: 'https://raw.githubusercontent.com/enkhbold470/mbg-landing/refs/heads/main/public/og.jpg',
   keywords: [
@@ -324,5 +324,5 @@ export const metaConfig = {
   
   authors: [{ name: 'Энхболд Ганболд', url: 'https://github.com/enkhbold470' }],
   creator: 'MBG Боловсролын Баг',
-  publisher: 'MBG Боловсрол',
+  publisher: 'MBG center',
 };

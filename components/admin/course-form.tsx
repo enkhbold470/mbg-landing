@@ -218,7 +218,7 @@ export function CourseForm({ course, onSubmit, isEdit = false, isSubmitting = fa
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="slug">Slug (URL) зай авахгүй (slug)</Label>
+            <Label htmlFor="slug">Дундаа зай авахгүй, жишээ нь: hsk_surgalt</Label>
             <Input 
               id="slug" 
               name="slug" 
@@ -237,7 +237,7 @@ export function CourseForm({ course, onSubmit, isEdit = false, isSubmitting = fa
             defaultChecked={course?.highlighted}
             disabled={isSubmitting}
           />
-          <Label htmlFor="highlighted">Highlighted</Label>
+          <Label htmlFor="highlighted">Онцлох Хичээл (Instagram-ийн Pin Post шиг)</Label>
         </div>
         
         <div className="space-y-2">
@@ -253,7 +253,7 @@ export function CourseForm({ course, onSubmit, isEdit = false, isSubmitting = fa
         
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-2">
-            <Label htmlFor="image">Image URL</Label>
+            <Label htmlFor="image">Image URL, google ees esvel pexels.com oos</Label>
             <Input 
               id="image" 
               name="image" 
@@ -263,7 +263,7 @@ export function CourseForm({ course, onSubmit, isEdit = false, isSubmitting = fa
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="video">Video URL</Label>
+            <Label htmlFor="video">Youtube deerh bichlegnii link</Label>
             <Input 
               id="video" 
               name="video" 

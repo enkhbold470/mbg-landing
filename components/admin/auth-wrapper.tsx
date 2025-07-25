@@ -10,7 +10,8 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Lock, Shield, Server } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import Link from 'next/link';
-import Image from 'next/image';
+
+
 interface AuthWrapperProps {
   children: React.ReactNode;
   isAuthenticated: boolean;
@@ -21,15 +22,16 @@ export default function AuthWrapper({ children, isAuthenticated }: AuthWrapperPr
   const [error, setError] = useState<string>('');
   const [isLocalhost, setIsLocalhost] = useState(false);
   const { toast } = useToast();
+
   useEffect(() => {
     // Check if we're on localhost
     const checkHost = () => {
       const host = window.location.host;
       const localhost = host.startsWith('localhost:') || host.startsWith('127.0.0.1:') || host.startsWith('mbg-landing.vercel.app');
       setIsLocalhost(localhost);
-      
+
       if (!localhost) {
-        setError('Админ панель зөвхөн localhost-ээс хандаж болно');
+        setError('Админ хяналтын самбар зөвхөн localhost-с хандах боломжтой');
       }
     };
 
@@ -42,36 +44,37 @@ export default function AuthWrapper({ children, isAuthenticated }: AuthWrapperPr
       try {
         await authenticateAdmin(formData);
         toast({
-          title: "Admin Page",
-              description: "Нэвтрэх амжилттай",
-        })  
+          title: "Админ хуудас",
+          description: "Амжилттай нэвтэрлээ",
+        });
       } catch (err) {
-        setError('Invalid credentials');
-        toast({
-          title: "Admin Page",
-          description: "Нэвтрэх үед алдаа гарлаа",
-        })  
+        // Check if it's a redirect error (which is expected on successful login)
+        if (err instanceof Error && err.message.includes('NEXT_REDIRECT')) {
+          // This is expected - the redirect will happen automatically
+          toast({
+            title: "Админ хуудас",
+            description: "Амжилттай нэвтэрлээ",
+          });
+          return;
         }
+        
+        setError(err as string);
+        console.log('Нэвтрэх амжилтгүй', err);
+        toast({
+          title: "Админ хуудас",
+          description: "Нэвтрэх амжилтгүй. Нэвтрэх мэдээллээ шалгана уу.",
+        });
+      }
     });
   };
 
   const handleLogout = async () => {
     startTransition(async () => {
-      try {
-        await logout();
-        toast({
-          title: "Admin Page",
-          description: "Гарах амжилттай",
-        });
-        // Redirect to admin login page
-        window.location.href = '/admin';
-      } catch (error) {
-        toast({
-          title: "Admin Page",
-          description: "Гарах үед алдаа гарлаа",
-          variant: "destructive",
-        });
-      }
+      await logout();
+      toast({
+        title: "Admin Page",
+        description: "Logout successful",
+      });
     });
   };
 
@@ -79,51 +82,66 @@ export default function AuthWrapper({ children, isAuthenticated }: AuthWrapperPr
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50">
         <Card className="w-full max-w-md">
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <Image src="https://placekeanu.com/100/100" alt="MBG Logo" width={100} height={100} className="rounded-full" />
-              <CardTitle>MBG Админ нэвтрэх</CardTitle>
+          <CardHeader className="text-center space-y-4">
+            <div className="mx-auto w-20 h-20 bg-gradient-to-br from-blue-600 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg">
+              <Shield className="w-10 h-10 text-white" />
             </div>
-            
-            
+            <div>
+              <CardTitle className="text-2xl font-bold text-gray-900">
+                Админ нэвтрэх
+              </CardTitle>
+              <CardDescription className="text-gray-600 mt-2">
+                Админ хяналтын самбарт хандах
+              </CardDescription>
+            </div>
           </CardHeader>
           <CardContent>
+            {error && (
+              <Alert className="mb-4">
+                <Lock className="h-4 w-4" />
+                <AlertDescription>
+                  Нэвтрэх амжилтгүй. Нэвтрэх мэдээллээ шалгана уу.
+                </AlertDescription>
+              </Alert>
+            )}
+
             <form action={handleLogin} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="username">Админ нэр</Label>
+              <div>
+                <Label htmlFor="username">Хэрэглэгчийн нэр</Label>
                 <Input
                   id="username"
                   name="username"
                   type="text"
+                  placeholder="admin"
                   required
                   disabled={isPending}
                 />
               </div>
-              <div className="space-y-2">
+              <div>
                 <Label htmlFor="password">Нууц үг</Label>
                 <Input
                   id="password"
                   name="password"
                   type="password"
+                  placeholder="••••••••"
                   required
                   disabled={isPending}
                 />
               </div>
-              {error && (
-                <div className="text-red-500 text-sm">{error}</div>
-              )}
-              <Button 
-                type="submit" 
-                className="w-full" 
+              <Button
+                type="submit"
+                className="w-full"
                 disabled={isPending}
               >
-                {isPending ? 'Нэвтрэх...' : 'Нэвтрэх'}
+                {isPending ? 'Нэвтэрч байна...' : 'Нэвтрэх'}
               </Button>
             </form>
           </CardContent>
         </Card>
 
-        <div className="text-center text-sm text-gray-500 mt-4">Шинэ админ нэвтрэх эрхийг үүсгэх бол: <Link href="mailto:enkhbold470@gmail.com" className="text-blue-500 hover:underline">enkhbold470@gmail.com</Link></div>
+        <div className="text-center text-sm text-gray-500 mt-4">
+          Шинэ админ хандалт үүсгэхэд: <Link href="mailto:enkhbold470@gmail.com" className="text-blue-500 hover:underline">enkhbold470@gmail.com</Link>
+        </div>
       </div>
     );
   }
@@ -131,20 +149,97 @@ export default function AuthWrapper({ children, isAuthenticated }: AuthWrapperPr
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="border-b bg-white">
-        <div className="flex h-16 items-center justify-between px-4">
-          <h1 className="text-xl font-semibold">MBG Админ Панель</h1>
+        <div className="flex h-16 items-center justify-between px-20">
+          <Link href="/admin" className="text-xl font-semibold hover:text-gray-700 transition-colors">
+            MBG Админ самбар
+          </Link>
+          {/* Logout UI removed as per instructions */}
           <Button 
             variant="outline" 
             onClick={handleLogout}
             disabled={isPending}
           >
-            {isPending ? 'Гарах...' : 'Гарах'}
+            {isPending ? 'Гараж байна...' : 'Гарах'}
           </Button>
         </div>
       </div>
       <div className="container mx-auto p-6">
-        {children}
+        {!isLocalhost && (
+          <Alert className="max-w-md mb-4">
+            <Server className="h-4 w-4" />
+            <AlertDescription>
+              Админ самбар нь аюулгүй байдлын үүднээс зөвхөн localhost-оос хандах боломжтой.
+            </AlertDescription>
+          </Alert>
+        )}
+
+        {isAuthenticated ? (
+          <>
+            {/* "Logged in as admin" and Logout UI removed as per instructions */}
+            {children}
+          </>
+        ) : (
+          <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50">
+            <Card className="w-full max-w-md">
+              <CardHeader className="text-center space-y-4">
+                <div className="mx-auto w-20 h-20 bg-gradient-to-br from-blue-600 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg">
+                  <Shield className="w-10 h-10 text-white" />
+                </div>
+                <div>
+                  <CardTitle className="text-2xl font-bold text-gray-900">
+                    Админ нэвтрэх
+                  </CardTitle>
+                  <CardDescription className="text-gray-600 mt-2">
+                    Админ хяналтын самбарт хандах
+                  </CardDescription>
+                </div>
+              </CardHeader>
+              <CardContent>
+                {error && (
+                  <Alert className="mb-4">
+                    <Lock className="h-4 w-4" />
+                    <AlertDescription>
+                      Нэвтрэх амжилтгүй. Нэвтрэх мэдээллээ шалгана уу.
+                    </AlertDescription>
+                  </Alert>
+                )}
+
+                <form action={handleLogin} className="space-y-4">
+                  <div>
+                    <Label htmlFor="username">Хэрэглэгчийн нэр</Label>
+                    <Input
+                      id="username"
+                      name="username"
+                      type="text"
+                      placeholder="admin"
+                      required
+                      disabled={isPending}
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="password">Нууц үг</Label>
+                    <Input
+                      id="password"
+                      name="password"
+                      type="password"
+                      placeholder="••••••••"
+                      required
+                      disabled={isPending}
+                    />
+                  </div>
+                  <Button
+                    type="submit"
+                    className="w-full"
+                    disabled={isPending}
+                  >
+                    {isPending ? 'Нэвтэрч байна...' : 'Нэвтрэх'}
+                  </Button>
+                </form>
+              </CardContent>
+            </Card>
+          </div>
+        )}
       </div>
     </div>
   );
-} 
+}
