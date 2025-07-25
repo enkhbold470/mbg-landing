@@ -3,7 +3,7 @@
 import { useState } from "react"
 import Link from "next/link"
 import {
-  Home,
+  Globe ,
   Menu,
 } from "lucide-react"
 
@@ -23,9 +23,9 @@ import {
 } from "@/components/ui/sheet"
 
 const navigation = [
+  { href: "/#about", text: "Бидний тухай" },
   { href: "/#features", text: "Онцлогууд" },
   { href: "/#testimonials", text: "Сэтгэгдэл" },
-  { href: "/#about", text: "Бидний тухай" },
   { href: "/#faq", text: "Асуулт" },
   { href: "/courses", text: "Сургалтууд" },
 ]
@@ -43,8 +43,8 @@ export function Header() {
             className="flex items-center space-x-2"
             onClick={() => setIsOpen(false)}
           >
-            <div className="w-8 h-8 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg flex items-center justify-center">
-              <Home className="w-5 h-5 text-white" />
+            <div className="flex shadow-xl rounded-full bg-gradient-to-r from-purple-600 to-blue-600 w-10 h-10 justify-center items-center">
+              <Globe className="w-5 h-5 text-white" />
             </div>
             <span className="text-xl font-semibold text-gray-900">{siteConfig.name}</span>
           </Link>
@@ -93,8 +93,8 @@ export function Header() {
                     className="flex items-center space-x-2"
                     onClick={() => setIsOpen(false)}
                   >
-                    <div className="w-8 h-8 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg flex items-center justify-center">
-                      <Home className="w-5 h-5 text-white" />
+                    <div className="flex shadow-xl rounded-full bg-gradient-to-r from-purple-600 to-blue-600 w-10 h-10 justify-center items-center">
+                      <Globe className="w-5 h-5 text-white" />
                     </div>
                     <span className="text-xl font-semibold text-gray-900">{siteConfig.name}</span>
                   </Link>
