@@ -1,1 +1,1 @@
-MBG Landing page built with Nextjs
+MBG Landing page built with Nextjs and Cursor
