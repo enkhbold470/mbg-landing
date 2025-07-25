@@ -1,7 +1,7 @@
 export const aboutUs = {
   title: "Танилцуулга",
   description: "MBG Education Center нь 2016 оноос хойш тасралтгүй үйл ажиллагаагаа зохион байгуулж, ажиллаж байна. MBG ХХК нь...Боловсрол, Сургалт аялал, Мэдээлэл зөвлөгөө чиглэлээр 9 дахь жилдээ...Тэг-с ТЭТГЭЛЭГТ ТЭНЦЭХ хүртэл нь... MBG гэдэг нь Mongolian Business Guide гэсэн үг. Зөвхөн сургалтын үйл ажиллагаагаа зохион байгуулаад зогсохгүй, бид бусад үйл ажиллагаагаа нэмэлтээр үйл ажиллаж байна.",
-  image: "https://scontent-sjc3-1.xx.fbcdn.net/v/t39.30808-6/509433170_1139359301555326_5701218130396420635_n.jpg?stp=cp6_dst-jpg_tt6&_nc_cat=109&ccb=1-7&_nc_sid=f727a1&_nc_ohc=K7xSzepjmsQQ7kNvwGVWUeo&_nc_oc=Adldyz_Cqg1KQZ0dKnAofUGZUIlL5agmYdEjUFHnwRQwx27ID4U-KPSWh_pIbjOGEwk&_nc_zt=23&_nc_ht=scontent-sjc3-1.xx&_nc_gid=tX9E8Tn0PrCGG49PXXYHmw&oh=00_AfSdX1pPkAH5-eS-O_DkQYWLXkk2gIdqb9FJt0hc5oB8dQ&oe=68700F87",
+  image: "https://raw.githubusercontent.com/enkhbold470/mbg-landing/refs/heads/main/public/og.jpg",
   video: "https://www.youtube.com/watch?v=2dJnlynLmVM",
   facebook: [
     {
@@ -157,12 +157,12 @@ export const ctaSection = {
 }
 
 export const siteConfig = {
-  name: "MBG Education",
-  description: "Хятадын хэлийг эзэмших мэргэжлийн сургалт",
+  name: "MBG Center",
+  description: "Хятад хэл, тэтгэлэгт хөтөлбөр, бизнес аялалын цогц шийдэл.",
   tagline: "ТЭГ-ээс тэтгэлэгт ТЭНЦЭХ хүртэл нь",
-  slogan: "MBG гээс бүгдийг нь",
+  slogan: "MBG 10 дахь жилдээ",
   url: "https://mbg-landing.vercel.app",
-  ogImage: "https://raw.githubusercontent.com/enkhbold470/mbg-landing/refs/heads/main/public/og.jpg?token=GHSAT0AAAAAADDNY624LZU73VR2BBFWVMA22DKJ7HA",
+  ogImage: "https://raw.githubusercontent.com/enkhbold470/mbg-landing/refs/heads/main/public/og.jpg",
   
   // Холбоо барих мэдээлэл
   contact: {
@@ -309,7 +309,7 @@ export const metaConfig = {
   title: 'MBG Боловсролын Төв',
   description: 'Хятадын хэлийг эзэмших мэргэжлийн сургалт',
   url: 'https://mbg-landing.vercel.app',
-  ogImage: 'https://raw.githubusercontent.com/enkhbold470/mbg-landing/refs/heads/main/public/og.jpg?token=GHSAT0AAAAAADDNY624LZU73VR2BBFWVMA22DKJ7HA',
+  ogImage: 'https://raw.githubusercontent.com/enkhbold470/mbg-landing/refs/heads/main/public/og.jpg',
   keywords: [
     'MBG Боловсрол', 'Хятад хэл', 'HSK', 'Хятадын боловсрол',
     'Хэл сургалт', 'Монгол', 'Хятадын хэлний сургалт', 'Улаанбаатар'
