@@ -166,7 +166,7 @@ export const siteConfig = {
   description: "Хятад хэл, тэтгэлэгт хөтөлбөр, бизнес аялалын цогц шийдэл.",
   tagline: "ТЭГ-ээс тэтгэлэгт ТЭНЦЭХ хүртэл нь",
   slogan: "MBG 10 дахь жилдээ",
-  url: "https://mbg-landing.vercel.app",
+  url: "https://mbg.mn",
   ogImage: "https://raw.githubusercontent.com/enkhbold470/mbg-landing/refs/heads/main/public/og.jpg",
   
   // Холбоо барих мэдээлэл
@@ -201,110 +201,6 @@ export const siteConfig = {
     github: "mailto:enkhbold470@gmail.com",
     facebook: "https://www.facebook.com/learningchina",
   },
-
-  // Сургалтын хөтөлбөрүүд
-  courses: [
-    {
-      title: "40 цаг",
-      subtitle: "HSK 4 түвшин",
-      description: "Хятад хэлний үндсийг эзэмших",
-      price: "450,000₮",
-      duration: "40 цаг",
-      highlighted: true,
-      slug: "hsk-4",
-      image: "https://placekeanu.com/500/500",
-      video: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-      signupForm: "https://www.google.com",
-      fullTitle: "HSK 4-ын ТҮРГЭВЧИЛСЭН АНГИ",
-      startDate: "9 сарын 4",
-      schedule: "Даваа – Баасан 10:00 – 12:00",
-      frequency: "Долоо хоногт 5 удаа 2 цагаар хичээллэх болно",
-      classSize: "5 сурагч",
-      teacher: "Хятад багш хичээл заах болно",
-      features: [
-        "Мэргэжлийн Хятад багш",
-        "Бага хүний тоо",
-        "Түргэвчилсэн хөтөлбөр",
-        "HSK 4 түвшинд бэлтгэх",
-        "Практик дасгалууд"
-      ]
-    },
-    {
-      title: "6 сар",
-      subtitle: "Үндсэн хичээл",
-      description: "Бүрэн дүүрэн хичээлийн хөтөлбөр",
-      price: "1,800,000₮",
-      duration: "6 сар",
-      highlighted: false,
-      slug: "basic-course",
-      image: "https://placekeanu.com/500/500",
-      video: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-      signupForm: "https://www.google.com",
-      fullTitle: "ҮНДСЭН ХЯТАД ХЭЛНИЙ КУРС",
-      startDate: "10 сарын 1",
-      schedule: "Даваа – Баасан 18:00 – 20:00",
-      frequency: "Долоо хоногт 5 удаа 2 цагаар хичээллэх болно",
-      classSize: "10 сурагч",
-      teacher: "Туршлагатай багш нар",
-      features: [
-        "Суурь түвшингээс эхлэх",
-        "Бүрэн дүүрэн материал",
-        "Ярианы дадлага",
-        "Бичих үсэг сурах",
-        "Соёлын танилцуулга"
-      ]
-    },
-    {
-      title: "5+5 сар",
-      subtitle: "Монгол + Хятад",
-      description: "Хосолсон олон улсын сургалт",
-      price: "5,800,000₮",
-      duration: "10 сар",
-      highlighted: false,
-      slug: "combined-course",
-      image: "https://placekeanu.com/500/500",
-      video: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-      signupForm: "https://www.google.com",
-      fullTitle: "МОНГОЛ-ХЯТАД ХОСОЛСОН ХӨТӨЛБӨР",
-      startDate: "11 сарын 15",
-      schedule: "Даваа – Баасан 16:00 – 18:00",
-      frequency: "Эхний 5 сар Монголд, дараагийн 5 сар Хятадад",
-      classSize: "8 сурагч",
-      teacher: "Олон улсын багш нар",
-      features: [
-        "Хятадад суралцах боломж",
-        "Соёлын солилцоо",
-        "Их сургуулийн бэлтгэл",
-        "Тэтгэлгийн зөвлөгөө",
-        "Визний тусламж"
-      ]
-    },
-    {
-      title: "1 жил",
-      subtitle: "Бүрэн хөтөлбөр",
-      description: "Мэргэжлийн түвшинд хүрэх",
-      price: "2,800,000₮",
-      duration: "12 сар",
-      highlighted: false,
-      slug: "full-course",
-      image: "https://placekeanu.com/500/500",
-      video: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-      signupForm: "https://www.google.com",
-      fullTitle: "БҮРЭН ХЯТАД ХЭЛНИЙ МЭРГЭЖЛИЙН КУРС",
-      startDate: "1 сарын 8",
-      schedule: "Даваа – Баасан 19:00 – 21:00",
-      frequency: "Долоо хоногт 5 удаа 2 цагаар + амралтын өдөр нэмэлт",
-      classSize: "12 сурагч",
-      teacher: "Мэргэжлийн багш нар",
-      features: [
-        "HSK 6 түвшинд хүрэх",
-        "Бизнес хятад хэл",
-        "Академик бичиг баримт",
-        "Их сургуулийн бэлтгэл",
-        "Ажлын байрны бэлтгэл"
-      ]
-    },
-  ]
 } as const
 
 export type SiteConfig = typeof siteConfig
