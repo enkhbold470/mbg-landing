@@ -77,7 +77,7 @@ export function HeroSection() {
   }, [])
 
   return (  
-    <section ref={sectionRef} className="pt-32 pb-20 px-6 overflow-hidden">
+    <section ref={sectionRef} className="pt-32 pb-20 px-6 overflow-hidden h-screen">
       <div className="max-w-6xl mx-auto text-center">
         <div 
           ref={badgeRef}

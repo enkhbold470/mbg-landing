@@ -6,6 +6,7 @@ import { AboutSection } from "@/components/about-section"
 import { FaqSection } from "@/components/faq-section"
 import { CtaSection } from "@/components/cta-section"
 import { ContactSection } from "@/components/contact-section"
+import { RevealOnScroll } from "@/components/reveal-on-scroll"
 
 export default function LandingPage() {
   return (
@@ -15,25 +16,36 @@ export default function LandingPage() {
       <HeroSection />
       
       {/* 2. Team & Company Information */}
-      <AboutSection />
+      <RevealOnScroll>
+        <AboutSection />
+      </RevealOnScroll>
       {/* 3. Social Proof & Trust Builders - Partners */}
       {/* <PartnersSection /> */}
       
       {/* 4. Product or Service Details - Features */}
-      <FeaturesSection />
+      <RevealOnScroll>
+        <FeaturesSection />
+      </RevealOnScroll>
       
       {/* 5. Social Proof & Trust Builders - Testimonials */}
-      <TestimonialsSection />
-      
+      <RevealOnScroll>
+        <TestimonialsSection />
+      </RevealOnScroll>
       
       {/* 7. FAQs */}
-      <FaqSection />
+      <RevealOnScroll>
+        <FaqSection />
+      </RevealOnScroll>
       
       {/* 8. Additional Conversion Elements - CTA */}
-      <CtaSection />
+      <RevealOnScroll>
+        <CtaSection />
+      </RevealOnScroll>
       
       {/* 9. Contact Information */}
-      <ContactSection />
+      <RevealOnScroll>
+        <ContactSection />
+      </RevealOnScroll>
       
     </div>
   )
