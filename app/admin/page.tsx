@@ -226,7 +226,7 @@ export default function AdminPage() {
   useEffect(() => {
     console.log("📊 [AdminPage] Loading initial data for courses tab...");
     loadTabData('courses')
-  }, []) // Remove loadTabData from dependencies to avoid infinite loop
+  }, [loadTabData]) // Remove loadTabData from dependencies to avoid infinite loop
 
   // Handle tab changes with lazy loading
   const handleTabChange = useCallback((value: string) => {

@@ -9,10 +9,10 @@ import type { Metadata } from "next";
 
 import { Viewport } from "next";
 import { Open_Sans } from "next/font/google";
-import { siteConfig, metaConfig } from "@/config/site";
+import { metaConfig } from "@/config/site";
 import "./globals.css";
 
-const openSans = Open_Sans({ subsets: ["latin"] });
+const openSans = Open_Sans({ weight: ["400", "500", "600", "700"], subsets: ["latin"] });
 
 export const viewport: Viewport = {
   themeColor: "black",
