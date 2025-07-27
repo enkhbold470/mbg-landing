@@ -178,7 +178,7 @@ export const siteConfig = {
 
     ],
     address: {
-      mongolian: "Монгол улс, Улаанбаатар, Сүхбаатар дүүрэг, 8-р хороо, Оюутаны гудамж, Танан Төв 202 тоот",
+      mongolian: "Улаанбаатар, Сүхбаатар дүүрэг, 8-р хороо, Танан төв 202",
       english: "Room 202, Tanan Center, Student Street, 8th Khoroo, Sukhbaatar District, Ulaanbaatar, Mongolia"
     },
     social: {
@@ -219,6 +219,6 @@ export const metaConfig = {
   referrer: 'origin-when-cross-origin',
   
   authors: [{ name: 'Энхболд Ганболд', url: 'https://github.com/enkhbold470' }],
-  creator: 'MBG Боловсролын Баг',
-  publisher: 'MBG center',
+  creator: 'MBG Center',
+  publisher: 'MBG Center',
 };
