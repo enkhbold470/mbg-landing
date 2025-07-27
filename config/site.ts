@@ -198,7 +198,7 @@ export const siteConfig = {
   // Нийгмийн холбоосууд
   links: {
     // twitter: "https://twitter.com/mbgeducation",
-    github: "mailto:enkhbold470@gmail.com",
+    github: "mailto:info@mbg.mn",
     facebook: "https://www.facebook.com/learningchina",
   },
 } as const
