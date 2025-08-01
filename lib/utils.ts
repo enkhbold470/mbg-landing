@@ -24,7 +24,7 @@ export async function copyToClipboard(text: string) {
 export const youtubeVideo = (link: string) => {
   const videoId = link.split("v=")[1];  
   
-  return `https://www.youtube.com/embed/${videoId}`;
+  return `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&controls=1&rel=0&fs=0&iv_load_policy=3&color=white&disablekb=1&playsinline=1&modestbranding=1`;
 }
 
 // Detect if the device is Windows

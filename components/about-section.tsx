@@ -27,7 +27,7 @@ export function AboutSection() {
         opacity: 0, 
         y: 50 
       })
-      gsap.set([imageCardRef.current, videoCardRef.current], { 
+      gsap.set([ videoCardRef.current], { 
         opacity: 0, 
         y: 100,
         scale: 0.8
@@ -60,7 +60,7 @@ export function AboutSection() {
       }, 0.2)
 
       // Cards animation with stagger
-      tl.to([imageCardRef.current, videoCardRef.current], {
+      tl.to([ videoCardRef.current], {
         opacity: 1,
         y: 0,
         scale: 1,
@@ -85,22 +85,9 @@ export function AboutSection() {
         </div>
 
         {/* Responsive Grid Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 max-w-4xl mx-auto">
+        <div className="grid grid-cols-1 gap-6 max-w-4xl mx-auto">
           
-          {/* Image Card */}
-          <Card ref={imageCardRef} className="rounded-3xl border-0 shadow-lg hover:shadow-xl transition-all duration-300 bg-white/70 backdrop-blur-sm">
-            <CardContent className="p-4 sm:p-6 lg:p-8">
-              <div className="flex items-center justify-center">
-                <Image 
-                  src={aboutUs.image} 
-                  alt={aboutUs.title} 
-                  width={400} 
-                  height={400} 
-                  className="rounded-2xl w-full h-auto max-w-sm"
-                />
-              </div>
-            </CardContent>
-          </Card>
+
 
           {/* Video Card */}
           <Card ref={videoCardRef} className="rounded-3xl border-0 shadow-lg hover:shadow-xl transition-all duration-300 bg-white/70 backdrop-blur-sm">
@@ -112,10 +99,10 @@ export function AboutSection() {
                   src={youtubeVideo(aboutUs.video)} 
                   title="MBG Education танилцуулга видео" 
                   frameBorder="0" 
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                  allow="encrypted-media" 
                   referrerPolicy="strict-origin-when-cross-origin"
                   allowFullScreen
-                  className="rounded-2xl"
+
                 />
               </div>
             </CardContent>

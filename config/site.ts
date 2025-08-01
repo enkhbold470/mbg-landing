@@ -2,7 +2,7 @@ export const aboutUs = {
   title: "Танилцуулга",
   description: `MBG төв нь 2016 оноос эхлэн Хятад улсад суралцах хүсэлтэй залууст зориулсан сургалт, тэтгэлэгт зуучлал, аялал, мэдээлэл-зөвлөгөөний үйлчилгээ үзүүлж байна. Бид "ТЭГ-ээс тэтгэлэгт ТЭНЦЭХ хүртэлх" бүх шатанд оюутан, залуучууддаа мэргэжлийн түвшинд чиглүүлж, амжилтад хүрэхэд нь тусалдаг. Түүнчлэн MBG гэдэг нь Mongolian Business Guide гэсэн утгатай бөгөөд сургалтаас гадна бид олон улсын харилцаа, бизнес аялалын зөвлөх үйлчилгээ зэргийг давхар явуулж байна.`,
   image: "https://raw.githubusercontent.com/enkhbold470/mbg-landing/refs/heads/main/public/og.jpg",
-  video: "https://www.youtube.com/watch?v=2dJnlynLmVM",
+  video: "https://www.youtube.com/watch?v=FPvcVoWqLFw",
   facebook: [
     {
       name: "Learning China",
