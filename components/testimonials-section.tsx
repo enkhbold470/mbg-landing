@@ -149,9 +149,9 @@ export function TestimonialsSection() {
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16">
           <h2 className="testimonials-title text-4xl lg:text-5xl font-bold text-gray-900 mb-6">Сэтгэгдэлүүд</h2>
-          <p className="testimonials-subtitle text-lg lg:text-xl text-gray-600 max-w-2xl mx-auto">
+          {/* <p className="testimonials-subtitle text-lg lg:text-xl text-gray-600 max-w-2xl mx-auto">
             Бидний оюутнуудын болон үйлчигдэгчдэд амжилттай түүхүүд
-          </p>
+          </p> */}
         </div>
 
         <div 

@@ -131,9 +131,9 @@ export function FaqSection() {
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-16">
           <h2 ref={titleRef} className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">Түгээмэл асуултууд</h2>
-          <p ref={subtitleRef} className="text-lg lg:text-xl text-gray-600">
+          {/* <p ref={subtitleRef} className="text-lg lg:text-xl text-gray-600">
             Та бүхэнд хамгийн их асуугддаг асуултууд болон хариултууд
-          </p>
+          </p> */}
         </div>
 
         <div ref={accordionRef} className="bg-white rounded-3xl shadow-lg p-8">
