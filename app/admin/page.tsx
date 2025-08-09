@@ -208,7 +208,7 @@ export default function AdminPage() {
     const names: Record<string, string> = {
       site: 'Сайтын тохируулга',
       courses: 'Сургалтууд',
-      testimonials: 'Сэтгэгдэлүүд',
+      testimonials: 'Сэтгэгдлүүд',
       partners: 'Хамтрагчид',
       faq: 'Асуултууд',
       features: 'Онцлогууд'
@@ -561,7 +561,7 @@ export default function AdminPage() {
                   Сургалтууд
                 </TabsTrigger>
                 <TabsTrigger value="testimonials" className="data-[state=active]:bg-blue-500 data-[state=active]:text-white">
-                  Сэтгэгдэлүүд
+                  Сэтгэгдлүүд
                 </TabsTrigger>
                 <TabsTrigger value="partners" className="data-[state=active]:bg-blue-500 data-[state=active]:text-white">
                   Хамтрагчид
@@ -632,7 +632,7 @@ export default function AdminPage() {
                   <LoadingSkeleton />
                 ) : (
                   <ContentSection
-                    title="Сэтгэгдэлүүд"
+                    title="Сэтгэгдлүүд"
                     items={testimonials}
                     fields={testimonialFields}
                     onSubmit={createContentHandler(createTestimonial, updateTestimonial, 'testimonial', setTestimonials)}
