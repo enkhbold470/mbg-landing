@@ -162,7 +162,7 @@ export const ctaSection = {
 }
 
 export const siteConfig = {
-  name: "MBG center",
+  name: "MBG Education Center",
   description: "Хятад хэл, тэтгэлэгт хөтөлбөр, бизнес аялалын цогц шийдэл.",
   tagline: "ТЭГ-ээс тэтгэлэгт ТЭНЦЭХ хүртэл нь",
   slogan: "MBG 10 дахь жилдээ",
@@ -188,7 +188,7 @@ export const siteConfig = {
           url: "https://www.facebook.com/learningchina"
         },
         {
-          name: "MBG center", 
+          name: "MBG Education Center", 
           url: "https://www.facebook.com/MBGeduMBGtourMBGConsulting"
         }
       ] 
@@ -207,7 +207,7 @@ export type SiteConfig = typeof siteConfig
 
 export const metaConfig = {
   generator: 'Next.js',
-  title: 'MBG center',
+  title: 'MBG Education Center',
   description: 'Хятадын хэлийг эзэмших мэргэжлийн сургалт',
   url: 'https://mbg.mn',
   ogImage: 'https://raw.githubusercontent.com/enkhbold470/mbg-landing/refs/heads/main/public/og.jpg',
@@ -219,6 +219,6 @@ export const metaConfig = {
   referrer: 'origin-when-cross-origin',
   
   authors: [{ name: 'Энхболд Ганболд', url: 'https://github.com/enkhbold470' }],
-  creator: 'MBG Center',
-  publisher: 'MBG Center',
+  creator: 'MBG Education Center',
+  publisher: 'MBG Education Center',
 };
