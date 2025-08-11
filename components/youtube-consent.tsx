@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react"
 import { cn } from "@/lib/utils"
 import { youtubeVideo } from "@/lib/utils"
+import { PlayIcon } from "lucide-react"
 
 interface YouTubeConsentProps {
   link: string
@@ -33,7 +34,7 @@ export function YouTubeConsent({ link, title, className }: YouTubeConsentProps) 
   const videoId = useMemo(() => extractYouTubeId(link), [link])
 
   const thumbnail = useMemo(() => {
-    return videoId ? `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg` : undefined
+    return videoId ? `/vi-placeholder.png` : `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`
   }, [videoId])
 
   if (consented) {
@@ -81,15 +82,7 @@ export function YouTubeConsent({ link, title, className }: YouTubeConsentProps) 
 
       <div className="absolute inset-0 flex items-center justify-center">
         <div className="flex items-center gap-3 rounded-full bg-white/90 px-4 py-2 shadow">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="currentColor"
-            className="h-6 w-6 text-purple-600"
-            aria-hidden="true"
-          >
-            <path d="M8 5v14l11-7z" />
-          </svg>
+          <PlayIcon className="h-6 w-6 text-purple-600" />
           <span className="text-sm font-medium text-gray-900">Play video</span>
         </div>
       </div>

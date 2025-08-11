@@ -59,10 +59,17 @@
     @apply bg-background text-foreground;
   }
   /* Ensure uniform explicit font-size for h1, including inside sectioning elements
-     Ref: MDN "Specifying a uniform font size for h1" */
-  h1,
-  :where(article, aside, nav, section) h1 {
+     Ref: MDN "Specifying a uniform font size for h1"
+     Use explicit selectors (not :where) to satisfy deprecation checks. */
+  h1 {
     font-size: 2em; /* base default; utility classes (e.g., text-4xl) will override */
+    line-height: 1.2;
+  }
+  article h1,
+  aside h1,
+  nav h1,
+  section h1 {
+    font-size: 2em;
     line-height: 1.2;
   }
 }
