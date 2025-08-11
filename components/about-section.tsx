@@ -5,6 +5,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { aboutUs } from "@/config/site"
 import Image from "next/image"
 import { youtubeVideo } from "@/lib/utils"
+import { YouTubeConsent } from "@/components/youtube-consent"
 import { gsap } from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 
@@ -93,17 +94,7 @@ export function AboutSection() {
           <Card ref={videoCardRef} className="rounded-3xl border-0 shadow-lg hover:shadow-xl transition-all duration-300 bg-white/70 backdrop-blur-sm">
             <CardContent className="flex p-4 sm:p-6 lg:pt-14 lg:pb-14">
               <div className="aspect-video w-full rounded-2xl overflow-hidden">
-                <iframe 
-                  width="100%" 
-                  height="100%" 
-                  src={youtubeVideo(aboutUs.video)} 
-                  title="MBG Education танилцуулга видео" 
-                  frameBorder="0" 
-                  allow="encrypted-media" 
-                  referrerPolicy="strict-origin-when-cross-origin"
-                  allowFullScreen
-
-                />
+                <YouTubeConsent link={aboutUs.video} title="MBG Education танилцуулга видео" className="rounded-2xl" />
               </div>
             </CardContent>
           </Card>

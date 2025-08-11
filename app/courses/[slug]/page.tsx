@@ -16,6 +16,7 @@ import { Clock, Users, Calendar, BookOpen, User, MapPin, CheckCircle, ArrowLeft,
 import Link from "next/link";
 import Image from "next/image";
 import { youtubeVideo } from "@/lib/utils";
+import { YouTubeConsent } from "@/components/youtube-consent";
 import { useRouter } from "next/navigation";
 
 interface Course {
@@ -290,23 +291,12 @@ export default function CourseDetailPage({ params }: { params: { slug: string } 
                                 />
                             </Card>
 
-                            {/* Course Video */}
+                            {/* Course Video (Click-to-load for privacy) */}
                             <Card className="rounded-3xl border-0 shadow-lg overflow-hidden bg-white">
                                 <CardContent className="p-6">
                                     <h3 className="text-xl font-bold text-gray-900 mb-4">Танилцуулга видео</h3>
                                     <div className="relative rounded-2xl overflow-hidden">
-                                        <iframe 
-                                            width="100%" 
-                                            height="315" 
-                                            src={youtubeVideo(course.video)} 
-                                            title="Course Introduction Video" 
-                                            frameBorder="0" 
-                                            loading="lazy"
-                                            allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                                            referrerPolicy="strict-origin-when-cross-origin" 
-                                            allowFullScreen
-                                            className="rounded-2xl"
-                                        />
+                                        <YouTubeConsent link={course.video} title="Course Introduction Video" className="rounded-2xl" />
                                     </div>
                                 </CardContent>
                             </Card>
