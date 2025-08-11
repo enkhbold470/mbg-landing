@@ -77,8 +77,8 @@ export function ContentSection({
     } catch (error) {
       console.error(`❌ [ContentSection-${title}] Error:`, error);
       toast({
-        title: "Алдаа",
-        description: `"${title.slice(0, -1)}"-ийг хадгалах үед алдаа гарлаа`,
+        title: "Error | 错误",
+        description: `An error occurred while saving "${title.slice(0, -1)}" | 保存 "${title.slice(0, -1)}" 时发生错误`,
         variant: "destructive"
       })  
     }
@@ -87,7 +87,7 @@ export function ContentSection({
   const handleDelete = async (id: string, itemName: string) => {
     console.log(`🗑️ [ContentSection-${title}] Deleting item:`, { id, itemName });
     
-    if (confirm(`Уучлаарай уу, "${itemName}"-ийг устгах уу?`)) {
+    if (confirm(`Are you sure you want to delete "${itemName}"? | 确认删除 “${itemName}” 吗？`)) {
       setDeletingId(id)
       try {
         await onDelete(id)
@@ -95,8 +95,8 @@ export function ContentSection({
       } catch (error) {
         console.error(`❌ [ContentSection-${title}] Delete error:`, error);
         toast({
-          title: "Алдаа",
-          description: `"${itemName}"-ийг устгах үед алдаа гарлаа`,
+          title: "Error | 错误",
+          description: `An error occurred while deleting "${itemName}" | 删除 "${itemName}" 时发生错误`,
           variant: "destructive"
         })      
       } finally {
@@ -144,10 +144,10 @@ export function ContentSection({
         {isSubmitting ? (
           <>
             <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-            {isEdit ? 'Хадгалж байна...' : 'Үүсгэж байна...'}
+            {isEdit ? 'Saving... | 保存中...' : 'Creating... | 创建中...'}
           </>
         ) : (
-          isEdit ? `Хадгалах ${title.slice(0, -1)}` : `Үүсгэх `
+          isEdit ? `Save ${title.slice(0, -1)} | 保存 ${title.slice(0, -1)}` : `Create | 创建 `
         )}
       </Button>
     </form>
@@ -157,7 +157,7 @@ export function ContentSection({
     <div className="space-y-8">
       <Card className="border-slate-200 shadow-sm">
         <CardHeader className="bg-gradient-to-r from-green-50 to-blue-50">
-          <CardTitle className="text-xl text-slate-800">Шинэ {title.slice(0, -1)} үүсгэх</CardTitle>
+          <CardTitle className="text-xl text-slate-800">Create new {title.slice(0, -1)} | 新建 {title.slice(0, -1)}</CardTitle>
         </CardHeader>
         <CardContent className="p-6">
           {renderForm()}
@@ -167,7 +167,7 @@ export function ContentSection({
       <Card className="border-slate-200 shadow-sm">
         <CardHeader className="bg-slate-50">
           <CardTitle className="text-xl text-slate-800 flex items-center gap-2">
-            Одоо байгаа {title} 
+            Current {title} | 当前 {title}
             <Badge variant="secondary" className="ml-2">{items.length}</Badge>
           </CardTitle>
         </CardHeader>
@@ -197,7 +197,7 @@ export function ContentSection({
                       </DialogTrigger>
                       <DialogContent className="max-w-md">
                         <DialogHeader>
-                          <DialogTitle>Edit {title.slice(0, -1)}</DialogTitle>
+                          <DialogTitle>Edit {title.slice(0, -1)} | 编辑 {title.slice(0, -1)}</DialogTitle>
                         </DialogHeader>
                         {renderForm(editingItem, true)}
                       </DialogContent>
@@ -223,8 +223,8 @@ export function ContentSection({
             {items.length === 0 && (
               <div className="text-center py-12 text-slate-500">
                 <div className="bg-slate-50 rounded-lg p-8">
-                  <p className="text-lg font-medium mb-2">Мэдээлэл олдсонгүй</p>
-                  <p>Эхний {title.toLowerCase().slice(0, -1)}-ийг үүсгэж эхлээрэй!</p>
+                  <p className="text-lg font-medium mb-2">No data found | 未找到数据</p>
+                  <p>Start by creating the first {title.toLowerCase().slice(0, -1)}! | 先创建第一个{title.toLowerCase().slice(0, -1)}吧！</p>
                 </div>
               </div>
             )}

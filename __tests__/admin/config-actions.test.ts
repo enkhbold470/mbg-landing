@@ -145,7 +145,7 @@ describe('Admin Config Actions', () => {
       mockPrisma.partner.findUnique.mockResolvedValue(null)
 
       // Act & Assert
-      await expect(updatePartner(partnerId, updateData)).rejects.toThrow('Хамтрагч олдсонгүй')
+      await expect(updatePartner(partnerId, updateData)).rejects.toThrow('Partner not found | 未找到合作伙伴')
     })
 
     it('should handle database errors gracefully', async () => {
@@ -153,7 +153,7 @@ describe('Admin Config Actions', () => {
       mockPrisma.partner.findMany.mockRejectedValue(new Error('Database connection failed'))
 
       // Act & Assert
-      await expect(getPartners()).rejects.toThrow('Өгөгдлийн санд холбогдож чадсангүй')
+      await expect(getPartners()).rejects.toThrow('Unable to connect to the database | 无法连接到数据库')
     })
   })
 
@@ -206,7 +206,7 @@ describe('Admin Config Actions', () => {
       }
 
       // Act & Assert
-      await expect(createTestimonial(invalidTestimonial)).rejects.toThrow('Үнэлгээ 1-5 хооронд байх ёстой')
+      await expect(createTestimonial(invalidTestimonial)).rejects.toThrow('Rating must be between 1 and 5 | 评分必须在 1 到 5 之间')
     })
 
     it('should validate required fields when creating testimonial', async () => {
@@ -219,7 +219,7 @@ describe('Admin Config Actions', () => {
       }
 
       // Act & Assert
-      await expect(createTestimonial(incompleteTestimonial)).rejects.toThrow('Нэр, сэтгэгдэл болон үнэлгээ заавал шаардлагатай')
+      await expect(createTestimonial(incompleteTestimonial)).rejects.toThrow('Name, content, and rating are required | 姓名、评价内容和评分为必填项')
     })
   })
 
@@ -270,7 +270,7 @@ describe('Admin Config Actions', () => {
       }
 
       // Act & Assert
-      await expect(createFeature(incompleteFeature)).rejects.toThrow('Гарчиг, тайлбар болон icon заавал шаардлагатай')
+      await expect(createFeature(incompleteFeature)).rejects.toThrow('Title, description, and icon are required | 标题、描述和图标为必填项')
     })
   })
 
@@ -297,7 +297,7 @@ describe('Admin Config Actions', () => {
       formData.append('password', 'wrong')
 
       // Act & Assert
-      await expect(authenticateAdmin(formData)).rejects.toThrow('Буруу нэвтрэх мэдээлэл')
+      await expect(authenticateAdmin(formData)).rejects.toThrow('Invalid credentials | 凭据无效')
     })
 
     it('should check authentication status correctly', async () => {
@@ -336,7 +336,7 @@ describe('Admin Config Actions', () => {
       const partnerData = { name: 'Duplicate', logo: 'logo.png', url: 'https://dup.com' }
 
       // Act & Assert
-      await expect(createPartner(partnerData)).rejects.toThrow('Давхардсан утга оруулж болохгүй')
+      await expect(createPartner(partnerData)).rejects.toThrow('Duplicate value is not allowed | 不允许重复值')
     })
 
     it('should handle Prisma P2025 (not found) error', async () => {
@@ -348,7 +348,7 @@ describe('Admin Config Actions', () => {
       mockPrisma.partner.update.mockRejectedValue(prismaError)
 
       // Act & Assert
-      await expect(updatePartner('non-existent', { name: 'Update' })).rejects.toThrow('Өгөгдөл олдсонгүй')
+      await expect(updatePartner('non-existent', { name: 'Update' })).rejects.toThrow('Data not found | 未找到数据')
     })
 
     it('should handle generic database errors', async () => {
@@ -357,7 +357,7 @@ describe('Admin Config Actions', () => {
       mockPrisma.partner.findMany.mockRejectedValue(genericError)
 
       // Act & Assert
-      await expect(getPartners()).rejects.toThrow('Систем алдаа: Generic database error')
+      await expect(getPartners()).rejects.toThrow('System error: Generic database error | 系统错误：Generic database error')
     })
   })
 })

@@ -31,20 +31,20 @@ export function CourseList({
   const { toast } = useToast()
 
   const handleDelete = async (id: string, title: string) => {
-    if (confirm(`Уучлаарай уу, "${title}" сургалтыг устгах уу?`)) {
+    if (confirm(`Are you sure you want to delete the course "${title}"? | 确认删除课程 “${title}” 吗？`)) {
       setDeletingId(id)
       try {
         await deleteCourse(id)
         await onRefresh()
         toast({
-          title: "Амжилттай",
-          description: "Сургалт амжилттай устгагдлаа",
+          title: "Success | 成功",
+          description: "Course deleted successfully | 课程已成功删除",
         })
       } catch (error) {
         console.error('Error deleting course:', error)
         toast({
-          title: "Алдаа",
-          description: "Сургалт устгах үед алдаа гарлаа",
+          title: "Error | 错误",
+          description: "An error occurred while deleting the course | 删除课程时发生错误",
           variant: "destructive"
         })
       } finally {
@@ -61,33 +61,33 @@ export function CourseList({
             <div className="flex-1">
               <div className="flex items-center gap-2 mb-2">
                 <h3 className="text-lg font-semibold text-slate-800">{course.title}</h3>
-                {course.highlighted && <Badge className="bg-yellow-500 hover:bg-yellow-600">Онцлох</Badge>}
+                {course.highlighted && <Badge className="bg-yellow-500 hover:bg-yellow-600">Featured | 精选</Badge>}
               </div>
               <p className="text-slate-600 mb-2">{course.subtitle}</p>
               <p className="text-sm text-slate-500 mb-3">{course.description}</p>
               
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                 <div>
-                  <span className="font-medium text-slate-700">Үнэ:</span>
+                  <span className="font-medium text-slate-700">Price: | 价格：</span>
                   <p className="text-slate-600">{course.price}</p>
                 </div>
                 <div>
-                  <span className="font-medium text-slate-700">Хугацаа:</span>
+                  <span className="font-medium text-slate-700">Duration: | 时长：</span>
                   <p className="text-slate-600">{course.duration}</p>
                 </div>
                 <div>
-                  <span className="font-medium text-slate-700">Багш:</span>
+                  <span className="font-medium text-slate-700">Teacher: | 教师：</span>
                   <p className="text-slate-600">{course.teacher}</p>
                 </div>
                 <div>
-                  <span className="font-medium text-slate-700">Сурагчид:</span>
+                  <span className="font-medium text-slate-700">Students: | 学生：</span>
                   <p className="text-slate-600">{course.classSize}</p>
                 </div>
               </div>
 
               {course.features && course.features.length > 0 && (
                 <div className="mt-4">
-                  <span className="font-medium text-slate-700 text-sm">Онцлогууд:</span>
+                  <span className="font-medium text-slate-700 text-sm">Features: | 特色：</span>
                   <div className="flex flex-wrap gap-1 mt-1">
                     {course.features.slice(0, 3).map((feature: string, index: number) => (
                       <Badge key={index} variant="outline" className="text-xs">
@@ -96,7 +96,7 @@ export function CourseList({
                     ))}
                     {course.features.length > 3 && (
                       <Badge variant="outline" className="text-xs">
-                        +{course.features.length - 3} дахь
+                        +{course.features.length - 3} more | 更多
                       </Badge>
                     )}
                   </div>
@@ -119,7 +119,7 @@ export function CourseList({
                 </DialogTrigger>
                 <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
                   <DialogHeader>
-                    <DialogTitle>Сургалт засах</DialogTitle>
+                    <DialogTitle>Edit Course | 编辑课程</DialogTitle>
                   </DialogHeader>
                   <CourseForm 
                     course={editingCourse} 
@@ -151,8 +151,8 @@ export function CourseList({
       {courses.length === 0 && (
         <div className="text-center py-12 text-slate-500">
           <div className="bg-slate-50 rounded-lg p-8">
-            <p className="text-lg font-medium mb-2">Сургалт олдсонгүй</p>
-            <p>Эхний сургалтыг үүсгэж эхлээрэй!</p>
+            <p className="text-lg font-medium mb-2">No courses found | 未找到课程</p>
+            <p>Start by creating the first course! | 先创建第一个课程吧！</p>
           </div>
         </div>
       )}

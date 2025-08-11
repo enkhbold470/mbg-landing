@@ -37,23 +37,23 @@ async function withErrorHandling<T>(operation: () => Promise<T>, operationName: 
       const prismaError = error as any
       switch (prismaError.code) {
         case 'P2002':
-          throw new AdminActionError('Давхардсан утга оруулж болохгүй', 'DUPLICATE_ERROR')
+          throw new AdminActionError('Duplicate value is not allowed | 不允许重复值', 'DUPLICATE_ERROR')
         case 'P2025':
-          throw new AdminActionError('Өгөгдөл олдсонгүй', 'NOT_FOUND')
+          throw new AdminActionError('Data not found | 未找到数据', 'NOT_FOUND')
         case 'P1001':
-          throw new AdminActionError('Өгөгдлийн санд холбогдож чадсангүй', 'CONNECTION_ERROR')
+          throw new AdminActionError('Unable to connect to the database | 无法连接到数据库', 'CONNECTION_ERROR')
         default:
-          throw new AdminActionError(`Өгөгдлийн сангийн алдаа: ${prismaError.message || 'Тодорхойгүй алдаа'}`, 'DATABASE_ERROR')
+          throw new AdminActionError(`Database error: ${prismaError.message || 'Unknown error'} | 数据库错误：${prismaError.message || '未知错误'}`, 'DATABASE_ERROR')
       }
     }
     
     // Network or other errors
     if (error instanceof Error) {
-      throw new AdminActionError(`Систем алдаа: ${error.message}`, 'SYSTEM_ERROR')
+      throw new AdminActionError(`System error: ${error.message} | 系统错误：${error.message}`, 'SYSTEM_ERROR')
     }
     
     // Unknown errors
-    throw new AdminActionError('Тодорхойгүй алдаа гарлаа', 'UNKNOWN_ERROR')
+    throw new AdminActionError('Unknown error occurred | 发生未知错误', 'UNKNOWN_ERROR')
   }
 }
 
@@ -72,7 +72,7 @@ export async function authenticateAdmin(formData: FormData) {
       })
       redirect('/admin')
     } else {
-      throw new AdminActionError('Буруу нэвтрэх мэдээлэл', 'INVALID_CREDENTIALS')
+      throw new AdminActionError('Invalid credentials | 凭据无效', 'INVALID_CREDENTIALS')
     }
   }, 'authenticateAdmin')
 }
@@ -117,7 +117,7 @@ export async function updateSiteConfig(data: any) {
     
     // Validate required fields
     if (!data.name || !data.description) {
-      throw new AdminActionError('Нэр болон тайлбар заавал шаардлагатай', 'VALIDATION_ERROR')
+      throw new AdminActionError('Name and description are required | 名称和描述为必填项', 'VALIDATION_ERROR')
     }
     
     const existing = await prisma.siteConfig.findFirst()
@@ -157,7 +157,7 @@ export async function createCourse(data: any) {
     
     // Validate required fields
     if (!data.title || !data.subtitle || !data.description) {
-      throw new AdminActionError('Гарчиг, дэд гарчиг болон тайлбар заавал шаардлагатай', 'VALIDATION_ERROR')
+      throw new AdminActionError('Title, subtitle, and description are required | 标题、副标题和描述为必填项', 'VALIDATION_ERROR')
     }
     
     // Validate slug uniqueness
@@ -166,7 +166,7 @@ export async function createCourse(data: any) {
         where: { slug: data.slug }
       })
       if (existingCourse) {
-        throw new AdminActionError('Энэ slug аль хэдийн ашиглагдаж байна', 'DUPLICATE_SLUG')
+        throw new AdminActionError('This slug is already in use | 该 slug 已被使用', 'DUPLICATE_SLUG')
       }
     }
     
@@ -188,7 +188,7 @@ export async function updateCourse(id: string, data: any) {
     // Check if course exists
     const existingCourse = await prisma.course.findUnique({ where: { id } })
     if (!existingCourse) {
-      throw new AdminActionError('Сургалт олдсонгүй', 'COURSE_NOT_FOUND')
+      throw new AdminActionError('Course not found | 未找到课程', 'COURSE_NOT_FOUND')
     }
     
     // Validate slug uniqueness (if changed)
@@ -200,7 +200,7 @@ export async function updateCourse(id: string, data: any) {
         }
       })
       if (duplicateSlug) {
-        throw new AdminActionError('Энэ slug аль хэдийн ашиглагдаж байна', 'DUPLICATE_SLUG')
+        throw new AdminActionError('This slug is already in use | 该 slug 已被使用', 'DUPLICATE_SLUG')
       }
     }
     
@@ -220,7 +220,7 @@ export async function deleteCourse(id: string) {
     // Check if course exists
     const existingCourse = await prisma.course.findUnique({ where: { id } })
     if (!existingCourse) {
-      throw new AdminActionError('Сургалт олдсонгүй', 'COURSE_NOT_FOUND')
+      throw new AdminActionError('Course not found | 未找到课程', 'COURSE_NOT_FOUND')
     }
     
     const result = await prisma.course.delete({ where: { id } })
@@ -247,12 +247,12 @@ export async function createTestimonial(data: any) {
     
     // Validate required fields
     if (!data.name || !data.content || !data.rating) {
-      throw new AdminActionError('Нэр, сэтгэгдэл болон үнэлгээ заавал шаардлагатай', 'VALIDATION_ERROR')
+      throw new AdminActionError('Name, content, and rating are required | 姓名、评价内容和评分为必填项', 'VALIDATION_ERROR')
     }
     
     // Validate rating range
     if (data.rating < 1 || data.rating > 5) {
-      throw new AdminActionError('Үнэлгээ 1-5 хооронд байх ёстой', 'INVALID_RATING')
+      throw new AdminActionError('Rating must be between 1 and 5 | 评分必须在 1 到 5 之间', 'INVALID_RATING')
     }
     
     const result = await prisma.testimonial.create({ data })
@@ -273,7 +273,7 @@ export async function updateTestimonial(id: string, data: any) {
     // Check if testimonial exists
     const existing = await prisma.testimonial.findUnique({ where: { id } })
     if (!existing) {
-      throw new AdminActionError('Сэтгэгдэл олдсонгүй', 'TESTIMONIAL_NOT_FOUND')
+      throw new AdminActionError('Testimonial not found | 未找到评价', 'TESTIMONIAL_NOT_FOUND')
     }
     
     const result = await prisma.testimonial.update({
@@ -291,7 +291,7 @@ export async function deleteTestimonial(id: string) {
     
     const existing = await prisma.testimonial.findUnique({ where: { id } })
     if (!existing) {
-      throw new AdminActionError('Сэтгэгдэл олдсонгүй', 'TESTIMONIAL_NOT_FOUND')
+      throw new AdminActionError('Testimonial not found | 未找到评价', 'TESTIMONIAL_NOT_FOUND')
     }
     
     const result = await prisma.testimonial.delete({ where: { id } })
@@ -318,7 +318,7 @@ export async function createPartner(data: any) {
     
     // Validate required fields
     if (!data.name || !data.logo || !data.url) {
-      throw new AdminActionError('Нэр, лого болон холбоос заавал шаардлагатай', 'VALIDATION_ERROR')
+      throw new AdminActionError('Name, logo, and URL are required | 名称、Logo 和链接为必填项', 'VALIDATION_ERROR')
     }
     
     const result = await prisma.partner.create({ data })
@@ -334,7 +334,7 @@ export async function updatePartner(id: string, data: any) {
     // Check if partner exists
     const existing = await prisma.partner.findUnique({ where: { id } })
     if (!existing) {
-      throw new AdminActionError('Хамтрагч олдсонгүй', 'PARTNER_NOT_FOUND')
+      throw new AdminActionError('Partner not found | 未找到合作伙伴', 'PARTNER_NOT_FOUND')
     }
     
     const result = await prisma.partner.update({
@@ -352,7 +352,7 @@ export async function deletePartner(id: string) {
     
     const existing = await prisma.partner.findUnique({ where: { id } })
     if (!existing) {
-      throw new AdminActionError('Хамтрагч олдсонгүй', 'PARTNER_NOT_FOUND')
+      throw new AdminActionError('Partner not found | 未找到合作伙伴', 'PARTNER_NOT_FOUND')
     }
     
     const result = await prisma.partner.delete({ where: { id } })
@@ -379,7 +379,7 @@ export async function createFAQ(data: any) {
     
     // Validate required fields
     if (!data.question || !data.answer) {
-      throw new AdminActionError('Асуулт болон хариулт заавал шаардлагатай', 'VALIDATION_ERROR')
+      throw new AdminActionError('Question and answer are required | 问题和答案为必填项', 'VALIDATION_ERROR')
     }
     
     const result = await prisma.fAQ.create({ data })
@@ -395,7 +395,7 @@ export async function updateFAQ(id: string, data: any) {
     // Check if FAQ exists
     const existing = await prisma.fAQ.findUnique({ where: { id } })
     if (!existing) {
-      throw new AdminActionError('Асуулт олдсонгүй', 'FAQ_NOT_FOUND')
+      throw new AdminActionError('FAQ not found | 未找到常见问题', 'FAQ_NOT_FOUND')
     }
     
     const result = await prisma.fAQ.update({
@@ -413,7 +413,7 @@ export async function deleteFAQ(id: string) {
     
     const existing = await prisma.fAQ.findUnique({ where: { id } })
     if (!existing) {
-      throw new AdminActionError('Асуулт олдсонгүй', 'FAQ_NOT_FOUND')
+      throw new AdminActionError('FAQ not found | 未找到常见问题', 'FAQ_NOT_FOUND')
     }
     
     const result = await prisma.fAQ.delete({ where: { id } })
@@ -440,7 +440,7 @@ export async function createFeature(data: any) {
     
     // Validate required fields
     if (!data.title || !data.description || !data.icon) {
-      throw new AdminActionError('Гарчиг, тайлбар болон icon заавал шаардлагатай', 'VALIDATION_ERROR')
+      throw new AdminActionError('Title, description, and icon are required | 标题、描述和图标为必填项', 'VALIDATION_ERROR')
     }
     
     const result = await prisma.feature.create({ data })
@@ -456,7 +456,7 @@ export async function updateFeature(id: string, data: any) {
     // Check if feature exists
     const existing = await prisma.feature.findUnique({ where: { id } })
     if (!existing) {
-      throw new AdminActionError('Онцлог олдсонгүй', 'FEATURE_NOT_FOUND')
+      throw new AdminActionError('Feature not found | 未找到功能亮点', 'FEATURE_NOT_FOUND')
     }
     
     const result = await prisma.feature.update({
@@ -474,7 +474,7 @@ export async function deleteFeature(id: string) {
     
     const existing = await prisma.feature.findUnique({ where: { id } })
     if (!existing) {
-      throw new AdminActionError('Онцлог олдсонгүй', 'FEATURE_NOT_FOUND')
+      throw new AdminActionError('Feature not found | 未找到功能亮点', 'FEATURE_NOT_FOUND')
     }
     
     const result = await prisma.feature.delete({ where: { id } })

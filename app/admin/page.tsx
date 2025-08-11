@@ -82,7 +82,7 @@ const ErrorDisplay = ({ error, onRetry }: { error: string; onRetry: () => void }
       <span>{error}</span>
       <Button onClick={onRetry} variant="outline" size="sm">
         <RefreshCw className="h-4 w-4 mr-2" />
-        Дахин оролдох
+        Retry | 重试
       </Button>
     </AlertDescription>
   </Alert>
@@ -181,8 +181,8 @@ export default function AdminPage() {
       // Show success toast only on manual refresh
       if (force) {
         toast({
-          title: "Амжилттай",
-          description: `${getTabDisplayName(tabName)} мэдээлэл шинэчлэгдлээ`,
+          title: "Success | 成功",
+          description: `${getTabDisplayName(tabName)} refreshed | 已刷新`,
           duration: 2000
         })
       }
@@ -193,8 +193,8 @@ export default function AdminPage() {
       setErrorStates(prev => ({ ...prev, [tabName]: errorMessage }))
       
       toast({
-        title: "Алдаа гарлаа",
-        description: `${getTabDisplayName(tabName)} мэдээлэл ачаалахад алдаа гарлаа: ${errorMessage}`,
+        title: "Error | 错误",
+        description: `Failed to load ${getTabDisplayName(tabName)}: ${errorMessage} | 加载失败：${errorMessage}`,
         variant: "destructive",
         duration: 5000
       })
@@ -206,12 +206,12 @@ export default function AdminPage() {
   // Helper functions
   const getTabDisplayName = (tabName: string) => {
     const names: Record<string, string> = {
-      site: 'Сайтын тохируулга',
-      courses: 'Сургалтууд',
-      testimonials: 'Сэтгэгдлүүд',
-      partners: 'Хамтрагчид',
-      faq: 'Асуултууд',
-      features: 'Онцлогууд'
+      site: 'Site Settings | 站点设置',
+      courses: 'Courses | 课程',
+      testimonials: 'Testimonials | 客户评价',
+      partners: 'Partners | 合作伙伴',
+      faq: 'FAQ | 常见问题',
+      features: 'Features | 功能亮点'
     }
     return names[tabName] || tabName
   }
@@ -219,7 +219,7 @@ export default function AdminPage() {
   const getErrorMessage = (error: any) => {
     if (error?.message) return error.message
     if (typeof error === 'string') return error
-    return 'Тодорхойгүй алдаа гарлаа'
+    return 'Unknown error | 未知错误'
   }
 
   // Load initial data for the default tab on component mount
@@ -246,8 +246,8 @@ export default function AdminPage() {
     
     // Show loading toast
     const loadingToast = toast({
-      title: "Хадгалж байна...",
-      description: "Сайтын тохируулга хадгалж байна",
+      title: "Saving... | 保存中...",
+      description: "Saving site settings | 正在保存站点设置",
       duration: 0, // Don't auto-dismiss
     })
     
@@ -269,16 +269,16 @@ export default function AdminPage() {
       // Dismiss loading toast and show success
       loadingToast.dismiss?.()
       toast({
-        title: "Амжилттай хадгаллаа",
-        description: "Сайтын тохируулга амжилттай хадгалагдлаа",
+        title: "Saved successfully | 保存成功",
+        description: "Site settings have been saved | 站点设置已保存",
         duration: 3000
       })  
     } catch (error) {
       console.error("❌ [AdminPage] Error updating site configuration:", error);
       loadingToast.dismiss?.()
       toast({
-        title: "Алдаа гарлаа",
-        description: `Сайтын тохируулга хадгалах үед алдаа гарлаа: ${getErrorMessage(error)}`,
+        title: "Error | 错误",
+        description: `Error saving site settings: ${getErrorMessage(error)} | 保存站点设置出错：${getErrorMessage(error)}`,
         variant: "destructive",
         duration: 5000
       })  
@@ -297,8 +297,8 @@ export default function AdminPage() {
     
     // Show loading toast
     const loadingToast = toast({
-      title: isEdit ? "Шинэчилж байна..." : "Үүсгэж байна...",
-      description: isEdit ? "Сургалтыг шинэчилж байна" : "Шинэ сургалт үүсгэж байна",
+      title: isEdit ? "Updating... | 更新中..." : "Creating... | 创建中...",
+      description: isEdit ? "Updating course | 正在更新课程" : "Creating course | 正在创建课程",
       duration: 0,
     })
     
@@ -336,8 +336,8 @@ export default function AdminPage() {
         
         loadingToast.dismiss?.()
         toast({
-          title: "Амжилттай шинэчлэгдлээ",
-          description: "Сургалт амжилттай шинэчлэгдлээ",
+          title: "Updated successfully | 更新成功",
+          description: "Course updated successfully | 课程已成功更新",
           duration: 3000
         })  
       } else {
@@ -352,8 +352,8 @@ export default function AdminPage() {
         
         loadingToast.dismiss?.()
         toast({
-          title: "Амжилттай үүслээ",
-          description: "Шинэ сургалт амжилттай үүслээ",
+          title: "Created successfully | 创建成功",
+          description: "New course created successfully | 新课程已成功创建",
           duration: 3000
         })  
       }
@@ -361,8 +361,8 @@ export default function AdminPage() {
       console.error("❌ [AdminPage] Error saving course:", error);
       loadingToast.dismiss?.()
       toast({
-        title: "Алдаа гарлаа",
-        description: `Сургалт хадгалах үед алдаа гарлаа: ${getErrorMessage(error)}`,
+        title: "Error | 错误",
+        description: `Error saving course: ${getErrorMessage(error)} | 保存课程出错：${getErrorMessage(error)}`,
         variant: "destructive",
         duration: 5000
       })  
@@ -383,8 +383,8 @@ export default function AdminPage() {
       
       // Show loading toast
       const loadingToast = toast({
-        title: isEdit ? "Шинэчилж байна..." : "Үүсгэж байна...",
-        description: `${getTabDisplayName(contentType)} ${isEdit ? 'шинэчилж' : 'үүсгэж'} байна`,
+        title: isEdit ? "Updating... | 更新中..." : "Creating... | 创建中...",
+        description: `${getTabDisplayName(contentType)} ${isEdit ? 'updating | 正在更新' : 'creating | 正在创建'}`,
         duration: 0,
       })
       
@@ -403,16 +403,16 @@ export default function AdminPage() {
         
         loadingToast.dismiss?.()
         toast({
-          title: "Амжилттай",
-          description: `${isEdit ? 'Шинэчлэгдлээ' : 'Үүслээ'} амжилттай`,
+          title: "Success | 成功",
+          description: `${isEdit ? 'Updated | 已更新' : 'Created | 已创建'}`,
           duration: 3000
         })  
       } catch (error) {
         console.error(`❌ [AdminPage] Error saving ${contentType}:`, error);
         loadingToast.dismiss?.()
         toast({
-          title: "Алдаа гарлаа",
-          description: `Мэдээлэл хадгалах үед алдаа гарлаа: ${getErrorMessage(error)}`,
+          title: "Error | 错误",
+        description: `An error occurred while saving: ${getErrorMessage(error)} | 保存时发生错误：${getErrorMessage(error)}`,
           variant: "destructive",
           duration: 5000
         })  
@@ -436,30 +436,30 @@ export default function AdminPage() {
 
   // Field configurations (moved outside to avoid recreating on each render)
   const testimonialFields = useMemo(() => [
-    { name: 'name', label: 'Name', type: 'input' as const, required: true, placeholder: 'Жишээ нь: John Doe' },
-    { name: 'role', label: 'Role', type: 'input' as const, required: true, placeholder: 'Жишээ нь: CEO' },
-    { name: 'content', label: 'Testimonial Content', type: 'textarea' as const, required: true, placeholder: 'Жишээ нь: Хятадтай худалдаа хийхэд хэлний мэдлэг маш их тустай болж байна' },
-    { name: 'rating', label: 'Rating (1-5)', type: 'number' as const, required: true, placeholder: 'Жишээ нь: 5' },
-    { name: 'image', label: 'Image URL', type: 'url' as const, placeholder: 'Жишээ нь: https://placekeanu.com/500/500' }
+    { name: 'name', label: 'Name', type: 'input' as const, required: true, placeholder: 'Example: John Doe | 例如：John Doe' },
+    { name: 'role', label: 'Role', type: 'input' as const, required: true, placeholder: 'Example: CEO | 例如：CEO' },
+    { name: 'content', label: 'Testimonial Content', type: 'textarea' as const, required: true, placeholder: 'Example: This course helped me a lot | 例如：这门课程对我帮助很大' },
+    { name: 'rating', label: 'Rating (1-5)', type: 'number' as const, required: true, placeholder: 'Example: 5 | 例如：5' },
+    { name: 'image', label: 'Image URL', type: 'url' as const, placeholder: 'Example: https://placekeanu.com/500/500 | 例如：https://placekeanu.com/500/500' }
   ], [])
 
   const partnerFields = useMemo(() => [
-    { name: 'name', label: 'Partner Name', type: 'input' as const, required: true, placeholder: 'Жишээ нь: John Doe' },
-    { name: 'logo', label: 'Logo URL', type: 'url' as const, required: true, placeholder: 'Жишээ нь: https://placekeanu.com/500/500' },
-    { name: 'url', label: 'Website URL', type: 'url' as const, required: true, placeholder: 'Жишээ нь: https://www.google.com' }
+    { name: 'name', label: 'Partner Name', type: 'input' as const, required: true, placeholder: 'Example: ACME Corp | 例如：ACME 公司' },
+    { name: 'logo', label: 'Logo URL', type: 'url' as const, required: true, placeholder: 'Example: https://placekeanu.com/500/500 | 例如：https://placekeanu.com/500/500' },
+    { name: 'url', label: 'Website URL', type: 'url' as const, required: true, placeholder: 'Example: https://www.google.com | 例如：https://www.google.com' }
   ], [])
 
   const faqFields = useMemo(() => [
-    { name: 'question', label: 'Question', type: 'input' as const, required: true, placeholder: 'Жишээ нь: Хятад хэл ямар түвшинд хичээллэх вэ?' },
-    { name: 'answer', label: 'Answer', type: 'textarea' as const, required: true, placeholder: 'Жишээ нь: HSK 6-ын түвшинд' },
-    { name: 'order', label: 'Order', type: 'number' as const, placeholder: 'Жишээ нь: 1' }
+    { name: 'question', label: 'Question', type: 'input' as const, required: true, placeholder: 'Example: What levels are available? | 例如：提供哪些等级？' },
+    { name: 'answer', label: 'Answer', type: 'textarea' as const, required: true, placeholder: 'Example: Up to HSK 6 | 例如：最高到 HSK 6' },
+    { name: 'order', label: 'Order', type: 'number' as const, placeholder: 'Example: 1 | 例如：1' }
   ], [])
 
   const featureFields = useMemo(() => [
-    { name: 'title', label: 'Title', type: 'input' as const, required: true, placeholder: 'Жишээ нь: Хятад хэл ямар түвшинд хичээллэх вэ?' },
-    { name: 'description', label: 'Description', type: 'textarea' as const, required: true, placeholder: 'Жишээ нь: Хятад хэл ямар түвшинд хичээллэх вэ?' },
-    { name: 'icon', label: 'Icon (emoji or text)', type: 'input' as const, required: true, placeholder: 'Жишээ нь: 🌐' },
-    { name: 'order', label: 'Order', type: 'number' as const, placeholder: 'Жишээ нь: 1' }
+    { name: 'title', label: 'Title', type: 'input' as const, required: true, placeholder: 'Example: What levels are available? | 例如：提供哪些等级？' },
+    { name: 'description', label: 'Description', type: 'textarea' as const, required: true, placeholder: 'Example: Course details | 例如：课程详情' },
+    { name: 'icon', label: 'Icon (emoji or text)', type: 'input' as const, required: true, placeholder: 'Example: 🌐 | 例如：🌐' },
+    { name: 'order', label: 'Order', type: 'number' as const, placeholder: 'Example: 1 | 例如：1' }
   ], [])
 
   // Render functions for different content types (memoized)
@@ -497,7 +497,7 @@ export default function AdminPage() {
         rel="noopener noreferrer"
         className="text-blue-500 hover:underline text-sm"
       >
-        Visit Website
+        Visit Website | 访问网站
       </a>
     </div>
   ), [])
@@ -506,7 +506,7 @@ export default function AdminPage() {
     <div>
       <h3 className="font-semibold mb-2">{faq.question}</h3>
       <p className="text-gray-600">{faq.answer}</p>
-      <Badge variant="outline" className="mt-2">Order: {faq.order}</Badge>
+      <Badge variant="outline" className="mt-2">Order | 顺序: {faq.order}</Badge>
     </div>
   ), [])
 
@@ -517,7 +517,7 @@ export default function AdminPage() {
         <h3 className="font-semibold">{feature.title}</h3>
       </div>
       <p className="text-gray-600">{feature.description}</p>
-      <Badge variant="outline" className="mt-2">Order: {feature.order}</Badge>
+      <Badge variant="outline" className="mt-2">Order | 顺序: {feature.order}</Badge>
     </div>
   ), [])
 
@@ -531,11 +531,11 @@ export default function AdminPage() {
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                Админ панель
+                Admin Panel | 管理面板
               </h1> 
-              <p className="text-slate-600 mt-2">Сайтын бүх мэдээлэл</p>
+              <p className="text-slate-600 mt-2">All site data | 站点所有数据</p>
               <p className="text-slate-500 text-sm mt-1">
-                Тусламж? <Link href="mailto:enkhbold470@gmail.com" className="text-blue-500 hover:underline font-medium">
+                Need help? | 需要帮助？ <Link href="mailto:enkhbold470@gmail.com" className="text-blue-500 hover:underline font-medium">
                   enkhbold470@gmail.com
                 </Link>
               </p>
@@ -547,7 +547,7 @@ export default function AdminPage() {
               disabled={loadingStates[activeTab as keyof typeof loadingStates]}
             >
               <RefreshCw className={`h-4 w-4 ${loadingStates[activeTab as keyof typeof loadingStates] ? 'animate-spin' : ''}`} />
-              Шинэчлэх
+              Refresh | 刷新
             </Button>
           </div>
         </div>
@@ -558,19 +558,19 @@ export default function AdminPage() {
             <div className="bg-slate-50 px-6 py-4 border-b border-slate-200">
               <TabsList className="grid w-full grid-cols-5 bg-white shadow-sm">
                 <TabsTrigger value="courses" className="data-[state=active]:bg-blue-500 data-[state=active]:text-white">
-                  Сургалтууд
+                  Courses | 课程
                 </TabsTrigger>
                 <TabsTrigger value="testimonials" className="data-[state=active]:bg-blue-500 data-[state=active]:text-white">
-                  Сэтгэгдлүүд
+                  Testimonials | 客户评价
                 </TabsTrigger>
                 <TabsTrigger value="partners" className="data-[state=active]:bg-blue-500 data-[state=active]:text-white">
-                  Хамтрагчид
+                  Partners | 合作伙伴
                 </TabsTrigger>
                 <TabsTrigger value="faq" className="data-[state=active]:bg-blue-500 data-[state=active]:text-white">
-                  Асуултууд
+                  FAQ | 常见问题
                 </TabsTrigger>
                 <TabsTrigger value="features" className="data-[state=active]:bg-blue-500 data-[state=active]:text-white">
-                  Онцлогууд
+                  Features | 功能亮点
                 </TabsTrigger>
               </TabsList>
             </div>
@@ -589,7 +589,7 @@ export default function AdminPage() {
                   <div className="space-y-8">
                     <Card className="border-slate-200 shadow-sm">
                       <CardHeader className="bg-gradient-to-r from-blue-50 to-purple-50">
-                        <CardTitle className="text-xl text-slate-800">Сургалт үүсгэх</CardTitle>
+                        <CardTitle className="text-xl text-slate-800">Create Course | 创建课程</CardTitle>
                       </CardHeader>
                       <CardContent className="p-6">
                         <CourseForm 
@@ -602,7 +602,7 @@ export default function AdminPage() {
                     <Card className="border-slate-200 shadow-sm">
                       <CardHeader className="bg-slate-50">
                         <CardTitle className="text-xl text-slate-800 flex items-center gap-2">
-                          Одоо байгаа сургалтууд 
+                          Existing Courses | 现有课程 
                           <Badge variant="secondary" className="ml-2">{courses.length}</Badge>
                         </CardTitle>
                       </CardHeader>
@@ -632,7 +632,7 @@ export default function AdminPage() {
                   <LoadingSkeleton />
                 ) : (
                   <ContentSection
-                    title="Сэтгэгдлүүд"
+                    title="Testimonials | 客户评价"
                     items={testimonials}
                     fields={testimonialFields}
                     onSubmit={createContentHandler(createTestimonial, updateTestimonial, 'testimonial', setTestimonials)}
@@ -657,7 +657,7 @@ export default function AdminPage() {
                   <LoadingSkeleton />
                 ) : (
                   <ContentSection
-                    title="Бидний хамтрагчид"
+                    title="Partners | 合作伙伴"
                     items={partners}
                     fields={partnerFields}
                     onSubmit={createContentHandler(createPartner, updatePartner, 'partner', setPartners)}
@@ -682,7 +682,7 @@ export default function AdminPage() {
                   <LoadingSkeleton />
                 ) : (
                   <ContentSection
-                    title="Түгээмэл асуултууд"
+                    title="FAQ | 常见问题"
                     items={faqs}
                     fields={faqFields}
                     onSubmit={createContentHandler(createFAQ, updateFAQ, 'faq', setFaqs)}
@@ -707,7 +707,7 @@ export default function AdminPage() {
                   <LoadingSkeleton />
                 ) : (
                   <ContentSection
-                    title="Онцлог боломжууд"
+                    title="Features | 功能亮点"
                     items={features}
                     fields={featureFields}
                     onSubmit={createContentHandler(createFeature, updateFeature, 'feature', setFeatures)}

@@ -18,21 +18,21 @@ export function SiteConfigForm({ siteConfig, onSubmit }: SiteConfigFormProps) {
     e.preventDefault();
     await onSubmit(e);
     toast({
-      title: "Admin Page",
-        description: "Сайтын тохируулга амжилттай хадгалагдлаа",
+      title: "Admin Page | 管理页面",
+        description: "Site settings saved successfully | 站点设置已成功保存",
     })  
   }
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Сайтын тохируулга</CardTitle>
-        <CardDescription>Сайтын тохируулга</CardDescription>
+        <CardTitle>Site Settings | 站点设置</CardTitle>
+        <CardDescription>Configure your site | 配置您的站点</CardDescription>
       </CardHeader>
       <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="name">Сайтын нэр</Label>
+              <Label htmlFor="name">Site Name | 站点名称</Label>
               <Input
                 id="name"
                 name="name"
@@ -41,7 +41,7 @@ export function SiteConfigForm({ siteConfig, onSubmit }: SiteConfigFormProps) {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="tagline">Слоганы текст</Label>
+              <Label htmlFor="tagline">Tagline | 标语</Label>
               <Input
                 id="tagline"
                 name="tagline"
@@ -51,7 +51,7 @@ export function SiteConfigForm({ siteConfig, onSubmit }: SiteConfigFormProps) {
             </div>
           </div>
           <div className="space-y-2">
-            <Label htmlFor="description">Таны мэдээлэл</Label>
+            <Label htmlFor="description">Description | 描述</Label>
             <Textarea
               id="description"
               name="description"
@@ -60,7 +60,7 @@ export function SiteConfigForm({ siteConfig, onSubmit }: SiteConfigFormProps) {
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="slogan">Слоганы текст</Label>
+            <Label htmlFor="slogan">Slogan | 口号</Label>
             <Input
               id="slogan"
               name="slogan"
@@ -69,7 +69,7 @@ export function SiteConfigForm({ siteConfig, onSubmit }: SiteConfigFormProps) {
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="url">Сайтын хаяг</Label>
+            <Label htmlFor="url">Site URL | 站点链接</Label>
             <Input
               id="url"
               name="url"
@@ -78,7 +78,7 @@ export function SiteConfigForm({ siteConfig, onSubmit }: SiteConfigFormProps) {
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="ogImage">OG Image хаяг</Label>
+            <Label htmlFor="ogImage">OG Image URL | OG 图片链接</Label>
             <Input
               id="ogImage"
               name="ogImage"
@@ -86,7 +86,7 @@ export function SiteConfigForm({ siteConfig, onSubmit }: SiteConfigFormProps) {
               required
             />
           </div>
-              <Button type="submit">Хадгалах</Button>
+              <Button type="submit">Save | 保存</Button>
         </form>
       </CardContent>
     </Card>
