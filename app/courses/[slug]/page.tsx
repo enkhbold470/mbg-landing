@@ -301,7 +301,8 @@ export default function CourseDetailPage({ params }: { params: { slug: string } 
                                             src={youtubeVideo(course.video)} 
                                             title="Course Introduction Video" 
                                             frameBorder="0" 
-                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                                            loading="lazy"
+                                            allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
                                             referrerPolicy="strict-origin-when-cross-origin" 
                                             allowFullScreen
                                             className="rounded-2xl"

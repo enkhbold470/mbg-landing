@@ -17,6 +17,7 @@ const nextConfig = {
     optimizeCss: true,
   },
   poweredByHeader: false,
+  productionBrowserSourceMaps: true,
 
 }
 
