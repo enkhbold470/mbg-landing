@@ -31,7 +31,7 @@ export default function AuthWrapper({ children, isAuthenticated }: AuthWrapperPr
       setIsLocalhost(localhost);
 
       if (!localhost) {
-        setError('Админ хяналтын самбар зөвхөн localhost-с хандах боломжтой');
+        setError('Admin panel is accessible only from localhost | 管理面板仅可从本地访问');
       }
     };
 
@@ -44,25 +44,25 @@ export default function AuthWrapper({ children, isAuthenticated }: AuthWrapperPr
       try {
         await authenticateAdmin(formData);
         toast({
-          title: "Админ хуудас",
-          description: "Амжилттай нэвтэрлээ",
+          title: "Admin Page | 管理页面",
+          description: "Login successful | 登录成功",
         });
       } catch (err) {
         // Check if it's a redirect error (which is expected on successful login)
         if (err instanceof Error && err.message.includes('NEXT_REDIRECT')) {
           // This is expected - the redirect will happen automatically
           toast({
-            title: "Админ хуудас",
-            description: "Амжилттай нэвтэрлээ",
+            title: "Admin Page | 管理页面",
+            description: "Login successful | 登录成功",
           });
           return;
         }
         
         setError(err as string);
-        console.log('Нэвтрэх амжилтгүй', err);
+        console.log('Login failed | 登录失败', err);
         toast({
-          title: "Админ хуудас",
-          description: "Нэвтрэх амжилтгүй. Нэвтрэх мэдээллээ шалгана уу.",
+          title: "Admin Page | 管理页面",
+          description: "Login failed. Please check your credentials. | 登录失败，请检查您的凭据。",
         });
       }
     });
@@ -72,8 +72,8 @@ export default function AuthWrapper({ children, isAuthenticated }: AuthWrapperPr
     startTransition(async () => {
       await logout();
       toast({
-        title: "Admin Page",
-        description: "Logout successful",
+        title: "Admin Page | 管理页面",
+        description: "Logout successful | 已成功退出",
       });
     });
   };
@@ -88,10 +88,10 @@ export default function AuthWrapper({ children, isAuthenticated }: AuthWrapperPr
             </div>
             <div>
               <CardTitle className="text-2xl font-bold text-gray-900">
-                Админ нэвтрэх
+                Admin Login | 管理员登录
               </CardTitle>
               <CardDescription className="text-gray-600 mt-2">
-                Админ хяналтын самбарт хандах
+                Access the admin panel | 访问管理面板
               </CardDescription>
             </div>
           </CardHeader>
@@ -100,14 +100,14 @@ export default function AuthWrapper({ children, isAuthenticated }: AuthWrapperPr
               <Alert className="mb-4">
                 <Lock className="h-4 w-4" />
                 <AlertDescription>
-                  Нэвтрэх амжилтгүй. Нэвтрэх мэдээллээ шалгана уу.
+                  Login failed. Please check your credentials. | 登录失败，请检查您的凭据。
                 </AlertDescription>
               </Alert>
             )}
 
             <form action={handleLogin} className="space-y-4">
               <div>
-                <Label htmlFor="username">Хэрэглэгчийн нэр</Label>
+                <Label htmlFor="username">Username | 用户名</Label>
                 <Input
                   id="username"
                   name="username"
@@ -118,7 +118,7 @@ export default function AuthWrapper({ children, isAuthenticated }: AuthWrapperPr
                 />
               </div>
               <div>
-                <Label htmlFor="password">Нууц үг</Label>
+                <Label htmlFor="password">Password | 密码</Label>
                 <Input
                   id="password"
                   name="password"
@@ -133,14 +133,14 @@ export default function AuthWrapper({ children, isAuthenticated }: AuthWrapperPr
                 className="w-full"
                 disabled={isPending}
               >
-                {isPending ? 'Нэвтэрч байна...' : 'Нэвтрэх'}
+                {isPending ? 'Logging in... | 正在登录...' : 'Login | 登录'}
               </Button>
             </form>
           </CardContent>
         </Card>
 
         <div className="text-center text-sm text-gray-500 mt-4">
-          Шинэ админ хандалт үүсгэхэд: <Link href="mailto:enkhbold470@gmail.com" className="text-blue-500 hover:underline">enkhbold470@gmail.com</Link>
+          Request new admin access: | 申请新的管理员访问： <Link href="mailto:enkhbold470@gmail.com" className="text-blue-500 hover:underline">enkhbold470@gmail.com</Link>
         </div>
       </div>
     );
@@ -151,7 +151,7 @@ export default function AuthWrapper({ children, isAuthenticated }: AuthWrapperPr
       <div className="border-b bg-white">
         <div className="flex h-16 items-center justify-between px-20">
           <Link href="/admin" className="text-xl font-semibold hover:text-gray-700 transition-colors">
-            MBG Админ самбар
+            MBG Admin Panel | MBG 管理面板
           </Link>
           {/* Logout UI removed as per instructions */}
           <Button 
@@ -159,7 +159,7 @@ export default function AuthWrapper({ children, isAuthenticated }: AuthWrapperPr
             onClick={handleLogout}
             disabled={isPending}
           >
-            {isPending ? 'Гараж байна...' : 'Гарах'}
+            {isPending ? 'Logging out... | 正在退出...' : 'Logout | 退出'}
           </Button>
         </div>
       </div>
@@ -168,7 +168,7 @@ export default function AuthWrapper({ children, isAuthenticated }: AuthWrapperPr
           <Alert className="max-w-md mb-4">
             <Server className="h-4 w-4" />
             <AlertDescription>
-              Админ самбар нь аюулгүй байдлын үүднээс зөвхөн localhost-оос хандах боломжтой.
+              For security, the admin panel is only accessible from localhost. | 出于安全考虑，管理面板仅能从本地访问。
             </AlertDescription>
           </Alert>
         )}
@@ -187,10 +187,10 @@ export default function AuthWrapper({ children, isAuthenticated }: AuthWrapperPr
                 </div>
                 <div>
                   <CardTitle className="text-2xl font-bold text-gray-900">
-                    Админ нэвтрэх
+                    Admin Login | 管理员登录
                   </CardTitle>
                   <CardDescription className="text-gray-600 mt-2">
-                    Админ хяналтын самбарт хандах
+                    Access the admin panel | 访问管理面板
                   </CardDescription>
                 </div>
               </CardHeader>
@@ -199,14 +199,14 @@ export default function AuthWrapper({ children, isAuthenticated }: AuthWrapperPr
                   <Alert className="mb-4">
                     <Lock className="h-4 w-4" />
                     <AlertDescription>
-                      Нэвтрэх амжилтгүй. Нэвтрэх мэдээллээ шалгана уу.
+                      Login failed. Please check your credentials. | 登录失败，请检查您的凭据。
                     </AlertDescription>
                   </Alert>
                 )}
 
                 <form action={handleLogin} className="space-y-4">
                   <div>
-                    <Label htmlFor="username">Хэрэглэгчийн нэр</Label>
+                    <Label htmlFor="username">Username | 用户名</Label>
                     <Input
                       id="username"
                       name="username"
@@ -217,7 +217,7 @@ export default function AuthWrapper({ children, isAuthenticated }: AuthWrapperPr
                     />
                   </div>
                   <div>
-                    <Label htmlFor="password">Нууц үг</Label>
+                    <Label htmlFor="password">Password | 密码</Label>
                     <Input
                       id="password"
                       name="password"
@@ -232,7 +232,7 @@ export default function AuthWrapper({ children, isAuthenticated }: AuthWrapperPr
                     className="w-full"
                     disabled={isPending}
                   >
-                    {isPending ? 'Нэвтэрч байна...' : 'Нэвтрэх'}
+                    {isPending ? 'Logging in... | 正在登录...' : 'Login | 登录'}
                   </Button>
                 </form>
               </CardContent>
