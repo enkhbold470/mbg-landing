@@ -58,36 +58,11 @@
   body {
     @apply bg-background text-foreground;
   }
+  /* Ensure uniform explicit font-size for h1, including inside sectioning elements */
+  h1,
+  :where(article, aside, nav, section) h1 {
+    @apply text-2xl;
+  }
 }
 
-/* Custom animations for your app */
-.card-transition {
-  transition: transform 0.3s ease, opacity 0.3s ease;
-  transform: translateY(0);
-  opacity: 1;
-}
-
-.card-exit {
-  transform: translateY(-20px);
-  opacity: 0;
-}
-
-.card-exit-left {
-  transform: translateX(-100px) rotate(-5deg);
-  opacity: 0;
-}
-
-.card-exit-right {
-  transform: translateX(100px) rotate(5deg);
-  opacity: 0;
-}
-
-.card-enter {
-  transform: translateY(20px);
-  opacity: 0;
-}
-
-.profile-container {
-  position: relative;
-  min-height: 400px;
-}
+/* Purged unused custom classes. Add back if needed by components. */

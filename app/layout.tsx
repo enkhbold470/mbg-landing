@@ -5,7 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Analytics } from "@vercel/analytics/next";
 
 import type { Metadata } from "next";
-
+import React from "react";
 
 import { Viewport } from "next";
 import { Open_Sans } from "next/font/google";

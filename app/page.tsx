@@ -1,12 +1,12 @@
 import { HeroSection } from "@/components/hero-section"
-import { PartnersSection } from "@/components/partners-section"
+// import { PartnersSection } from "@/components/partners-section"
 import { FeaturesSection } from "@/components/features-section"
 import { TestimonialsSection } from "@/components/testimonials-section"
 import { AboutSection } from "@/components/about-section"
 import { FaqSection } from "@/components/faq-section"
 import { CtaSection } from "@/components/cta-section"
 import { ContactSection } from "@/components/contact-section"
-import { RevealOnScroll } from "@/components/reveal-on-scroll"
+// Performance: remove scroll-based reveal wrapper
 
 export default function LandingPage() {
   return (
@@ -16,36 +16,24 @@ export default function LandingPage() {
       <HeroSection />
       
       {/* 2. Team & Company Information */}
-      <RevealOnScroll>
-        <AboutSection />
-      </RevealOnScroll>
+      <AboutSection />
       {/* 3. Social Proof & Trust Builders - Partners */}
       {/* <PartnersSection /> */}
       
       {/* 4. Product or Service Details - Features */}
-      <RevealOnScroll>
-        <FeaturesSection />
-      </RevealOnScroll>
+      <FeaturesSection />
       
       {/* 5. Social Proof & Trust Builders - Testimonials */}
-      <RevealOnScroll>
-        <TestimonialsSection />
-      </RevealOnScroll>
+      <TestimonialsSection />
       
       {/* 7. FAQs */}
-      <RevealOnScroll>
-        <FaqSection />
-      </RevealOnScroll>
+      <FaqSection />
       
       {/* 8. Additional Conversion Elements - CTA */}
-      <RevealOnScroll>
-        <CtaSection />
-      </RevealOnScroll>
+      <CtaSection />
       
       {/* 9. Contact Information */}
-      <RevealOnScroll>
-        <ContactSection />
-      </RevealOnScroll>
+      <ContactSection />
       
     </div>
   )
