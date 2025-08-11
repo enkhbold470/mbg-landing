@@ -34,7 +34,7 @@ export function YouTubeConsent({ link, title, className }: YouTubeConsentProps) 
   const videoId = useMemo(() => extractYouTubeId(link), [link])
 
   const thumbnail = useMemo(() => {
-    return videoId ? `/vi-placeholder.png` : `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`
+    return videoId ? `https://raw.githubusercontent.com/enkhbold470/mbg-landing/refs/heads/main/public/vi-placeholder.png` : `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`
   }, [videoId])
 
   if (consented) {
