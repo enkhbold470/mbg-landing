@@ -588,9 +588,7 @@ export default function AdminPage() {
                 ) : (
                   <div className="space-y-8">
                     <Card className="border-slate-200 shadow-sm">
-                      <CardHeader className="bg-gradient-to-r from-blue-50 to-purple-50">
-                        <CardTitle className="text-xl text-slate-800">Create Course | 创建课程</CardTitle>
-                      </CardHeader>
+                  
                       <CardContent className="p-6">
                         <CourseForm 
                           onSubmit={handleCourseSubmit} 

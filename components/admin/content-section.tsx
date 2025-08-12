@@ -156,9 +156,7 @@ export function ContentSection({
   return (
     <div className="space-y-8">
       <Card className="border-slate-200 shadow-sm">
-        <CardHeader className="bg-gradient-to-r from-green-50 to-blue-50">
-          <CardTitle className="text-xl text-slate-800">Create new {title.slice(0, -1)} | 新建 {title.slice(0, -1)}</CardTitle>
-        </CardHeader>
+    
         <CardContent className="p-6">
           {renderForm()}
         </CardContent>
