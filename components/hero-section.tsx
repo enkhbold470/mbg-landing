@@ -15,7 +15,7 @@ export function HeroSection() {
           {siteConfig.slogan || "Тэгээс тэтгэлэгт тэнцэх нь"}
         </div>
 
-        <h1 className="text-4xl lg:text-7xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
+        <h1 className="text-4xl lg:text-6xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
           {siteConfig.name || "MBG Education"}
           <span className="bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent block">
             {siteConfig.tagline || "Хятадын хэлийг эзэмших мэргэжлийн сургалт"}
