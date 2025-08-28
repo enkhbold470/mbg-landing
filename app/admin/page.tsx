@@ -16,6 +16,7 @@ import { SiteConfigForm } from '@/components/admin/site-config-form'
 import { CourseForm } from '@/components/admin/course-form'
 import { CourseList } from '@/components/admin/course-list'
 import { ContentSection } from '@/components/admin/content-section'
+import { ImageUpload } from '@/components/admin/image-upload'
 import Link from 'next/link'
  
 // Import actions
@@ -99,6 +100,10 @@ export default function AdminPage() {
   const [partners, setPartners] = useState<any[]>([])
   const [faqs, setFaqs] = useState<any[]>([])
   const [features, setFeatures] = useState<any[]>([])
+
+  //image storage
+  const [imageFiles, setImageFiles] = useState<File[]>([])
+  const [imagePreviews, setImagePreviews] = useState<string[]>([])
   
   // Loading states for different tabs
   const [loadingStates, setLoadingStates] = useState({
@@ -107,7 +112,8 @@ export default function AdminPage() {
     testimonials: false,
     partners: false,
     faq: false,
-    features: false
+    features: false,
+    images: false
   })
   
   // Error states for different tabs
@@ -117,7 +123,8 @@ export default function AdminPage() {
     testimonials: null,
     partners: null,
     faq: null,
-    features: null
+    features: null,
+    images: null
   })
   
   // Track which tabs have been successfully loaded
@@ -211,7 +218,8 @@ export default function AdminPage() {
       testimonials: 'Testimonials | 客户评价',
       partners: 'Partners | 合作伙伴',
       faq: 'FAQ | 常见问题',
-      features: 'Features | 功能亮点'
+      features: 'Features | 功能亮点',
+      images: 'Images | 图片上传'
     }
     return names[tabName] || tabName
   }
@@ -556,7 +564,7 @@ export default function AdminPage() {
         <div className="bg-white rounded-2xl shadow-lg border border-slate-200 overflow-hidden">
           <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
             <div className="bg-slate-50 px-6 py-4 border-b border-slate-200">
-              <TabsList className="grid w-full grid-cols-5 bg-white shadow-sm">
+              <TabsList className="grid w-full grid-cols-6 bg-white shadow-sm">
                 <TabsTrigger value="courses" className="data-[state=active]:bg-blue-500 data-[state=active]:text-white">
                   Courses | 课程
                 </TabsTrigger>
@@ -571,6 +579,9 @@ export default function AdminPage() {
                 </TabsTrigger>
                 <TabsTrigger value="features" className="data-[state=active]:bg-blue-500 data-[state=active]:text-white">
                   Features | 功能亮点
+                </TabsTrigger>
+                <TabsTrigger value="images" className="data-[state=active]:bg-blue-500 data-[state=active]:text-white">
+                  Images | 图片上传
                 </TabsTrigger>
               </TabsList>
             </div>
@@ -717,6 +728,65 @@ export default function AdminPage() {
                     isSubmitting={submittingStates.feature}
                   />
                 )}
+              </TabsContent>
+
+              <TabsContent value="images" className="mt-0">
+                <div className="p-6">
+                  <Card className="border-slate-200 shadow-sm">
+                    <CardHeader className="bg-slate-50">
+                      <CardTitle className="text-xl text-slate-800 flex items-center gap-2">
+                        Image Upload | 图片上传
+                        <Badge variant="secondary" className="ml-2">{imageFiles.length}</Badge>
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="p-6">
+                      <ImageUpload
+                        onImagesUploaded={(urls) => {
+                          setImagePreviews(urls)
+                          console.log('Images uploaded:', urls)
+                          toast({
+                            title: "Images ready | 图片就绪",
+                            description: `${urls.length} image(s) uploaded and ready to use | ${urls.length} 张图片已上传并可使用`,
+                          })
+                        }}
+                        maxFiles={10}
+                        existingImages={imagePreviews}
+                      />
+                      {imagePreviews.length > 0 && (
+                        <div className="mt-6 p-4 bg-blue-50 rounded-lg">
+                          <h4 className="font-medium text-blue-900 mb-2">
+                            Copy URLs | 复制链接:
+                          </h4>
+                          <div className="space-y-2">
+                            {imagePreviews.map((url, index) => (
+                              <div key={index} className="flex items-center gap-2">
+                                <input
+                                  type="text"
+                                  value={url}
+                                  readOnly
+                                  className="flex-1 px-3 py-1 text-sm border rounded bg-white"
+                                />
+                                <Button
+                                  onClick={() => {
+                                    navigator.clipboard.writeText(url)
+                                    toast({
+                                      title: "Copied | 已复制",
+                                      description: "URL copied to clipboard | 链接已复制到剪贴板",
+                                    })
+                                  }}
+                                  variant="outline"
+                                  size="sm"
+                                >
+                                  Copy | 复制
+                                </Button>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+                </div>
               </TabsContent>
             </div>
           </Tabs>

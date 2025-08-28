@@ -258,7 +258,39 @@ export default function CourseDetailPage({ params }: { params: { slug: string } 
                                 </CardContent>
                             </Card>
 
-                            {/* Enrollment Button */}
+                         
+                        </div>
+
+                        {/* Right Column - Media */}
+                        <div className="space-y-6">
+                            
+                            {/* Course Image */}
+                            <Card className="rounded-3xl border shadow-lg overflow-hidden bg-white  ">
+                                <Image 
+                                    src={course.image} 
+                                    alt={course.fullTitle} 
+                                    width={1000} 
+                                    height={1000} 
+                                    // className="w-64 h-64 object-cover"
+                                />
+                            </Card>
+
+                            {/* Course Video (Click-to-load for privacy) */}
+                            {course.video && (
+                            <Card className="rounded-3xl border-0 shadow-lg overflow-hidden bg-white">
+                                <CardContent className="p-6">
+                                    <h3 className="text-xl font-bold text-gray-900 mb-4">Танилцуулга видео</h3>
+                                    <div className="relative rounded-2xl overflow-hidden">
+                                        <YouTubeConsent link={course.video} title="Course Introduction Video" className="rounded-2xl" />
+                                    </div>
+                                </CardContent>
+                            </Card>
+                            )}
+
+
+
+
+                               {/* Enrollment Button */}
                             <Card className="rounded-3xl border-0 shadow-lg bg-gradient-to-r from-purple-600 to-blue-600 text-white">
                                 <CardContent className="p-8 text-center">
                                     <h3 className="text-2xl font-bold mb-4">Одоо бүртгүүлээрэй!</h3>
@@ -277,31 +309,10 @@ export default function CourseDetailPage({ params }: { params: { slug: string } 
                             </Card>
                         </div>
 
-                        {/* Right Column - Media */}
-                        <div className="space-y-6">
-                            
-                            {/* Course Image */}
-                            <Card className="rounded-3xl border-0 shadow-lg overflow-hidden bg-white">
-                                <Image 
-                                    src={course.image} 
-                                    alt={course.fullTitle} 
-                                    width={600} 
-                                    height={400} 
-                                    className="w-full h-64 object-cover"
-                                />
-                            </Card>
-
-                            {/* Course Video (Click-to-load for privacy) */}
-                            <Card className="rounded-3xl border-0 shadow-lg overflow-hidden bg-white">
-                                <CardContent className="p-6">
-                                    <h3 className="text-xl font-bold text-gray-900 mb-4">Танилцуулга видео</h3>
-                                    <div className="relative rounded-2xl overflow-hidden">
-                                        <YouTubeConsent link={course.video} title="Course Introduction Video" className="rounded-2xl" />
-                                    </div>
-                                </CardContent>
-                            </Card>
-                        </div>
+                        
+                        
                     </div>
+                    
                 </div>
             </section>
         </div>
