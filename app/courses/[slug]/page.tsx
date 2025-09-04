@@ -174,10 +174,55 @@ export default function CourseDetailPage({ params }: { params: { slug: string } 
             {/* Course Details */}
             <section className="pb-12 px-6">
                 <div className="max-w-6xl mx-auto">
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div className="flex flex-col lg:grid lg:grid-cols-2 gap-8">
                         
-                        {/* Left Column - Course Info */}
-                        <div className="space-y-6">
+                        {/* Mobile: Image First, Desktop: Right Column - Media */}
+                        <div className="space-y-6 lg:order-2">
+                            
+                            {/* Course Image */}
+                            <Card className="rounded-3xl border shadow-lg overflow-hidden bg-white  ">
+                                <Image 
+                                    src={course.image} 
+                                    alt={course.fullTitle} 
+                                    width={1000} 
+                                    height={1000} 
+                                    // className="w-64 h-64 object-cover"
+                                />
+                            </Card>
+
+                            {/* Course Video (Click-to-load for privacy) */}
+                            {course.video && (
+                            <Card className="rounded-3xl border-0 shadow-lg overflow-hidden bg-white">
+                                <CardContent className="p-6">
+                                    <h3 className="text-xl font-bold text-gray-900 mb-4">Танилцуулга видео</h3>
+                                    <div className="relative rounded-2xl overflow-hidden">
+                                        <YouTubeConsent link={course.video} title="Course Introduction Video" className="rounded-2xl" />
+                                    </div>
+                                </CardContent>
+                            </Card>
+                            )}
+
+                               {/* Enrollment Button */}
+                            <Card className="rounded-3xl border-0 shadow-lg bg-gradient-to-r from-purple-600 to-blue-600 text-white">
+                                <CardContent className="p-8 text-center">
+                                    <h3 className="text-2xl font-bold mb-4">Одоо бүртгүүлээрэй!</h3>
+                                    <p className="text-purple-100 mb-6">
+                                        Хязгаарлагдмал суудлын тоо. Өөрийн байр авахыг хурдан болгоорой.
+                                    </p>
+                                    <Link href={course.signupForm} target="_blank">
+                                        <Button 
+                                            size="lg"
+                                            className="bg-white text-purple-600 hover:bg-gray-100 px-8 py-4 text-lg rounded-2xl font-semibold transform hover:scale-105 transition-all duration-300"
+                                        >
+                                            БҮРТГҮҮЛЭХ
+                                        </Button>
+                                    </Link>
+                                </CardContent>
+                            </Card>
+                        </div>
+
+                        {/* Mobile: Content Second, Desktop: Left Column - Course Info */}
+                        <div className="space-y-6 lg:order-1">
                             
                             {/* Main Course Info */}
                             <Card className="rounded-3xl border-0 shadow-lg bg-white">
@@ -255,56 +300,6 @@ export default function CourseDetailPage({ params }: { params: { slug: string } 
                                             </div>
                                         ))}
                                     </div>
-                                </CardContent>
-                            </Card>
-
-                         
-                        </div>
-
-                        {/* Right Column - Media */}
-                        <div className="space-y-6">
-                            
-                            {/* Course Image */}
-                            <Card className="rounded-3xl border shadow-lg overflow-hidden bg-white  ">
-                                <Image 
-                                    src={course.image} 
-                                    alt={course.fullTitle} 
-                                    width={1000} 
-                                    height={1000} 
-                                    // className="w-64 h-64 object-cover"
-                                />
-                            </Card>
-
-                            {/* Course Video (Click-to-load for privacy) */}
-                            {course.video && (
-                            <Card className="rounded-3xl border-0 shadow-lg overflow-hidden bg-white">
-                                <CardContent className="p-6">
-                                    <h3 className="text-xl font-bold text-gray-900 mb-4">Танилцуулга видео</h3>
-                                    <div className="relative rounded-2xl overflow-hidden">
-                                        <YouTubeConsent link={course.video} title="Course Introduction Video" className="rounded-2xl" />
-                                    </div>
-                                </CardContent>
-                            </Card>
-                            )}
-
-
-
-
-                               {/* Enrollment Button */}
-                            <Card className="rounded-3xl border-0 shadow-lg bg-gradient-to-r from-purple-600 to-blue-600 text-white">
-                                <CardContent className="p-8 text-center">
-                                    <h3 className="text-2xl font-bold mb-4">Одоо бүртгүүлээрэй!</h3>
-                                    <p className="text-purple-100 mb-6">
-                                        Хязгаарлагдмал суудлын тоо. Өөрийн байр авахыг хурдан болгоорой.
-                                    </p>
-                                    <Link href={course.signupForm} target="_blank">
-                                        <Button 
-                                            size="lg"
-                                            className="bg-white text-purple-600 hover:bg-gray-100 px-8 py-4 text-lg rounded-2xl font-semibold transform hover:scale-105 transition-all duration-300"
-                                        >
-                                            БҮРТГҮҮЛЭХ
-                                        </Button>
-                                    </Link>
                                 </CardContent>
                             </Card>
                         </div>
