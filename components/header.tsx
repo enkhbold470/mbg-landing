@@ -21,7 +21,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet"
-
+import Image from "next/image"
 const navigation = [
   { href: "/#about", text: "Бидний тухай" },
   { href: "/#features", text: "Онцлогууд" },
@@ -44,7 +44,8 @@ export function Header() {
             onClick={() => setIsOpen(false)}
           >
             <div className="flex shadow-xl rounded-full bg-gradient-to-r from-purple-600 to-blue-600 w-10 h-10 justify-center items-center">
-              <Globe className="w-5 h-5 text-white" />
+              {/* <Globe className="w-5 h-5 text-white" /> */}
+              <Image src="/logo.png" alt="logo" width={40} height={40} />
             </div>
             <span className="text-xl font-semibold text-gray-900">{siteConfig.name}</span>
           </Link>
