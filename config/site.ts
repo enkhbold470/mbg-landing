@@ -186,7 +186,7 @@ export const siteConfig = {
       whatsapp: [
         {
           name: "WhatsApp",
-          url: "https://wa.me/97677117678"
+          url: "https://wa.me/97699797678"
         }
       ]
     }
