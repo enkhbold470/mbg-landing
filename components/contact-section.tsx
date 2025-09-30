@@ -1,5 +1,5 @@
 import { Card, CardContent } from "@/components/ui/card"
-import { Phone, Mail, MapPin, Facebook } from "lucide-react"
+import { Phone, Mail, MapPin, Facebook, Instagram, MessageCircle } from "lucide-react"
 import { siteConfig } from "@/config/site"
 
 export function ContactSection() {
@@ -11,7 +11,7 @@ export function ContactSection() {
           <p className="text-lg lg:text-xl text-gray-600">Бидэнтэй холбогдож, нэмэлт мэдээлэл авна уу</p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {/* Address Card */}
           <Card className="rounded-3xl border-0 shadow-lg hover:shadow-xl transition-all duration-300 bg-white/70 backdrop-blur-sm">
             <CardContent className="p-8">
@@ -67,7 +67,7 @@ export function ContactSection() {
             </CardContent>
           </Card>
 
-          {/* Social Media Card */}
+          {/* Facebook Card */}
           <Card className="rounded-3xl border-0 shadow-lg hover:shadow-xl transition-all duration-300 bg-white/70 backdrop-blur-sm">
             <CardContent className="p-8">
               <div className="flex items-start gap-6">
@@ -82,6 +82,62 @@ export function ContactSection() {
                         key={index}
                         href={social.url}
                         className="text-purple-600 hover:text-purple-700 transition-colors block font-medium"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {social.name}
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Instagram Card */}
+          <Card className="rounded-3xl border-0 shadow-lg hover:shadow-xl transition-all duration-300 bg-white/70 backdrop-blur-sm">
+            <CardContent className="p-8">
+              <div className="flex items-start gap-6">
+                <div className="w-12 h-12 bg-gradient-to-r from-pink-500 to-purple-600 rounded-2xl flex items-center justify-center flex-shrink-0">
+                  <Instagram className="text-white" size={24} />
+                </div>
+                <div>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-3">Instagram</h3>
+                  <div className="space-y-2">
+                    {siteConfig.contact.social.instagram.map((social, index) => (
+                      <a
+                        key={index}
+                        href={social.url}
+                        className="text-purple-600 hover:text-purple-700 transition-colors block font-medium"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {social.name}
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* WhatsApp Card */}
+          <Card className="rounded-3xl border-0 shadow-lg hover:shadow-xl transition-all duration-300 bg-white/70 backdrop-blur-sm">
+            <CardContent className="p-8">
+              <div className="flex items-start gap-6">
+                <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-green-600 rounded-2xl flex items-center justify-center flex-shrink-0">
+                  <MessageCircle className="text-white" size={24} />
+                </div>
+                <div>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-3">WhatsApp</h3>
+                  <div className="space-y-2">
+                    {siteConfig.contact.social.whatsapp.map((social, index) => (
+                      <a
+                        key={index}
+                        href={social.url}
+                        className="text-purple-600 hover:text-purple-700 transition-colors block font-medium"
+                        target="_blank"
+                        rel="noopener noreferrer"
                       >
                         {social.name}
                       </a>

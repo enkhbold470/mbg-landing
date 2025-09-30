@@ -182,6 +182,12 @@ export const siteConfig = {
           name: "MBG Education Center",
           url: "https://www.instagram.com/mbg_edu_center"
         }
+      ],
+      whatsapp: [
+        {
+          name: "WhatsApp",
+          url: "https://wa.me/97677117678"
+        }
       ]
     }
   },
