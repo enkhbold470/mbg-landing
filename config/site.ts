@@ -148,7 +148,7 @@ export const faq = [
 
 export const siteConfig = {
   name: "MBG Education Center",
-  description: "Хятад хэл, тэтгэлэгт хөтөлбөр, бизнес аялалын цогц шийдэл.",
+  description: "Гадаад хэл, Тэтгэлэгт хөтөлбөр, Практик сургалт, ...",
   tagline: "ТЭГ-ээс тэтгэлэгт ТЭНЦЭХ хүртэл нь",
   slogan: "MBG 10 дахь жилдээ",
   url: "https://mbg.mn",

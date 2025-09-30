@@ -23,12 +23,12 @@ import {
 } from "@/components/ui/sheet"
 import Image from "next/image"
 const navigation = [
-  { href: "/#about", text: "Бидний тухай" },
-  { href: "/#features", text: "Онцлогууд" },
-  // { href: "/#testimonials", text: "Сэтгэгдэл" },
-  // { href: "/#faq", text: "Асуулт" },
-  { href: "https://apply.mbg.mn", text: "Тэтгэлэг" },
-  { href: "/courses", text: "Сургалтууд" },
+  { href: "/#about", text: "MBG-ийн тухай" },
+  { href: "/#features", text: "Онцлог" },
+  { href: "/courses", text: "Сургалт" },
+  { href: "https://apply.mbg.mn", text: "Тэтгэлэгт" },
+  { href: "https://medium.com/@mbgedumn", text: "MBG News" },
+  // { href: "https://apply.mbg.mn", text: "MBG Apply" },
 ]
 
 export function Header() {

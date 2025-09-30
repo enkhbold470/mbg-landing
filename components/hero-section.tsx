@@ -32,7 +32,7 @@ export function HeroSection() {
               size="lg"
               className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-8 py-4 text-lg rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 min-w-[300px] group"
             >
-              {showEmoji("🇲🇳")} Сургалтууд
+              {showEmoji("🇲🇳")} Гадаад хэл сургалт
               <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </Button>
           </Link>
@@ -42,7 +42,7 @@ export function HeroSection() {
               size="lg"
               className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-8 py-4 text-lg rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 min-w-[300px] group"
             >
-              {showEmoji("🇨🇳")} Тэтгэлэгт бүртгүүлэх
+              {showEmoji("🗺️")} Тэтгэлэгт бүртгүүлэх
               <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </Button>
           </Link>
@@ -52,7 +52,7 @@ export function HeroSection() {
               size="lg"
               className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-8 py-4 text-lg rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 min-w-[300px] group"
             >
-              {showEmoji("🌐")} Хөтөч, орчуулга
+              {showEmoji("🌐")} Guide хөтөч орчуулга
               <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </Button>
           </Link>

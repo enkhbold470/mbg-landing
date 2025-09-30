@@ -1,5 +1,11 @@
 import Link from "next/link";
-import { Sparkles, Globe, MessageCircle, HelpCircle, Download } from "lucide-react";
+import {
+  Sparkles,
+  Globe,
+  MessageCircle,
+  HelpCircle,
+  Download,
+} from "lucide-react";
 import { siteConfig } from "@/config/site";
 
 export function Footer() {
@@ -16,12 +22,16 @@ export function Footer() {
               </div>
               <h3 className="text-2xl font-bold">{siteConfig.name}</h3>
             </div>
-            <p className="text-purple-200 text-sm italic">&quot;{siteConfig.slogan}&quot;</p>
+            <p className="text-purple-200 text-sm italic">
+              &quot;{siteConfig.slogan}&quot;
+            </p>
           </div>
 
           {/* Quick Links */}
           <div className="text-center">
-            <h4 className="text-lg font-semibold mb-4 text-purple-200">Холбоосууд</h4>
+            <h4 className="text-lg font-semibold mb-4 text-purple-200">
+              Холбоосууд
+            </h4>
             <div className="space-y-2">
               <Link
                 href="/courses"
@@ -45,12 +55,29 @@ export function Footer() {
                 <HelpCircle className="w-4 h-4 group-hover:scale-110 transition-transform" />
                 Асуудал мэдэгдэх
               </Link>
+              <Link
+                href="/#testimonials"
+                className="flex items-center justify-center md:justify-start gap-2 text-gray-300 hover:text-purple-300 transition-colors group"
+              >
+                <MessageCircle className="w-4 h-4 group-hover:scale-110 transition-transform" />
+                Сэтгэгдэл
+              </Link>
+
+              <Link
+                href="/#faq"
+                className="flex items-center justify-center md:justify-start gap-2 text-gray-300 hover:text-purple-300 transition-colors group"
+              >
+                <HelpCircle className="w-4 h-4 group-hover:scale-110 transition-transform" />
+                Түгээмэл асуулт
+              </Link>
             </div>
           </div>
 
           {/* Community */}
           <div className="text-center md:text-right">
-            <h4 className="text-lg font-semibold mb-4 text-purple-200">Хамтын нийгэмлэг</h4>
+            <h4 className="text-lg font-semibold mb-4 text-purple-200">
+              Хамтын нийгэмлэг
+            </h4>
             <p className="text-gray-300 text-sm mb-3">
               Хичээлийн талаар тусламж хэрэгтэй юу?
             </p>
@@ -81,9 +108,7 @@ export function Footer() {
               enk.icu
             </Link> */}
           </p>
-          <p className="text-gray-400 text-xs">
-            {siteConfig.description}
-          </p>
+          <p className="text-gray-400 text-xs">{siteConfig.description}</p>
         </div>
       </div>
     </footer>
