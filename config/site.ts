@@ -148,7 +148,7 @@ export const faq = [
 
 export const siteConfig = {
   name: "MBG Education Center",
-  description: "Гадаад хэл, Тэтгэлэгт хөтөлбөр, Практик сургалт, ...",
+  description: "Гадаад хэл, Тэтгэлэгт хөтөлбөр, Практик сургалт ...",
   tagline: "ТЭГ-ээс тэтгэлэгт ТЭНЦЭХ хүртэл нь",
   slogan: "MBG 10 дахь жилдээ",
   url: "https://mbg.mn",
@@ -176,7 +176,13 @@ export const siteConfig = {
           name: "MBG Education Center", 
           url: "https://www.facebook.com/MBGeduMBGtourMBGConsulting"
         }
-      ] 
+      ],
+      instagram: [
+        {
+          name: "MBG Education Center",
+          url: "https://www.instagram.com/mbg_edu_center"
+        }
+      ]
     }
   },
 

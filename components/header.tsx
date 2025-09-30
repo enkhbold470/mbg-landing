@@ -26,7 +26,7 @@ const navigation = [
   { href: "/#about", text: "MBG-ийн тухай" },
   { href: "/#features", text: "Онцлог" },
   { href: "/courses", text: "Сургалт" },
-  { href: "https://apply.mbg.mn", text: "Тэтгэлэгт" },
+  { href: "https://apply.mbg.mn", text: "Тэтгэлэг" },
   { href: "https://medium.com/@mbgedumn", text: "MBG News" },
   // { href: "https://apply.mbg.mn", text: "MBG Apply" },
 ]
