@@ -8,7 +8,7 @@ export async function middleware(request: NextRequest) {
     const host = request.headers.get('host') || ''
     
     // Allow access if on localhost or vercel deployment
-    const isAllowedHost = host.startsWith('localhost') || host === 'mbg-landing.vercel.app' || host.startsWith('127.0.0.1:')
+    const isAllowedHost = host.startsWith('localhost') || host === 'mbg-landing.vercel.app' || host.startsWith('127.0.0.1:') || host.startsWith('mbg-landing-8yf6oij3h-enkhbold470s-projects.vercel.app')
     
     if (!isAllowedHost) {
       // Block access to admin routes for non-allowed hosts
