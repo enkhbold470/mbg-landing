@@ -1,10 +1,43 @@
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient, AdminRole } from '@prisma/client'
 import { siteConfig } from '../config/site'
+import bcrypt from 'bcryptjs'
 
 const prisma = new PrismaClient()
 
 async function main() {
   console.log('Seeding database...')
+
+  // Create initial super admin
+  const superAdminPassword = await bcrypt.hash('admin123', 10)
+  await prisma.admin.upsert({
+    where: { username: 'superadmin' },
+    update: {},
+    create: {
+      username: 'superadmin',
+      email: 'superadmin@mbg.edu',
+      password: superAdminPassword,
+      role: AdminRole.SUPER_ADMIN,
+      isActive: true,
+    },
+  })
+
+  // Create a regular admin
+  const adminPassword = await bcrypt.hash('admin123', 10)
+  await prisma.admin.upsert({
+    where: { username: 'admin' },
+    update: {},
+    create: {
+      username: 'admin',
+      email: 'admin@mbg.edu',
+      password: adminPassword,
+      role: AdminRole.ADMIN,
+      isActive: true,
+    },
+  })
+
+  console.log('✅ Created admin users:')
+  console.log('  - Super Admin: superadmin / admin123')
+  console.log('  - Admin: admin / admin123')
 
   // Create site configuration
   await prisma.siteConfig.upsert({
@@ -21,32 +54,10 @@ async function main() {
     },
   })
 
-  // Create courses
-  for (const course of siteConfig.courses) {
-    await prisma.course.upsert({
-      where: { slug: course.slug },
-      update: {},
-      create: {
-        title: course.title,
-        subtitle: course.subtitle,
-        description: course.description,
-        price: course.price,
-        duration: course.duration,
-        highlighted: course.highlighted,
-        slug: course.slug,
-        image: course.image,
-        video: course.video,
-        signupForm: course.signupForm,
-        fullTitle: course.fullTitle,
-        startDate: course.startDate,
-        schedule: course.schedule,
-        frequency: course.frequency,
-        classSize: course.classSize,
-        teacher: course.teacher,
-        features: Array.isArray(course.features) ? course.features : [],
-      },
-    })
-  }
+  console.log('✅ Created site configuration')
+
+  // Note: Courses are now managed through the admin panel
+  // You can add courses manually or use the AI auto-fill feature
 
   // Import testimonials, partners, features, and FAQ from site config
   const { testimonials, partners, features, faq } = await import('../config/site')

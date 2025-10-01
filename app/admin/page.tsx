@@ -4,7 +4,7 @@
 
 import React, { useState, useEffect, useCallback, useMemo } from 'react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Star, Loader2, RefreshCw, AlertCircle, CheckCircle } from 'lucide-react'
 import Image from 'next/image'
@@ -520,7 +520,7 @@ export default function AdminPage() {
 
   const renderFeature = useCallback((feature: any) => (
     <div>
-      <div className="flex items-center gap-2 mb-2">
+      <div className="flex items-center gap-2 mb-2">  
         <span className="text-2xl">{feature.icon}</span>
         <h3 className="font-semibold">{feature.title}</h3>
       </div>
@@ -532,21 +532,18 @@ export default function AdminPage() {
   console.log("🎨 [AdminPage] Rendering admin dashboard, active tab:", activeTab);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+    <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8 space-y-8">
         {/* Header Section */}
-        <div className="bg-white rounded-2xl shadow-lg p-8 border border-slate-200">
+        <div className="bg-background rounded-2xl shadow-lg p-8 border border-slate-200">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                Admin Panel | 管理面板
-              </h1> 
-              <p className="text-slate-600 mt-2">All site data | 站点所有数据</p>
-              <p className="text-slate-500 text-sm mt-1">
+              <CardTitle className="text-2xl font-semibold leading-none tracking-tight">Admin Dashboard | 管理员仪表盘</CardTitle>
+              <CardDescription   className="text-slate-500 text-sm mt-1">
                 Need help? | 需要帮助？ <Link href="mailto:enkhbold470@gmail.com" className="text-blue-500 hover:underline font-medium">
                   enkhbold470@gmail.com
                 </Link>
-              </p>
+              </CardDescription>
             </div>
             <Button
               onClick={refreshCurrentTab}
@@ -561,33 +558,33 @@ export default function AdminPage() {
         </div>
 
         {/* Main Content */}
-        <div className="bg-white rounded-2xl shadow-lg border border-slate-200 overflow-hidden">
+        <div className="bg-background rounded-2xl shadow-lg border border-blue-200 overflow-hidden rounded-t-2xl">
           <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
-            <div className="bg-slate-50 px-6 py-4 border-b border-slate-200">
-              <TabsList className="grid w-full grid-cols-6 bg-white shadow-sm">
-                <TabsTrigger value="courses" className="data-[state=active]:bg-blue-500 data-[state=active]:text-white">
+            <div className="bg-background px-6 py-4 border">
+              <TabsList className="grid w-full grid-cols-6 bg-background shadow-sm rounded-full border border-blue-200">
+                <TabsTrigger value="courses" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-full">
                   Courses | 课程
                 </TabsTrigger>
-                <TabsTrigger value="testimonials" className="data-[state=active]:bg-blue-500 data-[state=active]:text-white">
+                <TabsTrigger value="testimonials" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-full">
                   Testimonials | 客户评价
                 </TabsTrigger>
-                <TabsTrigger value="partners" className="data-[state=active]:bg-blue-500 data-[state=active]:text-white">
+                <TabsTrigger value="partners" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-full">
                   Partners | 合作伙伴
                 </TabsTrigger>
-                <TabsTrigger value="faq" className="data-[state=active]:bg-blue-500 data-[state=active]:text-white">
+                <TabsTrigger value="faq" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-full">
                   FAQ | 常见问题
                 </TabsTrigger>
-                <TabsTrigger value="features" className="data-[state=active]:bg-blue-500 data-[state=active]:text-white">
+                <TabsTrigger value="features" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-full">
                   Features | 功能亮点
                 </TabsTrigger>
-                <TabsTrigger value="images" className="data-[state=active]:bg-blue-500 data-[state=active]:text-white">
+                <TabsTrigger value="images" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-full">
                   Images | 图片上传
                 </TabsTrigger>
               </TabsList>
             </div>
 
             <div className="p-6">
-              <TabsContent value="courses" className="mt-0">
+              <TabsContent value="courses" className="mt-0 ">
                 {errorStates.courses && (
                   <ErrorDisplay 
                     error={errorStates.courses} 
@@ -598,7 +595,7 @@ export default function AdminPage() {
                   <LoadingSkeleton />
                 ) : (
                   <div className="space-y-8">
-                    <Card className="border-slate-200 shadow-sm">
+                    <Card className="border-blue-200 shadow-sm bg-background">
                   
                       <CardContent className="p-6">
                         <CourseForm 
@@ -608,14 +605,14 @@ export default function AdminPage() {
                       </CardContent>
                     </Card>
 
-                    <Card className="border-slate-200 shadow-sm">
-                      <CardHeader className="bg-slate-50">
+                    <Card className="border-blue-200 shadow-sm bg-background">
+                      <CardHeader className="bg-background rounded-t-lg">
                         <CardTitle className="text-xl text-slate-800 flex items-center gap-2">
                           Existing Courses | 现有课程 
                           <Badge variant="secondary" className="ml-2">{courses.length}</Badge>
                         </CardTitle>
                       </CardHeader>
-                      <CardContent className="p-6">
+                      <CardContent className="p-6 bg-background">
                         <CourseList 
                           courses={courses}
                           onEditCourse={setEditingCourse}

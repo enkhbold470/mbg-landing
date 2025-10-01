@@ -1,13 +1,13 @@
 // app/admin/layout.tsx
 import AuthWrapper from '@/components/admin/auth-wrapper';
-import { isAuthenticated } from '@/app/actions/config';
+import { getAdminSession } from '@/lib/auth';
 
 // Force dynamic rendering to prevent static generation issues with cookies
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
-  const authenticated = await isAuthenticated();
+  const session = await getAdminSession();
   
-  return <AuthWrapper isAuthenticated={authenticated}>{children}</AuthWrapper>
+  return <AuthWrapper isAuthenticated={!!session} session={session}>{children}</AuthWrapper>
 }

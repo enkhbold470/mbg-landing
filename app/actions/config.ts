@@ -5,6 +5,8 @@
 import { prisma } from '@/lib/prisma'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
+import { getAdminSession } from '@/lib/auth'
+import { logCreate, logUpdate, logDelete } from '@/lib/audit'
 
 // Custom error class for better error handling
 class AdminActionError extends Error {
@@ -113,6 +115,9 @@ export async function getSiteConfig() {
 
 export async function updateSiteConfig(data: any) {
   return withErrorHandling(async () => {
+    const session = await getAdminSession()
+    if (!session) throw new AdminActionError('Unauthorized | 未授权', 'UNAUTHORIZED')
+    
     console.log("💾 [updateSiteConfig] Updating site configuration...", data);
     
     // Validate required fields
@@ -128,9 +133,11 @@ export async function updateSiteConfig(data: any) {
         where: { id: existing.id },
         data
       })
+      await logUpdate(session, 'SiteConfig', result.id, 'Site Configuration', existing, result)
       console.log("✅ [updateSiteConfig] Site config updated successfully");
     } else {
       result = await prisma.siteConfig.create({ data })
+      await logCreate(session, 'SiteConfig', result.id, 'Site Configuration', result)
       console.log("✅ [updateSiteConfig] Site config created successfully");
     }
     
@@ -153,6 +160,9 @@ export async function getCourses() {
 
 export async function createCourse(data: any) {
   return withErrorHandling(async () => {
+    const session = await getAdminSession()
+    if (!session) throw new AdminActionError('Unauthorized | 未授权', 'UNAUTHORIZED')
+    
     console.log("💾 [createCourse] Creating new course...", { title: data.title });
     
     // Validate required fields
@@ -171,6 +181,7 @@ export async function createCourse(data: any) {
     }
     
     const result = await prisma.course.create({ data })
+    await logCreate(session, 'Course', result.id, result.title, result)
     console.log("✅ [createCourse] Course created successfully:", result.id);
     return result
   }, 'createCourse')
@@ -178,6 +189,9 @@ export async function createCourse(data: any) {
 
 export async function updateCourse(id: string, data: any) {
   return withErrorHandling(async () => {
+    const session = await getAdminSession()
+    if (!session) throw new AdminActionError('Unauthorized | 未授权', 'UNAUTHORIZED')
+    
     console.log("💾 [updateCourse] Updating course...", { id, title: data.title });
     
     // Validate required fields
@@ -208,6 +222,7 @@ export async function updateCourse(id: string, data: any) {
       where: { id },
       data
     })
+    await logUpdate(session, 'Course', result.id, result.title, existingCourse, result)
     console.log("✅ [updateCourse] Course updated successfully:", result.id);
     return result
   }, 'updateCourse')
@@ -215,6 +230,9 @@ export async function updateCourse(id: string, data: any) {
 
 export async function deleteCourse(id: string) {
   return withErrorHandling(async () => {
+    const session = await getAdminSession()
+    if (!session) throw new AdminActionError('Unauthorized | 未授权', 'UNAUTHORIZED')
+    
     console.log("🗑️ [deleteCourse] Deleting course...", { id });
     
     // Check if course exists
@@ -223,6 +241,7 @@ export async function deleteCourse(id: string) {
       throw new AdminActionError('Course not found | 未找到课程', 'COURSE_NOT_FOUND')
     }
     
+    await logDelete(session, 'Course', id, existingCourse.title, existingCourse)
     const result = await prisma.course.delete({ where: { id } })
     console.log("✅ [deleteCourse] Course deleted successfully:", id);
     return result
@@ -243,6 +262,9 @@ export async function getTestimonials() {
 
 export async function createTestimonial(data: any) {
   return withErrorHandling(async () => {
+    const session = await getAdminSession()
+    if (!session) throw new AdminActionError('Unauthorized | 未授权', 'UNAUTHORIZED')
+    
     console.log("💾 [createTestimonial] Creating testimonial...", { name: data.name });
     
     // Validate required fields
@@ -256,6 +278,7 @@ export async function createTestimonial(data: any) {
     }
     
     const result = await prisma.testimonial.create({ data })
+    await logCreate(session, 'Testimonial', result.id, result.name, result)
     console.log("✅ [createTestimonial] Testimonial created successfully:", result.id);
     return result
   }, 'createTestimonial')
@@ -263,6 +286,9 @@ export async function createTestimonial(data: any) {
 
 export async function updateTestimonial(id: string, data: any) {
   return withErrorHandling(async () => {
+    const session = await getAdminSession()
+    if (!session) throw new AdminActionError('Unauthorized | 未授权', 'UNAUTHORIZED')
+    
     console.log("💾 [updateTestimonial] Updating testimonial...", { id, name: data.name });
     
     // Validate required fields
@@ -280,6 +306,7 @@ export async function updateTestimonial(id: string, data: any) {
       where: { id },
       data
     })
+    await logUpdate(session, 'Testimonial', result.id, result.name, existing, result)
     console.log("✅ [updateTestimonial] Testimonial updated successfully:", result.id);
     return result
   }, 'updateTestimonial')
@@ -287,6 +314,9 @@ export async function updateTestimonial(id: string, data: any) {
 
 export async function deleteTestimonial(id: string) {
   return withErrorHandling(async () => {
+    const session = await getAdminSession()
+    if (!session) throw new AdminActionError('Unauthorized | 未授权', 'UNAUTHORIZED')
+    
     console.log("🗑️ [deleteTestimonial] Deleting testimonial...", { id });
     
     const existing = await prisma.testimonial.findUnique({ where: { id } })
@@ -294,6 +324,7 @@ export async function deleteTestimonial(id: string) {
       throw new AdminActionError('Testimonial not found | 未找到评价', 'TESTIMONIAL_NOT_FOUND')
     }
     
+    await logDelete(session, 'Testimonial', id, existing.name, existing)
     const result = await prisma.testimonial.delete({ where: { id } })
     console.log("✅ [deleteTestimonial] Testimonial deleted successfully:", id);
     return result
@@ -314,6 +345,9 @@ export async function getPartners() {
 
 export async function createPartner(data: any) {
   return withErrorHandling(async () => {
+    const session = await getAdminSession()
+    if (!session) throw new AdminActionError('Unauthorized | 未授权', 'UNAUTHORIZED')
+    
     console.log("💾 [createPartner] Creating partner...", { name: data.name });
     
     // Validate required fields
@@ -322,6 +356,7 @@ export async function createPartner(data: any) {
     }
     
     const result = await prisma.partner.create({ data })
+    await logCreate(session, 'Partner', result.id, result.name, result)
     console.log("✅ [createPartner] Partner created successfully:", result.id);
     return result
   }, 'createPartner')
@@ -329,6 +364,9 @@ export async function createPartner(data: any) {
 
 export async function updatePartner(id: string, data: any) {
   return withErrorHandling(async () => {
+    const session = await getAdminSession()
+    if (!session) throw new AdminActionError('Unauthorized | 未授权', 'UNAUTHORIZED')
+    
     console.log("💾 [updatePartner] Updating partner...", { id, name: data.name });
     
     // Check if partner exists
@@ -341,6 +379,7 @@ export async function updatePartner(id: string, data: any) {
       where: { id },
       data
     })
+    await logUpdate(session, 'Partner', result.id, result.name, existing, result)
     console.log("✅ [updatePartner] Partner updated successfully:", result.id);
     return result
   }, 'updatePartner')
@@ -348,6 +387,9 @@ export async function updatePartner(id: string, data: any) {
 
 export async function deletePartner(id: string) {
   return withErrorHandling(async () => {
+    const session = await getAdminSession()
+    if (!session) throw new AdminActionError('Unauthorized | 未授权', 'UNAUTHORIZED')
+    
     console.log("🗑️ [deletePartner] Deleting partner...", { id });
     
     const existing = await prisma.partner.findUnique({ where: { id } })
@@ -355,6 +397,7 @@ export async function deletePartner(id: string) {
       throw new AdminActionError('Partner not found | 未找到合作伙伴', 'PARTNER_NOT_FOUND')
     }
     
+    await logDelete(session, 'Partner', id, existing.name, existing)
     const result = await prisma.partner.delete({ where: { id } })
     console.log("✅ [deletePartner] Partner deleted successfully:", id);
     return result
@@ -375,6 +418,9 @@ export async function getFAQs() {
 
 export async function createFAQ(data: any) {
   return withErrorHandling(async () => {
+    const session = await getAdminSession()
+    if (!session) throw new AdminActionError('Unauthorized | 未授权', 'UNAUTHORIZED')
+    
     console.log("💾 [createFAQ] Creating FAQ...", { question: data.question?.substring(0, 50) });
     
     // Validate required fields
@@ -383,6 +429,7 @@ export async function createFAQ(data: any) {
     }
     
     const result = await prisma.fAQ.create({ data })
+    await logCreate(session, 'FAQ', result.id, result.question.substring(0, 50), result)
     console.log("✅ [createFAQ] FAQ created successfully:", result.id);
     return result
   }, 'createFAQ')
@@ -390,6 +437,9 @@ export async function createFAQ(data: any) {
 
 export async function updateFAQ(id: string, data: any) {
   return withErrorHandling(async () => {
+    const session = await getAdminSession()
+    if (!session) throw new AdminActionError('Unauthorized | 未授权', 'UNAUTHORIZED')
+    
     console.log("💾 [updateFAQ] Updating FAQ...", { id, question: data.question?.substring(0, 50) });
     
     // Check if FAQ exists
@@ -402,6 +452,7 @@ export async function updateFAQ(id: string, data: any) {
       where: { id },
       data
     })
+    await logUpdate(session, 'FAQ', result.id, result.question.substring(0, 50), existing, result)
     console.log("✅ [updateFAQ] FAQ updated successfully:", result.id);
     return result
   }, 'updateFAQ')
@@ -409,6 +460,9 @@ export async function updateFAQ(id: string, data: any) {
 
 export async function deleteFAQ(id: string) {
   return withErrorHandling(async () => {
+    const session = await getAdminSession()
+    if (!session) throw new AdminActionError('Unauthorized | 未授权', 'UNAUTHORIZED')
+    
     console.log("🗑️ [deleteFAQ] Deleting FAQ...", { id });
     
     const existing = await prisma.fAQ.findUnique({ where: { id } })
@@ -416,6 +470,7 @@ export async function deleteFAQ(id: string) {
       throw new AdminActionError('FAQ not found | 未找到常见问题', 'FAQ_NOT_FOUND')
     }
     
+    await logDelete(session, 'FAQ', id, existing.question.substring(0, 50), existing)
     const result = await prisma.fAQ.delete({ where: { id } })
     console.log("✅ [deleteFAQ] FAQ deleted successfully:", id);
     return result
@@ -436,6 +491,9 @@ export async function getFeatures() {
 
 export async function createFeature(data: any) {
   return withErrorHandling(async () => {
+    const session = await getAdminSession()
+    if (!session) throw new AdminActionError('Unauthorized | 未授权', 'UNAUTHORIZED')
+    
     console.log("💾 [createFeature] Creating feature...", { title: data.title });
     
     // Validate required fields
@@ -444,6 +502,7 @@ export async function createFeature(data: any) {
     }
     
     const result = await prisma.feature.create({ data })
+    await logCreate(session, 'Feature', result.id, result.title, result)
     console.log("✅ [createFeature] Feature created successfully:", result.id);
     return result
   }, 'createFeature')
@@ -451,6 +510,9 @@ export async function createFeature(data: any) {
 
 export async function updateFeature(id: string, data: any) {
   return withErrorHandling(async () => {
+    const session = await getAdminSession()
+    if (!session) throw new AdminActionError('Unauthorized | 未授权', 'UNAUTHORIZED')
+    
     console.log("💾 [updateFeature] Updating feature...", { id, title: data.title });
     
     // Check if feature exists
@@ -463,6 +525,7 @@ export async function updateFeature(id: string, data: any) {
       where: { id },
       data
     })
+    await logUpdate(session, 'Feature', result.id, result.title, existing, result)
     console.log("✅ [updateFeature] Feature updated successfully:", result.id);
     return result
   }, 'updateFeature')
@@ -470,6 +533,9 @@ export async function updateFeature(id: string, data: any) {
 
 export async function deleteFeature(id: string) {
   return withErrorHandling(async () => {
+    const session = await getAdminSession()
+    if (!session) throw new AdminActionError('Unauthorized | 未授权', 'UNAUTHORIZED')
+    
     console.log("🗑️ [deleteFeature] Deleting feature...", { id });
     
     const existing = await prisma.feature.findUnique({ where: { id } })
@@ -477,6 +543,7 @@ export async function deleteFeature(id: string) {
       throw new AdminActionError('Feature not found | 未找到功能亮点', 'FEATURE_NOT_FOUND')
     }
     
+    await logDelete(session, 'Feature', id, existing.title, existing)
     const result = await prisma.feature.delete({ where: { id } })
     console.log("✅ [deleteFeature] Feature deleted successfully:", id);
     return result
