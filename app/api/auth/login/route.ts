@@ -1,31 +1,42 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { cookies } from 'next/headers'
+import { authenticateAdmin } from '@/lib/auth'
+import { logLogin, getClientIp, getUserAgent } from '@/lib/audit'
 
 export async function POST(request: NextRequest) {
   try {
     const { username, password } = await request.json()
     
-    // Simple hardcoded authentication
-    if (username === 'admin' && password === 'admin123') {
-      const cookieStore = await cookies()
-      cookieStore.set('admin-auth', 'authenticated', {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        maxAge: 60 * 60 * 24, // 24 hours
-        path: '/'
-      })
-      
-      return NextResponse.json({ success: true })
-    } else {
+    if (!username || !password) {
       return NextResponse.json(
-        { error: 'Invalid credentials' },
-        { status: 401 }
+        { error: 'Username and password are required' },
+        { status: 400 }
       )
     }
+
+    // Get client info
+    const ipAddress = await getClientIp()
+    const userAgent = await getUserAgent()
+    const device = userAgent.toLowerCase().includes('mobile') ? 'Mobile' : 'Desktop'
+
+    // Authenticate admin
+    const session = await authenticateAdmin(username, password, ipAddress, userAgent, device)
+    
+    // Log the login
+    await logLogin(session)
+    
+    return NextResponse.json({ 
+      success: true,
+      admin: {
+        username: session.username,
+        email: session.email,
+        role: session.role
+      }
+    })
   } catch (error) {
+    console.error('Login error:', error)
     return NextResponse.json(
-      { error: 'Internal server error: ' + (error as Error).message },
-      { status: 500 }
+      { error: 'Invalid credentials' },
+      { status: 401 }
     )
   }
 }

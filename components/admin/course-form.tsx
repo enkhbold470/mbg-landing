@@ -25,6 +25,12 @@ export function CourseForm({ course, onSubmit, isEdit = false, isSubmitting = fa
   const [courseTitle, setCourseTitle] = useState('')
   const [selectedImage, setSelectedImage] = useState<string>(course?.image || '')
 
+  const generateRandomSlug = () => {
+    const timestamp = Date.now();
+    const random = Math.floor(Math.random() * 10000);
+    return `course-${timestamp}-${random}`;
+  };
+
   const handleAIGenerate = async () => {
     if (!courseTitle.trim()) {
       toast({
@@ -58,12 +64,12 @@ export function CourseForm({ course, onSubmit, isEdit = false, isSubmitting = fa
       if (form) {
         // Fill basic fields
         (form.querySelector('#title') as HTMLInputElement).value = courseTitle;
+        (form.querySelector('#fullTitle') as HTMLInputElement).value = courseTitle; // Same as title
         (form.querySelector('#subtitle') as HTMLInputElement).value = data.subtitle || '';
         (form.querySelector('#description') as HTMLTextAreaElement).value = data.description || '';
         (form.querySelector('#price') as HTMLInputElement).value = data.price || '';
         (form.querySelector('#duration') as HTMLInputElement).value = data.duration || '';
-        (form.querySelector('#slug') as HTMLInputElement).value = data.slug || '';
-        (form.querySelector('#fullTitle') as HTMLInputElement).value = data.fullTitle || '';
+        (form.querySelector('#slug') as HTMLInputElement).value = data.slug || generateRandomSlug();
         (form.querySelector('#startDate') as HTMLInputElement).value = data.startDate || '';
         (form.querySelector('#schedule') as HTMLInputElement).value = data.schedule || '';
         (form.querySelector('#frequency') as HTMLInputElement).value = data.frequency || '';
@@ -169,6 +175,13 @@ export function CourseForm({ course, onSubmit, isEdit = false, isSubmitting = fa
               placeholder="e.g., Chinese in 40 Hours | 例如：40 小时学中文" 
               required 
               disabled={isSubmitting}
+              onChange={(e) => {
+                // Auto-update fullTitle to match title
+                const fullTitleInput = document.querySelector('#fullTitle') as HTMLInputElement;
+                if (fullTitleInput) {
+                  fullTitleInput.value = e.target.value;
+                }
+              }}
             />
           </div>
           <div className="space-y-2">
@@ -196,7 +209,7 @@ export function CourseForm({ course, onSubmit, isEdit = false, isSubmitting = fa
           />
         </div>
         
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-2 gap-4">
           <div className="space-y-2">
             <Label htmlFor="price">Price | 价格</Label>
             <Input 
@@ -219,18 +232,15 @@ export function CourseForm({ course, onSubmit, isEdit = false, isSubmitting = fa
               disabled={isSubmitting}
             />
           </div>
-          <div className="space-y-2">
-            <Label htmlFor="slug">Slug (no spaces) | URL 标识（不含空格）</Label>
-            <Input 
-              id="slug" 
-              name="slug" 
-              defaultValue={course?.slug} 
-              placeholder="e.g., hsk-4-course | 例如：hsk-4-course" 
-              required 
-              disabled={isSubmitting}
-            />
-          </div>
         </div>
+        
+        {/* Hidden slug field - auto-generated */}
+        <input 
+          type="hidden" 
+          id="slug" 
+          name="slug" 
+          value={course?.slug || generateRandomSlug()}
+        />
         
         <div className="flex items-center space-x-2">
           <Switch 
@@ -297,16 +307,13 @@ export function CourseForm({ course, onSubmit, isEdit = false, isSubmitting = fa
           />
         </div>
         
-        <div className="space-y-2">
-          <Label htmlFor="fullTitle">Full Title | 完整标题</Label>
-          <Input 
-            id="fullTitle" 
-            name="fullTitle" 
-            defaultValue={course?.fullTitle} 
-            placeholder="e.g., HSK 4 Intensive Class | 例如：HSK 4 强化班" 
-            disabled={isSubmitting}
-          />
-        </div>
+        {/* Hidden fullTitle field - same as title */}
+        <input 
+          type="hidden" 
+          id="fullTitle" 
+          name="fullTitle" 
+          value={course?.fullTitle || course?.title || ''}
+        />
         
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-2">

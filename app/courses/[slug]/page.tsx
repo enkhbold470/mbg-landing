@@ -162,7 +162,7 @@ export default function CourseDetailPage({ params }: { params: { slug: string } 
                             </Badge>
                         )}
                         <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                            {course.fullTitle}
+                            {course.title}
                         </h1>
                         <p className="text-base md:text-lg text-gray-600 mb-8">
                             {course.description}
