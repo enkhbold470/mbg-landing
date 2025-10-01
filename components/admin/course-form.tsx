@@ -8,6 +8,7 @@ import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
 import { useToast } from '@/hooks/use-toast'
 import { Sparkles, Loader2 } from 'lucide-react'
+import { ImageUpload } from '@/components/admin/image-upload'
 
 interface CourseFormProps {
   course?: any
@@ -22,6 +23,7 @@ export function CourseForm({ course, onSubmit, isEdit = false, isSubmitting = fa
   const { toast } = useToast();
   const [isGenerating, setIsGenerating] = useState(false)
   const [courseTitle, setCourseTitle] = useState('')
+  const [selectedImage, setSelectedImage] = useState<string>(course?.image || '')
 
   const handleAIGenerate = async () => {
     if (!courseTitle.trim()) {
@@ -74,7 +76,7 @@ export function CourseForm({ course, onSubmit, isEdit = false, isSubmitting = fa
         }
 
         // Set default values for other fields
-        (form.querySelector('#image') as HTMLInputElement).value = `https://placekeanu.com/${Math.floor(Math.random() * 1000)}/${Math.floor(Math.random() * 1000)}`;
+        setSelectedImage(`https://placekeanu.com/${Math.floor(Math.random() * 1000)}/${Math.floor(Math.random() * 1000)}`);
         (form.querySelector('#video') as HTMLInputElement).value = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ';
         (form.querySelector('#signupForm') as HTMLInputElement).value = 'https://www.google.com';
       }
@@ -251,15 +253,25 @@ export function CourseForm({ course, onSubmit, isEdit = false, isSubmitting = fa
           />
         </div>
         
-        <div className="grid grid-cols-2 gap-4">
+        <div className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="image">Image URL (Google or pexels.com) | 图片链接（Google 或 pexels.com）</Label>
-            <Input 
+            <Label>Course Image | 课程图片</Label>
+            <ImageUpload
+              onImagesUploaded={(urls) => {
+                if (urls.length > 0) {
+                  setSelectedImage(urls[0])
+                }
+              }}
+              maxFiles={1}
+              existingImages={selectedImage ? [selectedImage] : []}
+              allowSelection={true}
+            />
+            {/* Hidden input to store the selected image URL for form submission */}
+            <input 
+              type="hidden" 
               id="image" 
               name="image" 
-              defaultValue={course?.image} 
-              placeholder="e.g., https://placekeanu.com/500/500" 
-              disabled={isSubmitting}
+              value={selectedImage}
             />
           </div>
           <div className="space-y-2">

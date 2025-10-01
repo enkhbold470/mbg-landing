@@ -148,7 +148,7 @@ export default function CoursesPage() {
 
                   <div className="mb-6">
                     <Image
-                      src={course.image}
+                      src={course.image || 'og.jpg'}  
                       alt={course.title}
                       width={400}
                       height={200}

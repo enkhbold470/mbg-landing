@@ -5,14 +5,25 @@ import { useDropzone } from 'react-dropzone'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { X, Upload, Image as ImageIcon, Loader2, RefreshCw, Copy } from 'lucide-react'
+import { X, Upload, Image as ImageIcon, Loader2, RefreshCw, Copy, Trash2 } from 'lucide-react'
 import Image from 'next/image'
 import { useToast } from '@/hooks/use-toast'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog'
 
 interface ImageUploadProps {
   onImagesUploaded: (urls: string[]) => void
   maxFiles?: number
   existingImages?: string[]
+  allowSelection?: boolean // Allow selecting from existing images
 }
 
 interface StoredImage {
@@ -22,15 +33,17 @@ interface StoredImage {
   uploadedAt: string
 }
 
-export function ImageUpload({ onImagesUploaded, maxFiles = 5, existingImages = [] }: ImageUploadProps) {
+export function ImageUpload({ onImagesUploaded, maxFiles = 5, existingImages = [], allowSelection = false }: ImageUploadProps) {
   const [uploading, setUploading] = useState(false)
   const [uploadedImages, setUploadedImages] = useState<string[]>(existingImages)
   const [allImages, setAllImages] = useState<StoredImage[]>([])
   const [isLoadingImages, setIsLoadingImages] = useState(false)
+  const [imageToDelete, setImageToDelete] = useState<string | null>(null)
+  const [isDeleting, setIsDeleting] = useState(false)
   const { toast } = useToast()
 
   // Fetch all available images from storage
-  const fetchAllImages = async () => {
+  const fetchAllImages = useCallback(async () => {
     setIsLoadingImages(true)
     try {
       const response = await fetch('/api/images')
@@ -55,12 +68,12 @@ export function ImageUpload({ onImagesUploaded, maxFiles = 5, existingImages = [
     } finally {
       setIsLoadingImages(false)
     }
-  }
+  }, [toast])
 
   // Load images on component mount
   useEffect(() => {
     fetchAllImages()
-  }, [])
+  }, [fetchAllImages])
 
   // Copy URL to clipboard
   const copyToClipboard = async (url: string) => {
@@ -76,6 +89,72 @@ export function ImageUpload({ onImagesUploaded, maxFiles = 5, existingImages = [
         description: "Failed to copy URL | URL复制失败",
         variant: "destructive",
       })
+    }
+  }
+
+  // Select an image from available images
+  const selectImage = (url: string) => {
+    if (uploadedImages.length >= maxFiles) {
+      toast({
+        title: "Maximum reached | 已达上限",
+        description: `Maximum ${maxFiles} file(s) allowed | 最多允许 ${maxFiles} 个文件`,
+        variant: "destructive",
+      })
+      return
+    }
+
+    const newImages = [...uploadedImages, url]
+    setUploadedImages(newImages)
+    onImagesUploaded(newImages)
+    
+    toast({
+      title: "Image selected | 图片已选择",
+      description: "Image added to course | 图片已添加到课程",
+    })
+  }
+
+  // Delete an image from storage
+  const deleteImage = async (url: string) => {
+    setIsDeleting(true)
+    try {
+      const response = await fetch('/api/images', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ url }),
+      })
+
+      const data = await response.json()
+
+      if (data.success) {
+        toast({
+          title: "Image deleted | 图片已删除",
+          description: "Image removed from storage | 图片已从存储中移除",
+        })
+        
+        // Remove from uploaded images if it was selected
+        const newUploadedImages = uploadedImages.filter(img => img !== url)
+        if (newUploadedImages.length !== uploadedImages.length) {
+          setUploadedImages(newUploadedImages)
+          onImagesUploaded(newUploadedImages)
+        }
+        
+        // Refresh the images list
+        fetchAllImages()
+      } else {
+        throw new Error(data.error)
+      }
+    } catch (error) {
+      console.error('Delete error:', error)
+      toast({
+        title: "Delete failed | 删除失败",
+        description: "Failed to delete image | 删除图片失败",
+        variant: "destructive",
+      })
+    } finally {
+      setIsDeleting(false)
+      setImageToDelete(null)
     }
   }
 
@@ -138,10 +217,16 @@ export function ImageUpload({ onImagesUploaded, maxFiles = 5, existingImages = [
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     accept: {
-      'image/*': ['.jpeg', '.jpg', '.png', '.gif', '.webp']
+      'image/jpeg': [],
+      'image/jpg': [],
+      'image/png': [],
+      'image/gif': [],
+      'image/webp': []
     },
     multiple: true,
-    disabled: uploading
+    disabled: uploading,
+    noClick: false,
+    noKeyboard: false
   })
 
   const removeImage = (index: number) => {
@@ -152,41 +237,37 @@ export function ImageUpload({ onImagesUploaded, maxFiles = 5, existingImages = [
 
   return (
     <div className="space-y-4">
-      <Card>
-        <CardContent className="p-6">
-          <div
-            {...getRootProps()}
-            className={`
-              border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors
-              ${
-                isDragActive
-                  ? 'border-blue-500 bg-blue-50'
-                  : 'border-gray-300 hover:border-gray-400'
-              }
-              ${uploading ? 'opacity-50 cursor-not-allowed' : ''}
-            `}
-          >
-            <input {...getInputProps()} />
-            <div className="flex flex-col items-center space-y-2">
-              {uploading ? (
-                <Loader2 className="h-12 w-12 text-blue-500 animate-spin" />
-              ) : (
-                <Upload className="h-12 w-12 text-gray-400" />
-              )}
-              <div className="text-lg font-medium">
-                {uploading
-                  ? 'Uploading... | 上传中...'
-                  : isDragActive
-                  ? 'Drop images here | 拖放图片到这里'
-                  : 'Drag & drop images or click to select | 拖放图片或点击选择'}
-              </div>
-              <div className="text-sm text-gray-500">
-                Supports: JPG, PNG, GIF, WebP (Max {maxFiles} files) | 支持：JPG, PNG, GIF, WebP（最多 {maxFiles} 个文件）
-              </div>
-            </div>
+      <div
+        {...getRootProps()}
+        className={`
+          border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors bg-white
+          ${
+            isDragActive
+              ? 'border-blue-500 bg-blue-50'
+              : 'border-gray-300 hover:border-gray-400'
+          }
+          ${uploading ? 'opacity-50 cursor-not-allowed' : ''}
+        `}
+      >
+        <input {...getInputProps()} />
+        <div className="flex flex-col items-center space-y-2">
+          {uploading ? (
+            <Loader2 className="h-12 w-12 text-blue-500 animate-spin" />
+          ) : (
+            <Upload className="h-12 w-12 text-gray-400" />
+          )}
+          <div className="text-lg font-medium">
+            {uploading
+              ? 'Uploading... | 上传中...'
+              : isDragActive
+              ? 'Drop images here | 拖放图片到这里'
+              : 'Drag & drop images or click to select | 拖放图片或点击选择'}
           </div>
-        </CardContent>
-      </Card>
+          <div className="text-sm text-gray-500">
+            Supports: JPG, PNG, GIF, WebP (Max {maxFiles} files) | 支持：JPG, PNG, GIF, WebP（最多 {maxFiles} 个文件）
+          </div>
+        </div>
+      </div>
 
       {uploadedImages.length > 0 && (
         <Card>
@@ -269,48 +350,133 @@ export function ImageUpload({ onImagesUploaded, maxFiles = 5, existingImages = [
             </div>
           ) : (
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-              {allImages.map((image, index) => (
-                <div key={image.url} className="relative group">
-                  <div className="aspect-square rounded-lg overflow-hidden bg-gray-100">
-                    <Image
-                      src={image.url}
-                      alt={`Available image ${index + 1}`}
-                      className="w-full h-full object-cover"
-                      width={200}
-                      height={200}
-                    />
-                  </div>
-                  <Button
-                    onClick={() => copyToClipboard(image.url)}
-                    variant="secondary"
-                    size="sm"
-                    className="absolute -top-2 -right-2 h-6 w-6 rounded-full p-0 opacity-0 group-hover:opacity-100 transition-opacity"
-                  >
-                    <Copy className="h-3 w-3" />
-                  </Button>
-                  <div className="mt-2 space-y-1">
-                    <div className="text-xs text-gray-500 truncate">
-                      {image.pathname.split('/').pop()}
-                    </div>
-                    <div className="text-xs text-gray-400">
-                      {new Date(image.uploadedAt).toLocaleDateString()}
-                    </div>
-                    <Button
-                      onClick={() => copyToClipboard(image.url)}
-                      variant="outline"
-                      size="sm"
-                      className="w-full h-6 text-xs"
+              {allImages.map((image, index) => {
+                const isSelected = uploadedImages.includes(image.url);
+                return (
+                  <div key={image.url} className="relative group">
+                    <div 
+                      className={`aspect-square rounded-lg overflow-hidden bg-gray-100 ${
+                        allowSelection ? 'cursor-pointer hover:ring-2 hover:ring-blue-400 transition-all' : ''
+                      } ${
+                        isSelected ? 'ring-2 ring-green-500' : ''
+                      }`}
+                      onClick={() => allowSelection && !isSelected && selectImage(image.url)}
                     >
-                      <Copy className="h-3 w-3 mr-1" />
-                      Copy URL | 复制链接
-                    </Button>
+                      <Image
+                        src={image.url}
+                        alt={`Available image ${index + 1}`}
+                        className="w-full h-full object-cover"
+                        width={200}
+                        height={200}
+                      />
+                      {isSelected && (
+                        <div className="absolute inset-0 bg-green-500 bg-opacity-20 flex items-center justify-center">
+                          <Badge className="bg-green-600">Selected | 已选择</Badge>
+                        </div>
+                      )}
+                    </div>
+                    {!allowSelection && (
+                      <>
+                        <Button
+                          onClick={() => copyToClipboard(image.url)}
+                          variant="secondary"
+                          size="sm"
+                          className="absolute -top-2 -right-2 h-6 w-6 rounded-full p-0 opacity-0 group-hover:opacity-100 transition-opacity"
+                        >
+                          <Copy className="h-3 w-3" />
+                        </Button>
+                        <Button
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            setImageToDelete(image.url)
+                          }}
+                          variant="destructive"
+                          size="sm"
+                          className="absolute -top-2 -left-2 h-6 w-6 rounded-full p-0 opacity-0 group-hover:opacity-100 transition-opacity"
+                        >
+                          <Trash2 className="h-3 w-3" />
+                        </Button>
+                      </>
+                    )}
+                    <div className="mt-2 space-y-1">
+                      <div className="text-xs text-gray-500 truncate">
+                        {image.pathname.split('/').pop()}
+                      </div>
+                      <div className="text-xs text-gray-400">
+                        {new Date(image.uploadedAt).toLocaleDateString()}
+                      </div>
+                      {allowSelection ? (
+                        <Button
+                          onClick={() => !isSelected && selectImage(image.url)}
+                          variant={isSelected ? "default" : "outline"}
+                          size="sm"
+                          className="w-full h-6 text-xs"
+                          disabled={isSelected || uploadedImages.length >= maxFiles}
+                        >
+                          {isSelected ? '✓ Selected | 已选择' : 'Select | 选择'}
+                        </Button>
+                      ) : (
+                        <div className="flex gap-1">
+                          <Button
+                            onClick={() => copyToClipboard(image.url)}
+                            variant="outline"
+                            size="sm"
+                            className="flex-1 h-6 text-xs"
+                          >
+                            <Copy className="h-3 w-3 mr-1" />
+                            Copy | 复制
+                          </Button>
+                          <Button
+                            onClick={() => setImageToDelete(image.url)}
+                            variant="destructive"
+                            size="sm"
+                            className="h-6 text-xs px-2"
+                          >
+                            <Trash2 className="h-3 w-3" />
+                          </Button>
+                        </div>
+                      )}
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           )}
         </CardContent>
       </Card>
+
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog open={!!imageToDelete} onOpenChange={() => !isDeleting && setImageToDelete(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete Image? | 删除图片？</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to delete this image? This action cannot be undone and will permanently remove the image from storage.
+              <br /><br />
+              您确定要删除此图片吗？此操作无法撤销，将永久删除存储中的图片。
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={isDeleting}>
+              Cancel | 取消
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => imageToDelete && deleteImage(imageToDelete)}
+              disabled={isDeleting}
+              className="bg-red-600 hover:bg-red-700"
+            >
+              {isDeleting ? (
+                <>
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  Deleting... | 删除中...
+                </>
+              ) : (
+                'Delete | 删除'
+              )}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   )
 }

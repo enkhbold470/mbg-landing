@@ -182,7 +182,7 @@ export default function CourseDetailPage({ params }: { params: { slug: string } 
                             {/* Course Image */}
                             <Card className="rounded-3xl border shadow-lg overflow-hidden bg-white  ">
                                 <Image 
-                                    src={course.image} 
+                                    src={course.image || '/og.jpg'} 
                                     alt={course.fullTitle} 
                                     width={1000} 
                                     height={1000} 
